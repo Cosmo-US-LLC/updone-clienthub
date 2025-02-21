@@ -90,8 +90,8 @@ const BottomBarMobile = ({
         const isUpdoneDomain = window.location.hostname.includes("updone");
         Cookies.set("callbackUrl", pathname + window?.location?.search || "", {
           expires: 2,
-          path: "/",
-          ...(isUpdoneDomain && { domain: ".updone.com" }),
+          // path: "/",
+          // ...(isUpdoneDomain && { domain: ".updone.com" }),
         });
         router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`)
       } else {

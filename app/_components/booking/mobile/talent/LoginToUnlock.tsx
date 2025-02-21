@@ -13,8 +13,8 @@ const LoginToUnlock = ({ isClient = false }) => {
     // Save the current URL to redirect back after login
     Cookies.set("callbackUrl", pathname + window.location.search || "", {
       expires: 2,
-      path: "/",
-      ...(isUpdoneDomain && { domain: ".updone.com" }),
+      // path: "/",
+      // ...(isUpdoneDomain && { domain: ".updone.com" }),
     });
 
     // Redirect to the sign-in page

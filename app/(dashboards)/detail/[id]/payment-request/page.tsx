@@ -177,8 +177,8 @@ function Page({ params }: { params: { id: number } }) {
       // localStorage.setItem('callbackUrl', pathname)
       Cookies.set("callbackUrl", pathname, {
         expires: 30,
-        path: "/",
-        ...(isUpdoneDomain && { domain: ".updone.com" }),
+        // path: "/",
+        // ...(isUpdoneDomain && { domain: ".updone.com" }),
       });
       router.push(`${process?.env?.NEXT_PUBLIC_BASE_URL}/signin`);
     }

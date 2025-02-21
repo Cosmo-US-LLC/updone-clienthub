@@ -27,8 +27,8 @@ const JoinUpdone = ({
   const handleClickLogin = () => {
     Cookies.set("callbackUrl", pathname + window?.location?.search || "", {
       expires: 2,
-      path: "/",
-      ...(isUpdoneDomain && { domain: ".updone.com" }),
+      // path: "/",
+      // ...(isUpdoneDomain && { domain: ".updone.com" }),
     });
     // setCurrentScreen("login");
     router.push("/signin");
@@ -51,8 +51,8 @@ const JoinUpdone = ({
   const handleClickRegister = () => {
     Cookies.set("callbackUrl", pathname + window?.location?.search || "", {
       expires: 2,
-      path: "/",
-      ...(isUpdoneDomain && { domain: ".updone.com" }),
+      // path: "/",
+      // ...(isUpdoneDomain && { domain: ".updone.com" }),
     });
     // setCurrentScreen("register");
     router.push("/signup");

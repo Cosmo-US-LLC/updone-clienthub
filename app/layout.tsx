@@ -19,7 +19,8 @@ const isStaging = process.env.NEXT_PRODUCTION_ENV === "staging";
 // For SEO purpose to rank next js application
 export const metadata: Metadata = {
   robots: isProd === true ? "" : "noindex",
-  title: "Hire Expert Bartenders, Waiters & Mixologists for Your Events | Updone.com",
+  title:
+    "Hire Expert Bartenders, Waiters & Mixologists for Your Events | Updone.com",
   description:
     "Planning a wedding, birthday, or baby shower? Need a cocktail barman, bartender, or mixologist to shake things up? Updone connects you with top-tier waiters and event staff for unforgettable parties.",
   keywords:
@@ -39,15 +40,15 @@ export const metadata: Metadata = {
 };
 
 export async function generateViewport(): Promise<any> {
-  const userAgent = headers().get("user-agent");
-  const isiPhone = /iphone/i.test(userAgent ?? "");
-  return isiPhone
-    ? {
-      width: "device-width",
-      initialScale: 1,
-      maximumScale: 1, //disables auto-zoom on ios safari
-    }
-    : {};
+  // const userAgent = headers()?.get("user-agent");
+  // const isiPhone = /iphone/i.test(userAgent ?? "");
+  // return isiPhone
+  //   ? {
+  //     width: "device-width",
+  //     initialScale: 1,
+  //     maximumScale: 1, //disables auto-zoom on ios safari
+  //   }
+  //   : {};
 }
 
 export default function RootLayout({

@@ -110,13 +110,13 @@ const LoginFromDrawer = ({ setCurrentScreen }: any) => {
         setLoginSuccess(true);
         Cookies.set("token", newData?.token, {
           expires: 30,
-          path: "/",
-          ...(isUpdoneDomain && { domain: ".updone.com" }),
+          // path: "/",
+          // ...(isUpdoneDomain && { domain: ".updone.com" }),
         });
         Cookies.set("authData", JSON.stringify(newData), {
           expires: 30,
-          path: "/",
-          ...(isUpdoneDomain && { domain: ".updone.com" }),
+          // path: "/",
+          // ...(isUpdoneDomain && { domain: ".updone.com" }),
         });
         setTimeout(() => {
           // if (newData?.user?.role_id === 3) {

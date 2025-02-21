@@ -86,13 +86,13 @@ const Signup: React.FC<SignupFormProps> = ({ onSwitchToSignIn, onSuccess }) => {
         // ✅ Save token in Cookies
         Cookies.set("token", response.token, {
           expires: 30,
-          path: "/",
-          ...(isUpdoneDomain && { domain: ".updone.com" }),
+          // path: "/",
+          // ...(isUpdoneDomain && { domain: ".updone.com" }),
         });
         Cookies.set("authData", JSON.stringify(response), {
           expires: 30,
-          path: "/",
-          ...(isUpdoneDomain && { domain: ".updone.com" }),
+          // path: "/",
+          // ...(isUpdoneDomain && { domain: ".updone.com" }),
         });
 
         // ✅ Save user data in Redux store
@@ -121,8 +121,8 @@ const Signup: React.FC<SignupFormProps> = ({ onSwitchToSignIn, onSuccess }) => {
       console.log("Redirecting...");
       Cookies.set("callbackUrl", pathname + window?.location?.search || "", {
         expires: 30,
-        path: "/",
-        ...(isUpdoneDomain && { domain: ".updone.com" }),
+        // path: "/",
+        // ...(isUpdoneDomain && { domain: ".updone.com" }),
       });
       router.push(process.env.NEXT_PUBLIC_GOOGLE_AUTH_LINK || "");
     } else {
