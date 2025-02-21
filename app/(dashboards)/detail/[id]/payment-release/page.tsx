@@ -1,0 +1,60 @@
+"use client";
+import { useEffect, useState, useCallback } from "react";
+import { Elements } from "@stripe/react-stripe-js";
+import { Loader } from "@/app/_components/ui/dashboard-loader";
+import StripeMobile from "@/app/_components/PaymentMobile";
+import { stripePromise } from "@/app/lib/stripe";
+import { useError } from "@/app/lib/context/ErrorProvider";
+import { apiRequest } from "@/app/lib/services";
+import { useAppSelector } from "@/app/lib/store/hooks";
+import { selectAuth } from "@/app/lib/store/features/authSlice";
+import { selectBooking, setOfferDetailData } from "@/app/lib/store/features/bookingSlice";
+import { useDispatch } from "react-redux";
+
+const Page = ({ params }: { params: { id: number } }) => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<any>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const { handleError } = useError();
+  const { auth: storedData } = useAppSelector(selectAuth);
+
+  const getPaymentIntent = async () => {
+    setIsLoading(true);
+    const response = await apiRequest(`/stripe/CreatePaymentIntentForReleaseRequest`, {
+      method: 'POST',
+      headers: {
+        ...(storedData && { 'Authorization': `Bearer ${storedData.token}` })
+      },
+      body: {
+        job_id: params?.id
+      }
+    }, handleError);
+    if (response?.clientSecret) {
+      setClientSecret(response?.clientSecret);
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getPaymentIntent();
+  }, [data]);
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="flex-1 flex justify-center items-center">
+          { clientSecret && (
+            <Elements options={{ clientSecret }} stripe={stripePromise}>
+              <StripeMobile jobId={params.id} clientSecret={clientSecret} />
+            </Elements>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Page;
