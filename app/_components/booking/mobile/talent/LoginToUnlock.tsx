@@ -11,11 +11,7 @@ const LoginToUnlock = ({ isClient = false }) => {
     const isUpdoneDomain = window.location.hostname.includes("updone");
 
     // Save the current URL to redirect back after login
-    Cookies.set("callbackUrl", pathname + window.location.search || "", {
-      expires: 2,
-      // path: "/",
-      // ...(isUpdoneDomain && { domain: ".updone.com" }),
-    });
+    Cookies.set("callbackUrl", pathname + window.location.search || "");
 
     // Redirect to the sign-in page
     router.push(`${process.env.NEXT_PUBLIC_TALENTPRO_URL}/signin?from=unlock`);

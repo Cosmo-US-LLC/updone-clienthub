@@ -1,11 +1,14 @@
 "use client";
 
 import PaymentSuccessfull from "@/app/_components/payment/PaymentSuccessfull";
+import MobilePaymentSuccessfull from "@/app/_components/PaymentMobile/MobilePaymentSuccessfull";
 import { stripePromise } from "@/app/lib/stripe";
 import { Elements } from "@stripe/react-stripe-js";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const Page = ({ params }: { params: { offerId: number } }) => {
+const Page = () => {
+    const params = useParams();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,8 +25,8 @@ const Page = ({ params }: { params: { offerId: number } }) => {
   return (
     clientSecret && (
       <Elements options={{ clientSecret, loader }} stripe={stripePromise}>
-        <PaymentSuccessfull
-          offerId={params?.offerId}
+        <MobilePaymentSuccessfull
+          jobId={params?.id}
           clientSecret={clientSecret}
         />
       </Elements>

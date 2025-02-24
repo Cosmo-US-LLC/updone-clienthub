@@ -4,9 +4,11 @@ import PaymentSuccessfull from "@/app/_components/payment/PaymentSuccessfull";
 import MobilePaymentSuccessfull from "@/app/_components/PaymentMobile/MobilePaymentSuccessfull";
 import { stripePromise } from "@/app/lib/stripe";
 import { Elements } from "@stripe/react-stripe-js";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const Page = ({ params }: { params: { id: number } }) => {
+const Page = () => {
+    const params = useParams();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   useEffect(() => {

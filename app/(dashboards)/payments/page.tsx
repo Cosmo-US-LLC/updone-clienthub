@@ -1,5 +1,5 @@
-// @ts-nocheck
 "use client";
+// @ts-nocheck
 
 // import Tooltip from "@/app/_components/common/tooltip";
 import {
@@ -31,10 +31,10 @@ const CardTable = ({
     rowIndex: number;
     menuType: string;
   } | null>(null);
-  const containerRef = useRef<HTMLTableSectionElement>(null);
+  const containerRef = useRef<HTMLTableSectionElement | any>(null);
   const router = useRouter();
 
-  const handleRedirectToEvent = (eventId) => {
+  const handleRedirectToEvent = (eventId: any) => {
     router.push(`events/detail/${eventId}`);
   };
 
@@ -48,7 +48,7 @@ const CardTable = ({
 
   useClickOutside(containerRef, handleMenuClose);
 
-  const isLenghtSix = !!Number(bodyData.length.toString()) <= 6;
+  const isLenghtSix = !!(Number(bodyData.length.toString()) <= 6);
   return (
     <div className="flex flex-col w-[100%]">
       <div
@@ -198,7 +198,7 @@ const headers = [
 ];
 
 const Page = () => {
-  const [transactionsData, setTransactionsData] = useState(null);
+  const [transactionsData, setTransactionsData] = useState<any>(null);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -236,7 +236,7 @@ const Page = () => {
     >
       {isLoading ? (
         <Loader />
-      ) : transactionsData?.length === 0 ? (
+      ) : transactionsData?.length == 0 ? (
         <div className="h-full flex justify-center items-center flex-col">
           <Image
             width={151}

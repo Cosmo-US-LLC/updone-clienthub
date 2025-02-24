@@ -3,13 +3,14 @@ import SettlementPayment from '@/app/_components/payment/SettlementPayment'
 import { useError } from '@/app/lib/context/ErrorProvider'
 import { stripePromise } from '@/app/lib/stripe'
 import { Elements } from "@stripe/react-stripe-js"
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
 import { apiRequest } from '../../../../lib/services'
 import { selectAuth } from '../../../../lib/store/features/authSlice'
 import { useAppSelector } from '../../../../lib/store/hooks'
 
-const page = ({ params }: { params: { offerId: number } }) => {
+const page = () => {
+  const params = useParams();
   const [data, setData] = useState<any>(null);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [clientSecret, setClientSecret] = useState(null);

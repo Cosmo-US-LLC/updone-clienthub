@@ -3,17 +3,18 @@ import { Loader } from '@/app/_components/ui/dashboard-loader'
 import { useError } from '@/app/lib/context/ErrorProvider'
 import { stripePromise } from '@/app/lib/stripe'
 import { Elements } from "@stripe/react-stripe-js"
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import PaymentPay from '../../../../../_components/payment'
-import Header from '../../../../../_components/ui/header'
-import { apiRequest } from '../../../../../lib/services'
-import { selectAuth } from '../../../../../lib/store/features/authSlice'
-import { selectBooking, setOfferDetailData } from '../../../../../lib/store/features/bookingSlice'
-import { useAppSelector } from '../../../../../lib/store/hooks'
+import PaymentPay from '@/app/_components/payment'
+import Header from '@/app/_components/ui/header'
+import { apiRequest } from '@/app/lib/services'
+import { selectAuth } from '@/app/lib/store/features/authSlice'
+import { selectBooking, setOfferDetailData } from '@/app/lib/store/features/bookingSlice'
+import { useAppSelector } from '@/app/lib/store/hooks'
 
-const page = ({ params }: { params: { offerId: number } }) => {
+const page = () => {
+    const params = useParams();
   const selectedService = useSelector(selectBooking)
   const [data, setData] = useState<any>(null);
   const { auth: storedData } = useAppSelector(selectAuth);

@@ -8,10 +8,15 @@ import { useError } from "@/app/lib/context/ErrorProvider";
 import { apiRequest } from "@/app/lib/services";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import { selectAuth } from "@/app/lib/store/features/authSlice";
-import { selectBooking, setOfferDetailData } from "@/app/lib/store/features/bookingSlice";
+import {
+  selectBooking,
+  setOfferDetailData,
+} from "@/app/lib/store/features/bookingSlice";
 import { useDispatch } from "react-redux";
+import { useParams } from "next/navigation";
 
-const Page = ({ params }: { params: { id: number } }) => {
+const Page = () => {
+  const params = useParams();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any>(null);
@@ -21,20 +26,24 @@ const Page = ({ params }: { params: { id: number } }) => {
 
   const getPaymentIntent = async () => {
     setIsLoading(true);
-    const response = await apiRequest(`/stripe/CreatePaymentIntentForReleaseRequest`, {
-      method: 'POST',
-      headers: {
-        ...(storedData && { 'Authorization': `Bearer ${storedData.token}` })
+    const response = await apiRequest(
+      `/stripe/CreatePaymentIntentForReleaseRequest`,
+      {
+        method: "POST",
+        headers: {
+          ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
+        },
+        body: {
+          job_id: params?.id,
+        },
       },
-      body: {
-        job_id: params?.id
-      }
-    }, handleError);
+      handleError
+    );
     if (response?.clientSecret) {
       setClientSecret(response?.clientSecret);
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getPaymentIntent();
@@ -46,7 +55,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         <Loader />
       ) : (
         <div className="flex-1 flex justify-center items-center">
-          { clientSecret && (
+          {clientSecret && (
             <Elements options={{ clientSecret }} stripe={stripePromise}>
               <StripeMobile jobId={params.id} clientSecret={clientSecret} />
             </Elements>

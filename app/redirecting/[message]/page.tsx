@@ -1,9 +1,10 @@
 "use client"
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import { useSearchParams } from 'next/navigation'
 
-const Page = ({ params }: { params: { message: string } }) => {
+const Page = () => {
+    const params = useParams();
     const router = useRouter();
     const searchParams = useSearchParams()
 

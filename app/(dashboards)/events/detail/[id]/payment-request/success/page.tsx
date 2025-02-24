@@ -1,10 +1,11 @@
 "use client";
 
 import { Loader2 } from 'lucide-react';
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-const page = ({ params }: { params: { id: number } }) => {
+const page = () => {
+    const params = useParams();
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const router = useRouter();
 

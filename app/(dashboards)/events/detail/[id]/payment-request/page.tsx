@@ -5,7 +5,7 @@ import { apiRequest } from "@/app/lib/services";
 import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import { useError } from "@/app/lib/context/ErrorProvider";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import LoginToUnlock from "@/app/_components/booking/mobile/talent/LoginToUnlock";
 import { Loader2 } from "lucide-react";
 import Cookies from "js-cookie";
@@ -46,7 +46,8 @@ function AdditionalPay({
   );
 }
 
-function Page({ params }: { params: { id: number } }) {
+function Page() {
+    const params = useParams();
   const pathname = usePathname();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -175,11 +176,7 @@ function Page({ params }: { params: { id: number } }) {
     if (!loggedIn && !loading) {
       const isUpdoneDomain = window.location.hostname.includes("updone");
       // localStorage.setItem('callbackUrl', pathname)
-      Cookies.set("callbackUrl", pathname, {
-        expires: 30,
-        // path: "/",
-        // ...(isUpdoneDomain && { domain: ".updone.com" }),
-      });
+      Cookies.set("callbackUrl", pathname);
       router.push(`${process?.env?.NEXT_PUBLIC_BASE_URL}/signin`);
     }
     return <Loader />;

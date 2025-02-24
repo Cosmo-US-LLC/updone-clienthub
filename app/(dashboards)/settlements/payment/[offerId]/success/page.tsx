@@ -3,9 +3,11 @@
 import SettlementPaymentSuccessfull from '@/app/_components/payment/SettlementPaymentSuccessfull';
 import { stripePromise } from '@/app/lib/stripe';
 import { Elements } from "@stripe/react-stripe-js";
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const Page = ({ params }: { params: { offerId: number } }) => {
+const Page = () => {
+    const params = useParams();
     const [clientSecret, setClientSecret] = useState<string | null>(null);
 
     useEffect(() => {

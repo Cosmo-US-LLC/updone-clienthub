@@ -2,15 +2,21 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const talentAllowedPaths: string[] = ["/staff", "/talent"];
-
 const hostAllowedPaths: string[] = ["/events", "/payments", "/settings"];
-
 const unauthenticatedPathPattern = /^\/events\/detail\/\d+\/payment-request$/;
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get("token");
+  const token = request.cookies.get("authToken");
   const authData = request.cookies.get("authData")?.value;
   const currentPath = request.nextUrl.pathname;
+
+  if (request?.nextUrl?.pathname === "/auth") {
+    console.log("Authenticating ", request.nextUrl.searchParams.get('token')?.split(".")[0])
+
+    const response = NextResponse.next();
+    response.cookies.set("authToken", request.nextUrl.searchParams.get('token') || "");
+    return response;
+  }
 
   let parsedAuthData;
   try {
@@ -35,44 +41,44 @@ export function middleware(request: NextRequest) {
       new URL(process.env.NEXT_PUBLIC_BASE_URL || "/", request.url)
     );
   }
-  const role_id = parsedAuthData?.user?.role_id;
+  // const role_id = parsedAuthData?.user?.role_id;
 
-  if (
-    role_id === 3 &&
-    !talentAllowedPaths.some((path) => currentPath.startsWith(path))
-  ) {
-    return NextResponse.redirect(
-      new URL(`/unauthorized?role=talent`, request.url)
-    );
-  }
+  // if (
+  //   role_id === 3 &&
+  //   !talentAllowedPaths.some((path) => currentPath.startsWith(path))
+  // ) {
+  //   return NextResponse.redirect(
+  //     new URL(`/unauthorized?role=talent`, request.url)
+  //   );
+  // }
 
-  if (
-    role_id === 4 &&
-    !hostAllowedPaths.some((path) => currentPath.startsWith(path))
-  ) {
-    return NextResponse.redirect(
-      new URL(`/unauthorized?role=host`, request.url)
-    );
-  }
+  // if (
+  //   role_id === 4 &&
+  //   !hostAllowedPaths.some((path) => currentPath.startsWith(path))
+  // ) {
+  //   return NextResponse.redirect(
+  //     new URL(`/unauthorized?role=host`, request.url)
+  //   );
+  // }
 
-  const hostname = request.headers.get('host')!;
+  // const hostname = request.headers.get('host')!;
   // Redirect paths to NEXT_PUBLIC_CLIENTHUB_URL if not already on clienthub
-  if (
-    hostAllowedPaths.some((path) => currentPath.startsWith(path)) &&
-    !hostname.includes("clienthub")
-  ) {
-    const clientHubUrl = process.env.NEXT_PUBLIC_CLIENTHUB_URL;
-    return NextResponse.redirect(new URL(currentPath, clientHubUrl));
-  }
+  // if (
+  //   hostAllowedPaths.some((path) => currentPath.startsWith(path)) &&
+  //   !hostname.includes("clienthub")
+  // ) {
+  //   const clientHubUrl = process.env.NEXT_PUBLIC_CLIENTHUB_URL;
+  //   return NextResponse.redirect(new URL(currentPath, clientHubUrl));
+  // }
 
    // Redirect paths to NEXT_PUBLIC_TALENTPRO_URL if not already on talentpro
-   if (
-    talentAllowedPaths.some((path) => currentPath.startsWith(path)) &&
-    !hostname.includes("talentpro")
-  ) {
-    const clientHubUrl = process.env.NEXT_PUBLIC_TALENTPRO_URL;
-    return NextResponse.redirect(new URL(currentPath, clientHubUrl));
-  }
+  //  if (
+  //   talentAllowedPaths.some((path) => currentPath.startsWith(path)) &&
+  //   !hostname.includes("talentpro")
+  // ) {
+  //   const clientHubUrl = process.env.NEXT_PUBLIC_TALENTPRO_URL;
+  //   return NextResponse.redirect(new URL(currentPath, clientHubUrl));
+  // }
 
   
 
@@ -85,10 +91,12 @@ export const config = {
     "/signin",
     "/reset-password",
     "/events/:path*",
-    "/payments/:path*",
+    "/payments",
+    "/payment/:path*",
     "/settings/:path*",
     "/events/detail/:path*",
     '/staff/:path*',
-    '/talent/:path*'
+    '/talent/:path*',
+    '/auth'
   ],
 };

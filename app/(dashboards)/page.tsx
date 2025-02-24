@@ -38,7 +38,7 @@ const CardTable = ({
     rowIndex: number;
     menuType: string;
   } | null>(null);
-  const containerRef = useRef<HTMLTableSectionElement>(null);
+  const containerRef = useRef<HTMLTableSectionElement | any>(null);
   const router = useRouter();
 
   // Function to handle menu opening
@@ -599,11 +599,12 @@ const DynamicCardTablePage = () => {
   const fetchOffers = async () => {
     try {
       setIsLoading(true);
+      console.log(storedData)
       const response = await apiRequest("/client/events", {
         method: "POST",
         headers: {
           revalidate: true,
-          ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
+          ...(storedData && { Authorization: `Bearer ${storedData?.token}` }),
         },
         body: {
           page_number: 1,
@@ -625,7 +626,7 @@ const DynamicCardTablePage = () => {
   useEffect(() => {
     fetchOffers();
     setUserName(storedData ? storedData?.user?.name : "");
-  }, [storedData]);
+  }, []);
 
   if (!userName)
     return (

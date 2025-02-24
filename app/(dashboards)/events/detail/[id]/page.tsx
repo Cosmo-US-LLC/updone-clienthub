@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import JobDetailWorker from "@/app/_components/booking/worker/JobDetail";
 import loadable from "@/app/_components/ui/lazy-load";
 import { useError } from "@/app/lib/context/ErrorProvider";
@@ -9,12 +10,14 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useParams } from 'next/navigation'
 
 const JobDetail = loadable(
     () => import("@/app/_components/booking/job-detail")
 );
 
-const page = ({ params }: { params: { id: number } }) => {
+const page = () => {
+    const params = useParams();
     const { auth: storedData } = useAppSelector(selectAuth);
     const [isWorker, setIsWorker] = useState<boolean | null>(null);
     const router = useRouter();
@@ -83,16 +86,17 @@ const page = ({ params }: { params: { id: number } }) => {
     return (
         // <div className="mt-4 p-1 h-screen max-h-[calc(100vh-133px)] overflow-y-hidden"></div>
         <>
-        <div className="max-lg:hidden mt-4 h-screen max-h-[calc(100vh-132px)] overflow-y-hidden">
-            {/* <Header /> */}
+        {/* <div className="max-lg:hidden mt-4 h-screen max-h-[calc(100vh-132px)] overflow-y-hidden">
             {isWorker === true ? (
+                @ts-ignore
                 <JobDetailWorker jobId={params.id} />
             ) : (
                 // <Suspense>
                 <JobDetail jobId={params.id} />
                 // </Suspense>
             )}
-        </div>
+        </div> */}
+            <JobDetail jobId={params.id} />
         
       
       <div className="lg:hidden px-4">
