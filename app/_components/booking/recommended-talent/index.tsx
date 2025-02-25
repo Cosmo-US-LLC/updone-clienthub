@@ -183,7 +183,7 @@ const RecommendedTalent = ({
           totalCount={data.pagination.total_records}
           onPageChange={handlePageChange}
           handleChange={handleChange}
-          setIsOptionSelected={setIsOptionSelected}
+          // setIsOptionSelected={setIsOptionSelected}
         />
       )}
     </div>

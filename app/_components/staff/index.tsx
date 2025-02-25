@@ -247,7 +247,7 @@ const StaffListing = ({ countInvited, setCountInvited, selectedService, setSelec
           totalCount={data?.pagination?.total_records}
           onPageChange={handlePageChange}
           handleChange={handleChange}
-          setIsOptionSelected={setIsOptionSelected}
+          // setIsOptionSelected={setIsOptionSelected}
           isOptionSelected={isOptionSelected}
         />
       </div>

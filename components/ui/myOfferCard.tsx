@@ -8,14 +8,14 @@ const OfferCard = ({
   totalIncome = 125,
 }) => {
   return (
-    <motion.div
+    <div
       className="bg-[#F4EBFF] rounded-lg p-4 flex flex-col space-y-4 shadow-md mx-4 mt-6"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.5,
-        ease: "easeInOut",
-      }}
+      // initial={{ opacity: 0, y: 50 }}
+      // animate={{ opacity: 1, y: 0 }}
+      // transition={{
+      //   duration: 0.5,
+      //   ease: "easeInOut",
+      // }}
     >
       <h3 className="text-lg font-semibold text-[#161616]">{title}</h3>
       <div className="flex justify-between items-center space-x-4">
@@ -46,7 +46,7 @@ const OfferCard = ({
           </span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

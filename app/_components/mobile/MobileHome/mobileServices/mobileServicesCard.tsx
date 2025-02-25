@@ -103,9 +103,9 @@ const mobileServicesCard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.2, duration: 0.5, ease: "easeOut" }}
-            className="py-3 pl-2 pr-1 rounded-lg overflow-hidden"
+            // className="py-3 pl-2 pr-1 rounded-lg overflow-hidden"
             style={{ backgroundColor: card.bgColor, opacity: 0.5 }}
-            onClick={() => handleClickServiceCard(card)}
+            // onClick={() => handleClickServiceCard(card)}
           >
             <motion.div
               key={card.id}
