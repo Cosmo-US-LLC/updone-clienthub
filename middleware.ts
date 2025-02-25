@@ -10,6 +10,27 @@ export function middleware(request: NextRequest) {
   const authData = request.cookies.get("authData")?.value;
   const currentPath = request.nextUrl.pathname;
 
+  if (currentPath != "/auth") {
+    console.log("currentPath - ", currentPath);
+    // const response = NextResponse.next();
+    // response.cookies.set("authToken", request.nextUrl.searchParams.get('token') || "");
+    // return response;
+  }
+  // console.log(JSON.parse(authData || "")?.role_id)
+  let roleId = null;
+  if (authData && authData !== "undefined") {
+    try {
+      roleId = JSON.parse(authData)?.role_id;
+    } catch (error) {
+      console.error("Error parsing authData:", error);
+    }
+  }
+  if (roleId && roleId != 4) {
+    return NextResponse.redirect(
+      new URL(process.env.NEXT_PUBLIC_BASE_URL || "/", request.url)
+    );
+  }
+
   if (request?.nextUrl?.pathname === "/auth") {
     console.log("Authenticating ", request.nextUrl.searchParams.get('token')?.split(".")[0])
 
@@ -87,16 +108,18 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/signup",
-    "/signin",
-    "/reset-password",
+    // "/signup",
+    // "/signin",
+    // "/reset-password",
     "/events/:path*",
     "/payments",
     "/payment/:path*",
+    "/settings",
     "/settings/:path*",
-    "/events/detail/:path*",
-    '/staff/:path*',
-    '/talent/:path*',
-    '/auth'
+    // "/events/detail/:path*",
+    // '/staff/:path*',
+    // '/talent/:path*',
+    '/auth',
+    '/'
   ],
 };

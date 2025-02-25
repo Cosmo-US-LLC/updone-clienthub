@@ -194,7 +194,7 @@ function NavbarClienthub() {
               <DropdownMenuItem
                 onClick={() =>
                   router.push(
-                    `${process.env.NEXT_PUBLIC_CLIENTHUB_URL}/settings`
+                    `/settings`
                   )
                 }
                 className="hover:!bg-[#F1EEFF] max-lg:hidden duration-0 text-[#2C2240] hover:text-[#2C2240] py-[20px] px-[40px] flex justify-start items-center !text-[14px] font-[400] leading-[24px]"
