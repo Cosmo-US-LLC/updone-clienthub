@@ -177,7 +177,7 @@ const BookingMobileScreen = () => {
                         exit="exit"
                         variants={screenVariants}
                         transition={{ duration: 0.5 }}
-                        className="min-h-[100dvh] flex flex-col"
+                        // className="min-h-[100dvh] flex flex-col"
                     >
                         <AddLocationSecondScreen
                             setLocationError={setLocationError}
