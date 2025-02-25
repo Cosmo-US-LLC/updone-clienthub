@@ -586,7 +586,7 @@ const AddJobDesktop: React.FC = () => {
               </div>
               <motion.div
                 key={step}
-                className="mt-[24px]"
+                // className="mt-[24px]"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 2, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
