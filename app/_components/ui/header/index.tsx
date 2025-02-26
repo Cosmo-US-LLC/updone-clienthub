@@ -381,7 +381,7 @@ const Header = ({ isClientHub }: { isClientHub?: boolean }) => {
                     </div>
                   </li> */}
                   <li
-                    onClick={() => router.push("/add-job?step=event-location")}
+                    onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/add-event`)}
                     className={`${
                       !scrollBackground && pathName === "/"
                         ? `!ml-[22px] bg-white hover:bg-[#EBE6FF] rounded-full text-black !normal-case px-[20px] py-[12px] text-[14px] font-[600] leading-[150%] transition-colors duration-300 delay-150 `

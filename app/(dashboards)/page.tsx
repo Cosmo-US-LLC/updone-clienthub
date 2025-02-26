@@ -21,6 +21,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 // CardTable Component
 const CardTable = ({
@@ -664,16 +665,11 @@ const DynamicCardTablePage = () => {
                   Chat with talent before booking to ensure your event is just
                   the way you want it. It's quick, easy, and hassle-free!
                 </p>
-                <div
-                  onClick={() => {
-                    router.push(
-                      `${process.env.NEXT_PUBLIC_BASE_URL}/add-job?step=event-location`
-                    );
-                  }}
+                <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-event`}
                   className="cursor-pointer bg-[black] rounded-full py-2 px-4 w-fit mt-4 2xl:mt-8 transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 active:shadow-inner"
                 >
                   <p className="text-[16px] text-[white]">Book a Talent Now</p>
-                </div>
+                </Link>
               </div>
 
               <Image

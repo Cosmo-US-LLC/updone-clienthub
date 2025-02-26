@@ -46,11 +46,22 @@ const SideBar = () => {
   useEffect(() => {
     setLogoutPath(`${process.env.NEXT_PUBLIC_BASE_URL}`)
     const findActiveIndex = () => {
+      if (pathname == "/" || pathname.includes("/events")) {
+        setActiveIndex(0)
+      } else if (pathname.includes("/payments")) {
+        setActiveIndex(1)
+      } else if (pathname.includes("/settlements")) {
+        setActiveIndex(2)
+      } else if (pathname.includes("/reviews")) {
+        setActiveIndex(3)
+      } else if (pathname.includes("/settings")) {
+        setActiveIndex(4)
+      }
       // Check which link matches the current pathname
-      const activeLinkIndex = [...links, ...bottomLinks].findIndex((link) =>
-        pathname.startsWith(link.path)
-      );
-      setActiveIndex(activeLinkIndex);
+      // const activeLinkIndex = [...links, ...bottomLinks].findIndex((link) =>
+      //   pathname.startsWith(link.path)
+      // );
+      // setActiveIndex(activeLinkIndex);
       setLoading(false); // Set loading to false after determining the active index
     };
 
@@ -77,6 +88,7 @@ const SideBar = () => {
       // alert('Redux cleared')
   
       // ✅ Remove Authentication Cookies
+      Cookies.remove("token");
       Cookies.remove("authToken");
       Cookies.remove("authData");
   
@@ -151,7 +163,7 @@ const SideBar = () => {
           <div className="w-full flex flex-col gap-2">
             {bottomLinks.map((link, index) => (
               <Link
-                href={link.path}
+                href={index === 1 ? "" : link.path}
                 key={index + links.length}
                 className={`hover:bg-[#F8F6FF] flex flex-col items-center justify-center gap-6 w-full p-3 rounded-[12px] ${
                   activeIndex === index + links.length ? "bg-[#F8F6FF]" : ""

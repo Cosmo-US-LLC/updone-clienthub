@@ -50,11 +50,10 @@ const TalentInfo = ({ jobDetailData }: any) => {
         }
     }
 
-
     return (
         <div className="flex flex-row items-center justify-center gap-4 mt-4">
             <div className="border border-1 border-[#EBE6FF] bg-[#FFEFD7] min-h-[320px] h-full w-full rounded-[12px] p-4 flex flex-col p-8">
-                <p className="font-[500] leading-[8px] text-[16px]">You are Hired!</p>
+                <p className="font-[500] leading-[8px] text-[16px]">You Hired!</p>
                 <div className="flex items-center mt-4">
                     <div className="rounded-full overflow-hidden border-[1px] border-white">
                         <Image
