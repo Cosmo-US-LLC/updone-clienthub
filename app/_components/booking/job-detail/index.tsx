@@ -735,7 +735,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
       {/* Chat Panel */}
       {isChatHidden === false && selectedOffer !== null && (
         <div
-          className={`z-[2] absolute right-0 bottom-0 flex bg-white rounded-[12px] ${
+          className={`z-[2] absolute right-20 bottom-0 flex bg-white rounded-[12px] ${
             isChatVisible ? "h-[90%]" : "h-[63px]"
           } w-[26%] transition-all duration-300 ease-in-out`}
         >
