@@ -15,7 +15,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
           <div className="flex">
             <SideBar />
           </div>
-          <main className=" w-[100%] h-[100%] flex flex-col px-4 pt-0 relative overflow-y-auto">
+          <main className="w-[100%] h-[100%] flex flex-col px-4 pt-0 relative overflow-y-auto">
             {children}
           </main>
         </div>

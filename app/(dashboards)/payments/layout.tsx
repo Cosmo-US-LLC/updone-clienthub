@@ -7,7 +7,7 @@ function layout({ children }: any) {
 
   return (
     <>
-      <div className="max-lg:hidden">{children}</div>
+      <div className="max-lg:hidden grow max-h-full overflow-y-auto">{children}</div>
       <div className="px-4">
         <p className="lg:hidden text-[18px] pt-4 mb-2">
           ClientHub is coming soon on your cellphone!

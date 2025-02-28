@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { selectAuth, setAuth } from "../lib/store/features/authSlice";
 import Cookies from "js-cookie";
 import { useAppSelector } from "../lib/store/hooks";
+import RenderLoader from "../_components/ui/loader";
 
 function page() {
   const router = useRouter();
@@ -49,7 +50,7 @@ function page() {
   return (
     <div>
       {/* {token?.split(".")[0]} */}
-      <Loader />
+      <RenderLoader />
     </div>
   );
 }
