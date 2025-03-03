@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useState } from "react";
 import "./payment.module.css";
 import styles from "./payment.module.css";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function StripeCheckoutForm({
   offerId,
@@ -14,9 +15,9 @@ export default function StripeCheckoutForm({
   clientSecret,
   isSettlement = false,
 }: any) {
-
   const stripe = useStripe();
   const elements = useElements();
+  const [saveMethod, setSaveMethod] = useState<any>(true);
   const [message, setMessage] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const paymentElementOptions = { layout: "tabs" as const };
@@ -64,6 +65,15 @@ export default function StripeCheckoutForm({
     <div className="flex flex-col">
       <form id="payment-form" onSubmit={handleSubmit}>
         <PaymentElement id="payment-element" options={paymentElementOptions} />
+        <div className="flex items-center space-x-2 pt-3">
+          <Checkbox id="save" value={saveMethod} onCheckedChange={setSaveMethod} className="hover:bg-white" />
+          <label
+            htmlFor="save"
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Save payment method for future use.
+          </label>
+        </div>
         <button
           disabled={isLoading || !stripe || !elements}
           id="submit"
@@ -106,7 +116,13 @@ export default function StripeCheckoutForm({
       </form>
       <div className="flex flex-row items-center mt-4 justify-center mt-[48px] gap-2">
         <p className="text-gray-600 text-[16px]">Powered by</p>
-        <Image width={65} height={65} alt="" src="/images/stripe.svg" className="w-[65px] h-[65px]" />
+        <Image
+          width={65}
+          height={65}
+          alt=""
+          src="/images/stripe.svg"
+          className="w-[65px] h-[65px]"
+        />
       </div>
     </div>
   );

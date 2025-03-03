@@ -1,9 +1,5 @@
 "use client";
 
-// import MyEvents from "@/app/_components/dashboards/client/MyEvents";
-import MyEvents from "@/components/events/mobile/MyEvents/page";
-import VerificationIcon from "@/app/_components/ui/shield";
-import useClickOutside from "@/app/lib/hooks";
 import { apiRequest } from "@/app/lib/services";
 import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
@@ -48,7 +44,7 @@ const headers = [
 ];
 
 const DynamicCardTablePage = () => {
-  const [eventData, setGetEventData] = useState<any>([]);
+  const [eventData, setGetEventData] = useState([]);
   const [userName, setUserName] = useState("");
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
@@ -154,9 +150,6 @@ const DynamicCardTablePage = () => {
     return formattedResults;
   };
 
-
-  console.log({eventData});
-
   return (
     <>
       <div
@@ -164,7 +157,7 @@ const DynamicCardTablePage = () => {
       >
         <div className="my-2 h-fit">
           <p className="font-medium text-[20px] mb-2">
-            Welcome Back,
+            Welcome Back, {/* @ts-ignore */}
             {userName?.split(" ")[0]}&nbsp;
             {userName?.split(" ")[1]?.length > 0 && userName?.split(" ")[1][0]}
           </p>
@@ -422,10 +415,46 @@ const DynamicCardTablePage = () => {
             )}
           </TableBody>
         </Table>
+
+        <p className="lg:hidden text-[18px] pt-4 mb-2">
+          ClientHub is coming soon on your cellphone!
+          <br />
+          <br />
+          <span className="text-[16px] text-neutral-600">
+            Meanwhile, you can manage your events, view offers, talk to talents,
+            and hire them on desktop.
+          </span>
+        </p>
+
+        <button
+          onClick={() => {
+            router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
+          }}
+          className="lg:hidden mt-6 items-center justify-center min-w-[250px] py-2 rounded-full bg-[#350ABC] text-white shadow-md"
+        >
+          Go Back to Updone
+        </button>
       </div>
 
-      <div className="lg:hidden overflow-hidden px-4 py-4 bg-[#F6F9FC]">
-        <MyEvents eventData={eventData} />
+      <div className="lg:hidden overflow-hidden px-4">
+        <p className="lg:hidden text-[18px] pt-4 mb-2">
+          ClientHub is coming soon on your cellphone!
+          <br />
+          <br />
+          <span className="text-[16px] text-neutral-600">
+            Meanwhile, you can manage your events, view offers, talk to talents,
+            and hire them on desktop.
+          </span>
+        </p>
+
+        <button
+          onClick={() => {
+            router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
+          }}
+          className="lg:hidden w-fit mx-auto mt-6 items-center justify-center min-w-[250px] py-2 rounded-full bg-[#350ABC] text-white shadow-md"
+        >
+          Go Back to Updone
+        </button>
       </div>
     </>
   );
