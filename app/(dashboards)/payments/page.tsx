@@ -271,7 +271,7 @@ const Page = () => {
 
           <Table className="grow relative hover:bg-transparent">
             {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-            <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
+            <TableHeader className="sticky -top-[2] z-10 bg-[#f6f9fc]">
               <TableRow>
                 <TableHead className="w-[130px]">Payment ID</TableHead>
                 <TableHead>Event Detail</TableHead>

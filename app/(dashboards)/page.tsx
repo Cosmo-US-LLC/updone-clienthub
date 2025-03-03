@@ -220,7 +220,7 @@ const DynamicCardTablePage = () => {
         </div>
 
         <Table className="grow relative">
-          <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
+          <TableHeader className="sticky -top-[2] z-10 bg-[#f6f9fc]">
             <TableRow>
               <TableHead className="w-[180px]">Title</TableHead>
               <TableHead>Event Status</TableHead>
@@ -274,7 +274,7 @@ const DynamicCardTablePage = () => {
               eventData?.map((event: any, id: any) => (
                 <TableRow
                   key={id}
-                  onClick={() => router.push(`/event/${event?.id}`)}
+                  onClick={() => router.push(`/events/detail/${event?.id}`)}
                   className="cursor-pointer"
                 >
                   <TableCell className="text-[#350ABC] max-w-[180px] truncate overflow-hidden whitespace-nowrap font-[400] text-[14px]">
