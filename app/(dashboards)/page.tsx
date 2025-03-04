@@ -30,6 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import VerificationIconMobile from "@/app/_components/ui/shield";
+import MyEvents from "@/components/events/mobile/MyEvents/page";
 
 // Headers
 const headers = [
@@ -123,22 +124,22 @@ const DynamicCardTablePage = () => {
           const formattedDate = startDate.toLocaleDateString(
             "en-US",
             dateOptions
-          ); // E.g., Wednesday, September 4, 2024
+          ); 
           const formattedStartTime = startDate.toLocaleTimeString(
             "en-US",
             timeOptions
-          ); // E.g., 05:00 PM
+          );  
           const formattedEndTime = endDate.toLocaleTimeString(
             "en-US",
             timeOptions
-          ); // E.g., 07:00 PM
+          );  
 
-          // Push JSX element with a line break between date and time
+         
           formattedResults.push(
-            <span key={date}>
+            <span key={date} className="flex flex-row text-[#774DFD] gap-2 md:gap-0 md:flex-col">
               {formattedDate}
-              <br />
-              <span className="text-[#6B6B6B]">
+              <br className="hidden md:block"/>
+              <span className="text-[#161616]">
                 {`${formattedStartTime} - ${formattedEndTime}`}
               </span>
             </span>
@@ -436,8 +437,9 @@ const DynamicCardTablePage = () => {
         </button>
       </div>
 
-      <div className="lg:hidden overflow-hidden px-4">
-        <p className="lg:hidden text-[18px] pt-4 mb-2">
+      <div className="lg:hidden overflow-hidden">
+        <MyEvents isLoading={isLoading} eventData={eventData} formatDateAndTime={formatDateAndTime} />
+        {/* <p className="lg:hidden text-[18px] pt-4 mb-2">
           ClientHub is coming soon on your cellphone!
           <br />
           <br />
@@ -445,16 +447,16 @@ const DynamicCardTablePage = () => {
             Meanwhile, you can manage your events, view offers, talk to talents,
             and hire them on desktop.
           </span>
-        </p>
+        </p> */}
 
-        <button
+        {/* <button
           onClick={() => {
             router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
           }}
           className="lg:hidden w-fit mx-auto mt-6 items-center justify-center min-w-[250px] py-2 rounded-full bg-[#350ABC] text-white shadow-md"
         >
           Go Back to Updone
-        </button>
+        </button> */}
       </div>
     </>
   );
