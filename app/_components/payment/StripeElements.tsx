@@ -65,7 +65,7 @@ export default function StripeCheckoutForm({
     <div className="flex flex-col">
       <form id="payment-form" onSubmit={handleSubmit}>
         <PaymentElement id="payment-element" options={paymentElementOptions} />
-        <div className="flex items-center space-x-2 pt-3">
+        {/* <div className="flex items-center space-x-2 pt-3">
           <Checkbox id="save" value={saveMethod} onCheckedChange={setSaveMethod} className="hover:bg-white" />
           <label
             htmlFor="save"
@@ -73,7 +73,7 @@ export default function StripeCheckoutForm({
           >
             Save payment method for future use.
           </label>
-        </div>
+        </div> */}
         <button
           disabled={isLoading || !stripe || !elements}
           id="submit"

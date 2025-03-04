@@ -93,7 +93,7 @@ function NavbarClienthub() {
         <div className="flex gap-4">
           {/* Logo */}
           <Link
-            href={`${process.env.NEXT_PUBLIC_BASE_URL}/`}
+            href={`/`}
             className="relative"
           >
             <p className="text-2xl font-light text-[#4A4A4A] leading-[15px]">
