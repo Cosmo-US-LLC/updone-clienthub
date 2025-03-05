@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from 'next/navigation'
+import EventsDetails from '@/components/eventsDetails/mobile/page'
 
 const JobDetail = loadable(
     () => import("@/app/_components/booking/job-detail")
@@ -100,7 +101,8 @@ const page = () => {
         
       
       <div className="lg:hidden px-4">
-        <p className="lg:hidden text-[18px] pt-4 mb-2">
+        <EventsDetails />
+        {/* <p className="lg:hidden text-[18px] pt-4 mb-2">
           ClientHub is coming soon on your cellphone!
           <br />
           <br />
@@ -108,16 +110,16 @@ const page = () => {
             Meanwhile, you can manage your events, view offers, talk to talents,
             and hire them on desktop.
           </span>
-        </p>
+        </p> */}
 
-        <button
+        {/* <button
           onClick={() => {
             router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
           }}
           className="lg:hidden w-fit mx-auto mt-6 items-center justify-center min-w-[250px] py-2 rounded-full bg-[#350ABC] text-white shadow-md"
         >
           Go Back to Updone
-        </button>
+        </button> */}
       </div>
         </>
     );
