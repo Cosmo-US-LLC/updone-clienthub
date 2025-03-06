@@ -99,7 +99,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
           </h2>
 
           {/* Description */}
-          <p className="text-[#6B6B6B] text-[16px] font-[400] leading-[24px] text-left mb-4">
+          <div className="text-[#6B6B6B] text-[16px] font-[400] leading-[24px] text-left mb-4">
             {/* Congratulations, you’ve successfully hired a talented talent for
             your event.  */}
             <ul className="list-disc list-inside">
@@ -108,7 +108,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
             </ul>
             {/* We have notified the talent about the details of the
             event. You can connect with your talent directly. */}
-          </p>
+          </div>
           {/* <p className="text-[#6B6B6B] text-[16px] font-[400] leading-[24px] text-center">
             Click the button to view contact details.
           </p> */}
@@ -156,7 +156,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
                   <path
                     d="M6 12L10 8L6 4"
                     stroke="#F3F0FF"
-                    stroke-width="1.4"
+                    strokeWidth="1.4"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />

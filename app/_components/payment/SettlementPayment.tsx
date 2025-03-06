@@ -22,7 +22,7 @@ interface Event {
     end_time: string;
 }
 
-const SettlementPayment = ({ data, offerId, clientSecret }: any) => {
+const SettlementPayment = ({ data, offerId, clientSecret, loadingIntent }: any) => {
     const { auth: storedData } = useAppSelector(selectAuth);
     const [loading, setLoading] = useState(false);
     const [loadingRejection, setLoadingRejection] = useState(false);
@@ -259,7 +259,7 @@ const SettlementPayment = ({ data, offerId, clientSecret }: any) => {
                                     Extra Hours Claimed
                                 </h2>
                                 <p className='tracking-[-0.28px] !text-[#2C2240] font-[400] text-[14px] leading-[24px] flex justify-center items-center'>
-                                    ${data?.settlementDetails?.extra_hours}h
+                                    {data?.settlementDetails?.extra_hours}h
                                 </p>
                             </div>
                             <div className='w-full flex justify-between items-center pt-[16px] pb-[28px]'>
@@ -268,7 +268,7 @@ const SettlementPayment = ({ data, offerId, clientSecret }: any) => {
                                 </h2>
                                 <p className='tracking-[-0.28px] !text-[#2C2240] font-[400] text-[14px] leading-[24px] flex justify-center items-center'>
                                     <small className='mr-[16px] text-[#6B6B6B] text-[10px]'>
-                                        ${data?.settlementDetails?.extra_hours} hours x ${parseFloat(data?.offered_amount)}
+                                        {data?.settlementDetails?.extra_hours} hours x ${parseFloat(data?.offered_amount)}
                                     </small>
                                     ${parseFloat(data?.settlementDetails?.settlement_amount)}
                                 </p>
@@ -294,6 +294,7 @@ const SettlementPayment = ({ data, offerId, clientSecret }: any) => {
                         jobId={data?.job?.id}
                         clientSecret={clientSecret}
                         isSettlement={true}
+                        loadingIntent={loadingIntent}
                     />
                 </div>
             </div >
