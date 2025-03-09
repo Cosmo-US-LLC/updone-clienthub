@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import Invites from './Invites'
 import Offers from './Offers'
 
-const JobDetailsTabs = ({ activeTab, setOffers, offers, jobId, setSelectedOffer, selectedOffer, messagesRefreshed, isInModal }: any) => {
+const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, setSelectedOffer, selectedOffer, messagesRefreshed, isInModal }: any) => {
     const [data, setData] = useState<any>(null);
     const { jobData } = useAppSelector(selectStaff);
     const { auth: storedData } = useAppSelector(selectAuth);
@@ -70,6 +70,7 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, jobId, setSelectedOffer,
                         {activeTab === 'a' && (
                             <Offers
                                 offers={offers}
+                                offersLoading={offersLoading}
                                 job={job}
                                 setSelectedOffer={setSelectedOffer}
                                 selectedOffer={selectedOffer}
@@ -88,12 +89,13 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, jobId, setSelectedOffer,
         return (
             <>
                 {/* {error === "Password mismatch" || "User not found" ||storedData.token  ? null : */}
-                <div className='!h-[100%] h-full'>
+                <div className='!h-[100%]'>
                     <section className='bg-[#FFF] rounded-[12px]'>
                         {activeTab === 'a' && (
                             <Offers
                                 offers={offers}
                                 job={job}
+                                offersLoading={offersLoading}
                                 setSelectedOffer={setSelectedOffer}
                                 selectedOffer={selectedOffer}
                                 isInModal={isInModal}

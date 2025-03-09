@@ -4,7 +4,7 @@ import { IoArrowBack } from "react-icons/io5";
 import styles from "../payment/payment.module.css";
 import StripeCheckoutForm from "./StripeElements";
 
-const StripeMobile = ({ jobId, clientSecret }: any) => {
+const StripeMobile = ({ jobId, clientSecret, customerSessionToken }: any) => {
   return (
     // ${is-Mobile === false ? "w-[40%] mt-4 mx-auto" : "w-full"}
     <div className={`w-full lg:w-[40%] lg:mt-4 lg:mx-auto px-8 mt-16 flex flex-col justify-center  gap-6  bg-white`}>
@@ -18,6 +18,7 @@ const StripeMobile = ({ jobId, clientSecret }: any) => {
         <StripeCheckoutForm
           jobId={jobId}
           clientSecret={clientSecret}
+          customerSessionToken={customerSessionToken}
         />
       </div>
       <div className="flex flex-col">

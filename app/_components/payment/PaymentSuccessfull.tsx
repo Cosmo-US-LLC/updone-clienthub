@@ -80,9 +80,9 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
   return (
     <div className="flex flex-col  items-center justify-center min-h-[100%] !px-8">
       {/* Container */}
-      <div className="flex flex-col  !max-h-[520px] items-center justify-center p-8 bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+      <div className="flex flex-col !max-h-[520px] items-center justify-center p-8 bg-white rounded-xl shadow-lg max-w-lg mx-auto">
         {/* Success SVG */}
-        <div className="mb-4 relative bottom-0">
+        <div className="mb-4 mt-8 relative bottom-0">
           <Image
             width={100}
             height={100}
@@ -142,7 +142,8 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
           <div className="flex justify-center">
             <button
               onClick={handleRedirect}
-              className="text-[14px] font-[400] py-[16px] flex items-center text-[#fff] px-[60px] rounded-[4px] bg-[#350ABC] transition-transform duration-150 ease-in-out transform active:scale-95 grow_ellipse"
+              disabled={!jobId}
+              className="text-[14px] font-[400] disabled:pointer-events-none disabled:opacity-70 py-[16px] flex items-center text-[#fff] px-[60px] rounded-[4px] bg-[#350ABC] transition-transform duration-150 ease-in-out transform active:scale-95 grow_ellipse"
             >
               View Contact Details{" "}
               <span className="ml-2">

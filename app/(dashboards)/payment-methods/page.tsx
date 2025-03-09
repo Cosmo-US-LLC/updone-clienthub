@@ -95,8 +95,11 @@ const Page = () => {
             alt=""
             src="/images/client-portal/payment/no-payment.svg"
           />
-          <p className="text-[#000000] text-[40px] leading-[32px] font-[300]">
-            No payments yet
+          <p className="text-[#000000] text-[34px] leading-[32px] font-[300]">
+            No Payment Methods
+          </p>
+          <p className="text-neutral-600 text-md py-4">
+            Save a payment method at checkout and it will appear here.
           </p>
         </div>
       ) : (

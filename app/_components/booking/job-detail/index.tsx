@@ -22,6 +22,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
     useState(false);
   const { jobData } = useAppSelector(selectStaff);
   const [offers, setOffers] = useState<any[]>([]);
+  const [offersLoading, setOffersLoading] = useState<boolean>(true);
   const [jobDetailData, setData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("a");
@@ -77,6 +78,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
 
   useEffect(() => {
     const GetOffers = async () => {
+      setOffersLoading(true);
       try {
         const response = await apiRequest(
           `/invitation/fetchOffers`,
@@ -96,6 +98,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
         );
 
         if (response?.offers) {
+          console.log(response)
           setOffers(response?.offers);
           if (
             jobDetailData?.status === "assigned" ||
@@ -113,6 +116,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setOffersLoading(false);
       }
     };
 
@@ -497,6 +502,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                       jobId={jobId}
                       setOffers={setOffers}
                       offers={offers}
+                      offersLoading={offersLoading}
                       activeTab={activeTab}
                       setSelectedOffer={setSelectedOffer}
                       selectedOffer={selectedOffer}
@@ -555,6 +561,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   jobId={jobId}
                   setOffers={setOffers}
                   offers={offers}
+                  offersLoading={offersLoading}
                   activeTab={activeTab}
                   setSelectedOffer={setSelectedOffer}
                   selectedOffer={selectedOffer}

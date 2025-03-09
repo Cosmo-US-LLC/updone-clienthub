@@ -328,9 +328,11 @@ const DynamicCardTablePage = () => {
                       onClick={() => router.push(`/events/detail/${event?.id}`)}
                       className="cursor-pointer"
                     >
+                      {/* Event Title */}
                       <TableCell className="text-[#350ABC] max-w-[180px] truncate overflow-hidden whitespace-nowrap font-[400] text-[14px]">
                         {event?.event_title || "N/A"}
                       </TableCell>
+                      {/* Event Status */}
                       <TableCell className="text-[#2C2240] text-[14px] font-[400] capitalize">
                         <div className="flex gap-2">
                           <div
@@ -354,6 +356,7 @@ const DynamicCardTablePage = () => {
                           </div>
                         </div>
                       </TableCell>
+                      {/* Messages */}
                       <TableCell className="text-[#350ABC]  truncate overflow-hidden whitespace-nowrap font-[400] text-[14px]">
                         <div className="relative pl-2">
                           <img
@@ -364,7 +367,7 @@ const DynamicCardTablePage = () => {
                             src="/images/client-portal/all-events/Badge.svg"
                           />
                           {event?.unread_message_count > 0 && (
-                            <span className="text-[10px] bg-[#C70101] text-white absolute flex justify-center items-center top-[-15%] left-[42%] w-[12px] m-0 h-[12px] rounded-full font-[400]">
+                            <span className="text-[10px] bg-[#C70101] text-white absolute flex justify-center items-center top-[-15%] left-[34px] w-[12px] m-0 h-[12px] rounded-full font-[400]">
                               {event?.unread_message_count}
                             </span>
                           )}
