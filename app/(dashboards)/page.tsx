@@ -271,7 +271,7 @@ const DynamicCardTablePage = () => {
           </div>
         ) : (
           <Table className="grow relative">
-            <TableHeader className="sticky -top-[2] z-10 bg-[#f6f9fc]">
+            <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
               <TableRow>
                 <TableHead className="w-[250px]">Title</TableHead>
                 <TableHead>Event Status</TableHead>
