@@ -10,15 +10,25 @@ import { apiRequest } from "@/app/lib/services"; // Assuming this is your API ut
 import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import useIsMobile from "@/app/lib/hooks/useMobile";
+import { Layout } from "@stripe/stripe-js";
+import { LayoutObject } from "@stripe/stripe-js";
 
-export default function StripeCheckoutForm({ jobId, clientSecret }: any) {
+export default function StripeCheckoutForm({
+  jobId,
+  clientSecret,
+  customerSessionToken,
+}: any) {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
   const [error, setError] = useState<any>(null);
-  const paymentElementOptions = { layout: "tabs" as const };
+  const paymentElementOptions: Layout | LayoutObject | undefined = {
+    // @ts-ignore
+    layout: "tabs", // ✅ Enables saved cards inside Stripe UI
+    customerSessionClientSecret: customerSessionToken,
+  };
   const isMobile = useIsMobile();
 
   const { auth: storedData } = useAppSelector(selectAuth);
@@ -80,11 +90,14 @@ export default function StripeCheckoutForm({ jobId, clientSecret }: any) {
   return (
     <div className="flex flex-col">
       <form id="payment-form" onSubmit={handleSubmit}>
+        {/* @ts-ignore */}
         <PaymentElement id="payment-element" options={paymentElementOptions} />
         <button
           disabled={isLoading || !stripe || !elements}
           id="submit"
-          className={`${styles.pay_btn_style} ${isMobile === false ? "mt-8" : "mt-1"} bg-[#0055DE] hover:contrast-115 disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={`${styles.pay_btn_style} ${
+            isMobile === false ? "mt-8" : "mt-1"
+          } bg-[#0055DE] hover:contrast-115 disabled:opacity-50 disabled:cursor-not-allowed`}
         >
           <span id="button-text">
             {isLoading ? (

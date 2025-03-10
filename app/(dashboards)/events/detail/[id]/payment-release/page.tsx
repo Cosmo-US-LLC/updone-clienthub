@@ -21,6 +21,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [customerSessionToken, setCustomerSessionToken] = useState("");
   const { handleError } = useError();
   const { auth: storedData } = useAppSelector(selectAuth);
 
@@ -41,6 +42,7 @@ const Page = () => {
     );
     if (response?.clientSecret) {
       setClientSecret(response?.clientSecret);
+      setCustomerSessionToken(response?.customer_session_client_secret);
       setIsLoading(false);
     }
   };
@@ -56,8 +58,18 @@ const Page = () => {
       ) : (
         <div className="flex-1 flex justify-center items-center">
           {clientSecret && (
-            <Elements options={{ clientSecret }} stripe={stripePromise}>
-              <StripeMobile jobId={params.id} clientSecret={clientSecret} />
+            <Elements
+              options={{
+                clientSecret,
+                customerSessionClientSecret: customerSessionToken,
+              }}
+              stripe={stripePromise}
+            >
+              <StripeMobile
+                jobId={params.id}
+                clientSecret={clientSecret}
+                customerSessionToken={customerSessionToken}
+              />
             </Elements>
           )}
         </div>

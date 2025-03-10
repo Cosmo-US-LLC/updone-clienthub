@@ -4,23 +4,37 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./payment.module.css";
 import styles from "./payment.module.css";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Layout, LayoutObject } from "@stripe/stripe-js";
 
 export default function StripeCheckoutForm({
   offerId,
   jobId,
   clientSecret,
+  loadingIntent = false,
   isSettlement = false,
+  // saveMethod, 
+  // setSaveMethod,
+  customerSessionToken
 }: any) {
   const stripe = useStripe();
   const elements = useElements();
-  const [saveMethod, setSaveMethod] = useState<any>(true);
+  // const [saveMethod, setSaveMethod] = useState<any>(true);
   const [message, setMessage] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const paymentElementOptions = { layout: "tabs" as const };
+  // const paymentElementOptions = { layout: "tabs" as const };
+  const paymentElementOptions: Layout | LayoutObject | undefined = {
+    // @ts-ignore
+    layout: "tabs", // ✅ Enables saved cards inside Stripe UI
+    customerSessionClientSecret: customerSessionToken
+  };
+
+  useEffect(() => {
+    console.log("ClientSecret:", clientSecret);
+  }, [clientSecret]);  
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -64,9 +78,10 @@ export default function StripeCheckoutForm({
   return (
     <div className="flex flex-col">
       <form id="payment-form" onSubmit={handleSubmit}>
+        {/* @ts-ignore */}
         <PaymentElement id="payment-element" options={paymentElementOptions} />
         {/* <div className="flex items-center space-x-2 pt-3">
-          <Checkbox id="save" value={saveMethod} onCheckedChange={setSaveMethod} className="hover:bg-white" />
+          <Checkbox id="save" checked={saveMethod} onCheckedChange={setSaveMethod} className="hover:bg-white" />
           <label
             htmlFor="save"
             className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -75,12 +90,12 @@ export default function StripeCheckoutForm({
           </label>
         </div> */}
         <button
-          disabled={isLoading || !stripe || !elements}
+          disabled={isLoading || !stripe || !elements || loadingIntent}
           id="submit"
           className={`${styles.pay_btn_style} mt-8 bg-[#0055DE] hover:contrast-115 disabled:opacity-50 disabled:cursor-not-allowed`}
         >
           <span id="button-text">
-            {isLoading ? (
+            {isLoading || loadingIntent ? (
               <div role="status">
                 <svg
                   aria-hidden="true"

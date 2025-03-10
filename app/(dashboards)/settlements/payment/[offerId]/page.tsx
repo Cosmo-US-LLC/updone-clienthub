@@ -14,6 +14,7 @@ const page = () => {
   const [data, setData] = useState<any>(null);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [clientSecret, setClientSecret] = useState(null);
+  const [loadingIntent, setLoadingIntent] = useState(true);
   const { handleError } = useError();
   const router = useRouter();
   const loader = 'auto';
@@ -45,18 +46,21 @@ const page = () => {
     }
   }, [params]);
 
-  const getPaymentIntent = async () => {
+  const getPaymentIntent = async (save: boolean = false) => {
+    setLoadingIntent(true);
     const response = await apiRequest(`/stripe/createPaymentIntent`, {
       method: 'POST',
       headers: {
         ...(storedData && { 'Authorization': `Bearer ${storedData.token}` })
       },
       body: {
-        amount: parseInt(data?.settlementDetails?.settlement_amount)
+        amount: parseInt(data?.settlementDetails?.settlement_amount),
+        save_payment_method: save,
       }
     }, handleError);
     if (response?.clientSecret) {
       setClientSecret(response?.clientSecret);
+      setLoadingIntent(false);
     }
   }
 
@@ -75,7 +79,7 @@ const page = () => {
             {
               data && params?.offerId && clientSecret &&
               <Elements options={{ clientSecret, loader }} stripe={stripePromise}>
-                <SettlementPayment data={data} offerId={params?.offerId} clientSecret={clientSecret} />
+                <SettlementPayment data={data} offerId={params?.offerId} clientSecret={clientSecret} loadingIntent={loadingIntent} />
               </Elements>
             }
           </Suspense>

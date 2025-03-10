@@ -31,6 +31,7 @@ import { FiLogOut } from "react-icons/fi";
 import { PiUserLight } from "react-icons/pi";
 import Link from "next/link";
 import { apiRequest } from "@/app/lib/services";
+import { SidebarTrigger } from "../ui/sidebar";
 
 function NavbarClienthub() {
   const router = useRouter();
@@ -65,23 +66,23 @@ function NavbarClienthub() {
         revalidate: true,
         ...(storedData && { Authorization: `Bearer ${storedData?.token}` }),
       },
-      body: {}
-    }).then((res)=>{
-      console.log(res)
+      body: {},
+    }).then((res) => {
+      console.log(res);
       // ✅ Clear Redux Authentication & Data States
       dispatch(clearAuth());
       dispatch(setStaffEmpty());
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
-  
+
       // alert('Redux cleared')
-  
+
       // ✅ Remove Authentication Cookies
       Cookies.remove("token");
       Cookies.remove("authToken");
       Cookies.remove("authData");
-  
+
       // ✅ Redirect Based on Role
       router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/logout?status=200`);
     });
@@ -89,9 +90,9 @@ function NavbarClienthub() {
 
   return (
     <header className="bg-white min-h-[65px] flex items-center shadow-md">
-      <nav className="px-4 md:px-8 h-full w-full flex justify-between items-center">
-        <div className="flex gap-4">
-          {/* Logo */}
+      <nav className="px-4 md:px-8 h-full w-full flex justify-end items-center">
+        {/* Logo */}
+        {/* <div className="flex gap-4">
           <Link
             href={`/`}
             className="relative"
@@ -113,7 +114,10 @@ function NavbarClienthub() {
             </p>
             <div className="h-[8px]"></div>
           </Link>
-        </div>
+        </div> */}
+        {/* <div className="flex items-center">
+          <SidebarTrigger className="!h-[30px] w-[30px]" />
+        </div> */}
 
         <div className=" flex items-center gap-3">
           <Link
@@ -127,7 +131,7 @@ function NavbarClienthub() {
             <div>Go To Updone</div>
           </Link>
           <Link
-            href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-event`}
+            href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`}
             className={`${
               // !scrollBackground && pathName === "/"
               // `!ml-[22px] bg-white hover:bg-[#EBE6FF] rounded-full  text-black  !normal-case px-[20px] py-[12px] text-[14px] font-[600] leading-[150%] transition-colors duration-300 delay-150 `
@@ -193,11 +197,7 @@ function NavbarClienthub() {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() =>
-                  router.push(
-                    `/settings`
-                  )
-                }
+                onClick={() => router.push(`/settings`)}
                 className="hover:!bg-[#F1EEFF] max-lg:hidden duration-0 text-[#2C2240] hover:text-[#2C2240] py-[20px] px-[40px] flex justify-start items-center !text-[14px] font-[400] leading-[24px]"
               >
                 <Settings className="mr-[12px]" size={18} />

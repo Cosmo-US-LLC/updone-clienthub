@@ -80,9 +80,9 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
   return (
     <div className="flex flex-col  items-center justify-center min-h-[100%] !px-8">
       {/* Container */}
-      <div className="flex flex-col  !max-h-[520px] items-center justify-center p-8 bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+      <div className="flex flex-col !max-h-[520px] items-center justify-center p-8 bg-white rounded-xl shadow-lg max-w-lg mx-auto">
         {/* Success SVG */}
-        <div className="mb-4 relative bottom-0">
+        <div className="mb-4 mt-8 relative bottom-0">
           <Image
             width={100}
             height={100}
@@ -99,7 +99,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
           </h2>
 
           {/* Description */}
-          <p className="text-[#6B6B6B] text-[16px] font-[400] leading-[24px] text-left mb-4">
+          <div className="text-[#6B6B6B] text-[16px] font-[400] leading-[24px] text-left mb-4">
             {/* Congratulations, you’ve successfully hired a talented talent for
             your event.  */}
             <ul className="list-disc list-inside">
@@ -108,7 +108,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
             </ul>
             {/* We have notified the talent about the details of the
             event. You can connect with your talent directly. */}
-          </p>
+          </div>
           {/* <p className="text-[#6B6B6B] text-[16px] font-[400] leading-[24px] text-center">
             Click the button to view contact details.
           </p> */}
@@ -142,7 +142,8 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
           <div className="flex justify-center">
             <button
               onClick={handleRedirect}
-              className="text-[14px] font-[400] py-[16px] flex items-center text-[#fff] px-[60px] rounded-[4px] bg-[#350ABC] transition-transform duration-150 ease-in-out transform active:scale-95 grow_ellipse"
+              disabled={!jobId}
+              className="text-[14px] font-[400] disabled:pointer-events-none disabled:opacity-70 py-[16px] flex items-center text-[#fff] px-[60px] rounded-[4px] bg-[#350ABC] transition-transform duration-150 ease-in-out transform active:scale-95 grow_ellipse"
             >
               View Contact Details{" "}
               <span className="ml-2">
@@ -156,7 +157,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
                   <path
                     d="M6 12L10 8L6 4"
                     stroke="#F3F0FF"
-                    stroke-width="1.4"
+                    strokeWidth="1.4"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
