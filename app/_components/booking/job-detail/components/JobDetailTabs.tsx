@@ -78,7 +78,7 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, se
                             />
                         )}
                         {activeTab === 'b' && (
-                            <Invites jobId={jobId} data={data} />
+                            <Invites jobId={jobId} data={data} jobData={jobData} />
                         )}
                     </section>
                 </div>
@@ -102,7 +102,7 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, se
                             />
                         )}
                         {activeTab === 'b' && (
-                            <Invites jobId={jobId} data={data} />
+                            <Invites jobId={jobId} data={data} jobData={jobData} />
                         )}
                     </section>
                 </div>

@@ -18,7 +18,7 @@ import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import { Loader } from "@/app/_components/ui/dashboard-loader";
 
-const Invites = ({ data, jobId }: any) => {
+const Invites = ({ data, jobId, jobData }: any) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [inviteMore, setInviteMore] = useState(false);
@@ -168,6 +168,7 @@ const Invites = ({ data, jobId }: any) => {
           ) : (
             <InviteMoreTalents
               jobId={jobId}
+              jobData={jobData}
               selectedTalentsLocal={selectedTalentsLocal}
               setSelectedTalentsLocal={setSelectedTalentsLocal}
               handleInviteSelected={handleInviteSelected}

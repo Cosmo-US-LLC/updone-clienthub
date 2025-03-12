@@ -315,7 +315,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   </div>
                 </div>
                 <p
-                  className={`${`h-[26px] flex px-[16px] rounded-[32px] items-center gap-1 text-[14px] font-[500] border-none leading-[30px]
+                  className={`${`h-[26px] flex px-[16px] rounded-[32px] items-center gap-1 text-[14px] font-[500] border-none leading-[30px] capitalize
                       ${
                         jobDetailData?.status === "assigned"
                           ? "text-[#0C9000] bg-[#EAFDE7]"
