@@ -1,6 +1,6 @@
 "use client";
 
-import Tooltip from "@/app/_components/common/tooltip";
+// import Tooltip from "@/app/_components/common/tooltip";
 import { Loader } from "@/app/_components/ui/dashboard-loader";
 import VerificationIcon from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
@@ -10,6 +10,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import TalentImage from "./TalentImage";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import VerificationIconMobile from "@/app/_components/ui/shield";
+import { BadgeCheck } from "lucide-react";
 
 const Offers = ({
   offers,
@@ -34,6 +43,9 @@ const Offers = ({
     router.push(`/events/payment/${invite_id}`);
   };
 
+  const [showModal, setShowModal] = useState(false);
+  // const galleryImages = talent?.gallery?.length > 0 ? talent?.gallery : [talent.profile_pic];
+
   return (
     <div className={`flex flex-col`}>
       {offers?.length > 0 &&
@@ -43,13 +55,8 @@ const Offers = ({
             className="flex flex-row items-center justify-between border border-1 border-[#EBE6FF] px-2 h-[120px] mb-4 mx-2 rounded-xl"
           >
             <div className="flex flex-row items-center justify-start gap-2">
-              <Image
-                width={100}
-                height={100}
-                className="h-[52px] w-[52px] object-cover rounded-[50%] border-2 border-[#F3F0FF]"
-                src={offer.worker.profile_pic}
-                alt="user"
-              />
+              <TalentImage talent={offer.worker} />
+
               <div className="flex flex-col">
                 <div className="flex flex-row items-center">
                   <p className="text-[16px] font-[500] leading-[8px]">
@@ -57,25 +64,36 @@ const Offers = ({
                       ? `${offer.worker.full_name.slice(0, 17)}...`
                       : offer.worker.full_name}
                   </p>
-                  <Tooltip
-                    content={
-                      <VerificationStatus
-                        id_is_verified={offer.worker.id_is_verified}
-                        contact_is_verified={offer.worker.contact_is_verified}
-                      />
-                    }
-                  >
-                    <div className=" text-white pr-4 pl-2  rounded">
-                      <VerificationIcon
-                        id_is_verified={offer.worker.id_is_verified}
-                        contact_is_verified={offer.worker.contact_is_verified}
-                        height={30}
-                        width={30}
-                      />
-                    </div>
-                  </Tooltip>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="hover:bg-transparent">
+                        <div className=" text-white rounded w-[30px]">
+                          <VerificationIconMobile
+                            id_is_verified={offer.worker.id_is_verified}
+                            contact_is_verified={
+                              offer.worker.contact_is_verified
+                            }
+                            height={30}
+                            width={30}
+                          />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="z-40">
+                        <VerificationStatus
+                          id_is_verified={offer.worker.id_is_verified}
+                          contact_is_verified={offer.worker.contact_is_verified}
+                        />
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-1.5">
+                  <BadgeCheck className="w-4 h-4 fill-[#4c4b4b] text-white" />
+                  <p className="text-[#4C4B4B] text-[14px] font-[400] leading-[16px]">
+                    {offer?.worker?.total_jobs_count} Jobs
+                  </p>
+                </div>
+                <div className="flex flex-row gap-2 pl-0.5">
                   <Image
                     width={12}
                     height={12}
@@ -83,7 +101,7 @@ const Offers = ({
                     alt="star"
                   />
                   <p className="text-[#4C4B4B] text-[14px] font-[400] leading-[24px]">
-                    {parseFloat(offer?.worker?.rating).toFixed(1)}/5
+                    {parseFloat(offer?.worker?.rating).toFixed(1)}
                   </p>
                 </div>
               </div>
@@ -120,7 +138,7 @@ const Offers = ({
                       selectedOffer?.id === offer?.id
                         ? "w-[262px]"
                         : "w-[162px]"
-                      } text-white text-[14px] font-[400] leading-[24px] tracking-[-0.28px] capitalize
+                    } text-white text-[14px] font-[400] leading-[24px] tracking-[-0.28px] capitalize
                       transition-all duration-300 ease-in-out grow_ellipse
                       active:scale-95 active:shadow-inner ${
                         job.status === "assigned" || job.status === "completed"

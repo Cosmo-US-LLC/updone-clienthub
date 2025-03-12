@@ -11,10 +11,11 @@ import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from 'next/navigation'
+import JobDetail from "@/app/_components/booking/job-detail";
 
-const JobDetail = loadable(
-    () => import("@/app/_components/booking/job-detail")
-);
+// const JobDetail = loadable(
+//     () => import("@/app/_components/booking/job-detail")
+// );
 
 const page = () => {
     const params = useParams();

@@ -44,13 +44,11 @@ const TalentCard = ({
                 ? talent.profile_pic
                 : "/images/testiminial/testi3.jpg"
             }
-            quality={100}
-            objectFit="fill"
             width={120}
             height={120}
             alt=""
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,..."
+            // placeholder="blur"
+            // blurDataURL="data:image/jpeg;base64,..."
             priority={true}
           />
           <div className="text-center w-[75px] py-0.5 relative bottom-[15px] bg-[#e6e0fa] text-[#350ABC] rounded-md">

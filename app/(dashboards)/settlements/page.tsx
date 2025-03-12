@@ -304,7 +304,7 @@ const headers = [
 ];
 
 const Page = () => {
-  const [transactionsData, setTransactionsData] = useState(null);
+  const [transactionsData, setTransactionsData] = useState([]);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -323,7 +323,7 @@ const Page = () => {
           //     page_size: 10
           // }
         });
-        setTransactionsData(response);
+        setTransactionsData(response?.length > 0 ? response : []);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
