@@ -84,7 +84,7 @@ const TalentCard = ({
                     : talent?.full_name}
                 </h3>
                 
-                {(talent?.id_is_verified && talent?.worker?.id_is_verified) ? (
+                {(talent?.id_is_verified && talent?.contact_is_verified) ? (
                 <Tooltip
                   content={
                     <VerificationStatus

@@ -104,7 +104,7 @@ const InviteCard = ({ data, isInvited }: StaffMapProps) => {
                         <VerificationIcon id_is_verified={staff.id_is_verified} contact_is_verified={staff.contact_is_verified} height={30} width={30} />
                     </div>
                 </Tooltip> */}
-                {staff?.id_is_verified && staff?.worker?.id_is_verified ? (
+                {(staff?.id_is_verified && staff?.contact_is_verified) ? (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger className="hover:bg-transparent">

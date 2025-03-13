@@ -73,7 +73,7 @@ const Offers = ({ offers, job, setSelectedOffer }: { offers: any[]; job: any, se
                           ? `${offer.worker.full_name.slice(0, 17)}...`
                           : offer.worker.full_name}
                       </h3>
-                      {(offer.worker.id_is_verified && offer.worker.contact_is_verified) ? (
+                      {(offer?.worker?.id_is_verified && offer?.worker?.contact_is_verified) ? (
                         <Tooltip
                           content={
                             <VerificationStatus

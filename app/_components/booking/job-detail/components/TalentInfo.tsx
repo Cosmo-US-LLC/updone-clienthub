@@ -70,7 +70,7 @@ const TalentInfo = ({ jobDetailData }: any) => {
                             className={`${montserrat.className} text-[black] leading-[27px] font-[500] text-[18px] flex items-center`}
                         >
                             {jobDetailData?.invite?.worker?.full_name}
-                            {(jobDetailData?.invite?.worker?.id_is_verified && jobDetailData?.invite?.worker?.worker?.id_is_verified) ? (
+                            {(jobDetailData?.invite?.worker?.id_is_verified && jobDetailData?.invite?.worker?.contact_is_verified) ? (
                             <span className="ml-1 text-green-500 flex justify-center items-center">
                                 <Tooltip
                                     content={
