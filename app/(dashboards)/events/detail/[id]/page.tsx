@@ -97,11 +97,14 @@ const page = () => {
                 // </Suspense>
             )}
         </div> */}
-            <JobDetail jobId={params.id} />
+        <div className="max-lg:hidden">
+        <JobDetail jobId={params.id} />
+        </div>
+           
         
       
-      <div className="lg:hidden px-4">
-        <EventsDetails />
+      <div className="lg:hidden ">
+        <EventsDetails jobId={params.id} />
         {/* <p className="lg:hidden text-[18px] pt-4 mb-2">
           ClientHub is coming soon on your cellphone!
           <br />

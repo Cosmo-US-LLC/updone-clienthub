@@ -6,6 +6,7 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { MdMailOutline, MdCall, MdAttachMoney } from "react-icons/md";
 import { GoPerson } from "react-icons/go";
 import { HiOutlineCalendar } from "react-icons/hi";
+import { useRouter } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
@@ -15,9 +16,11 @@ import {
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import FindATalent from "../../../ui/FindATalent";
 
 const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
   console.log("mobile my events page", formatDateAndTime);
+    const router = useRouter();
   const [client, setClient] = useState(false);
 
   useEffect(() => {
@@ -65,7 +68,7 @@ const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
         ))
       ) : eventData?.length > 0 ? (
         eventData?.map((event: any) => (
-          <div className="bg-white w-full rounded-[12px] border-[2px] border-[#EBE6FF]">
+          <div className="bg-white w-full rounded-[12px] border-[2px] border-[#EBE6FF]" onClick={() => router.push(`/events/detail/${event?.id}`)}>
             <div className=" px-3 py-4">
               <div className="flex justify-between items-center mb-2">
                 <span
@@ -99,16 +102,27 @@ const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
                 </p>
               </div>
 
+              <div className="flex items-center justify-center gap-1 bg-[#F6F9FC] py-[10px] px-2 rounded-full mt-3">
+                <HiOutlineCalendar className="w-[20px] h-[20px] stroke-1 text-[#774DFD]" />
+
+                <span className="text-[14px] font-[400] leading-[24px] pt-[1px]">
+                  {formatDateAndTime(event.event_date_time)}
+                </span>
+              </div>
+
               {/* Assigned User */}
               {event.event_assigned_to && client && (
-                <div className="flex items-center justify-center gap-1 mt-3">
-                  <Image
-                    src={event.event_assigned_to.profile_pic}
-                    alt={event.event_assigned_to.full_name}
-                    width={40}
-                    height={40}
-                    className=" w-[36px] h-[36px] object-cover rounded-full border border-gray-300"
-                  />
+                <div className="flex items-center justify-center gap-1 mt-4">
+                  <div className="w-[76px] h-[62px] rounded-full border-2 border-[#F3F0FF] overflow-hidden  ">
+                    <Image
+                      src={event.event_assigned_to.profile_pic}
+                      alt={event.event_assigned_to.full_name}
+                      width={76}
+                      height={62}
+                      className="object-cover object-[50%_1%] w-full h-full  "
+                    />
+                  </div>
+
                   <div className="flex justify-between items-center w-full px-2 ">
                     <span className="font-[500] text-[16px] text-black flex items-center gap-1 ">
                       {event.event_assigned_to.full_name}
@@ -150,37 +164,31 @@ const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
                   </div>
                 </div>
               )}
-
-              <div className="flex items-center justify-center gap-1 bg-[#F6F9FC] py-[10px] px-2 rounded-full mt-3">
-                <HiOutlineCalendar className="w-[20px] h-[20px] stroke-1 text-[#774DFD]" />
-
-                <span className="text-[14px] font-[400] leading-[24px] pt-[1px]">
-                  {formatDateAndTime(event.event_date_time)}
-                </span>
-              </div>
             </div>
 
-            {event.event_status !== "open" && (
+            {event.event_status !== "open" && event.event_status !== "completed" && (
               <div
                 className={`flex justify-around p-3  rounded-b-lg ${
                   event.event_status === "assigned"
-                    ? "bg-[#774DFD] text-white"
+                    ? "bg-[#774DFD] text-white "
                     : "bg-[#EBE6FF] text-[#161616]"
                 }`}
               >
                 {event.event_status === "assigned" && (
                   <>
                     <MdMailOutline className="text-xl cursor-pointer" />
+                    <div className="w-[1px] h-5 bg-slate-50"></div>
                     <MdCall className="text-xl cursor-pointer" />
                   </>
                 )}
-                <MdAttachMoney className="text-xl cursor-pointer" />
+                {/* <MdAttachMoney className="text-xl cursor-pointer" /> */}
               </div>
             )}
           </div>
         ))
       ) : (
-        <p>No events found</p>
+        // <p>No events found</p>
+        <FindATalent/>
       )}
     </div>
   );
