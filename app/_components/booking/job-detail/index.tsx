@@ -94,7 +94,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             },
             body: {
               job_id: jobDetailData?.id,
-              sort: offerSort == "latest" ? "" : offerSort,
+              sort_by: offerSort == "latest" ? "" : offerSort,
             },
           },
           handleError
