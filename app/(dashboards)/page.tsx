@@ -30,6 +30,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import VerificationIconMobile from "@/app/_components/ui/shield";
+import { ColumnDef } from "@tanstack/react-table";
+
+// This type is used to define the shape of our data.
+// You can use a Zod schema here if you want.
+export type Payment = {
+  event_title: string;
+  event_status: string;
+  unread_message_count: string;
+  event_total_offers: string;
+  event_assigned_to_name: string;
+  event_assigned_to_profile_pic: string;
+  event_assigned_to_contact_verified: string;
+  event_assigned_to_id_verified: string;
+  event_required_service: string;
+  event_date_time: string;
+  event_location: string;
+};
 
 // Headers
 const headers = [
@@ -45,6 +62,7 @@ const headers = [
 
 const DynamicCardTablePage = () => {
   const [eventData, setGetEventData] = useState([]);
+  const [eventListing, setEventListing] = useState<Payment[]>([]);
   const [userName, setUserName] = useState("");
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,46 +77,7 @@ const DynamicCardTablePage = () => {
       setIsCloseClicked("true");
     }, 500);
   };
-
-  const fetchOffers = async () => {
-    try {
-      setIsLoading(true);
-      console.log(storedData);
-      const response = await apiRequest("/client/events", {
-        method: "POST",
-        headers: {
-          revalidate: true,
-          ...(storedData && { Authorization: `Bearer ${storedData?.token}` }),
-        },
-        body: {
-          page_number: 1,
-          page_size: 100,
-        },
-      });
-      setGetEventData(response?.records);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    setIsCloseClicked(localStorage?.getItem("eventsBanner") || false);
-  }, []);
-
-  useEffect(() => {
-    fetchOffers();
-    setUserName(storedData ? storedData?.user?.name : "");
-  }, []);
-
-  if (!userName)
-    return (
-      <div className="h-[50svh]">
-        <RenderLoader />
-      </div>
-    );
-
+  
   const formatDateAndTime = (event_date_time: any) => {
     const formattedResults: any = [];
 
@@ -149,6 +128,94 @@ const DynamicCardTablePage = () => {
 
     return formattedResults;
   };
+
+  // Data Table Conversion
+  const convertEventToPayment = (event: any): Payment => {
+    console.log(event, event?.event_assigned_to)
+    return {
+      event_title: event?.event_title,
+      event_status: event?.event_status,
+      unread_message_count: event?.unread_message_count?.toString(),
+      event_total_offers: event?.event_total_offers?.toString(),
+      event_assigned_to_name: event?.event_assigned_to?.full_name,
+      event_assigned_to_profile_pic: event?.event_assigned_to?.profile_pic,
+      event_assigned_to_contact_verified: event?.event_assigned_to?.contact_is_verified.toString(),
+      event_assigned_to_id_verified: event?.event_assigned_to?.id_is_verified.toString(),
+      event_required_service: event?.event_required_service,
+      event_date_time: formatDateAndTime(event?.event_date_time),
+      event_location: event?.event_location,
+    };
+  };
+
+  const fetchOffers = async () => {
+    try {
+      setIsLoading(true);
+      console.log(storedData);
+      const response = await apiRequest("/client/events", {
+        method: "POST",
+        headers: {
+          revalidate: true,
+          ...(storedData && { Authorization: `Bearer ${storedData?.token}` }),
+        },
+        body: {
+          page_number: 1,
+          page_size: 100,
+        },
+      });
+      setGetEventData(response?.records);
+      setEventListing(response?.records?.map(convertEventToPayment))
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setIsCloseClicked(localStorage?.getItem("eventsBanner") || false);
+  }, []);
+
+  useEffect(() => {
+    fetchOffers();
+    setUserName(storedData ? storedData?.user?.name : "");
+  }, []);
+
+  if (!userName)
+    return (
+      <div className="h-[50svh]">
+        <RenderLoader />
+      </div>
+    );
+  
+  // Data Table Headers
+  const columns: ColumnDef<Payment>[] = [
+    {
+      accessorKey: "event_title",
+      header: "Title",
+    },
+    {
+      accessorKey: "event_status",
+      header: "Event Status",
+    },
+    {
+      accessorKey: "unread_message_count",
+      header: "Messages",
+    },
+  ];
+
+  // event_title: string;
+  // event_status: string;
+  // unread_message_count: string;
+  // event_total_offers: string;
+  // event_assigned_to_name: string;
+  // event_assigned_to_profile_pic: string;
+  // event_assigned_to_contact_verified: string;
+  // event_assigned_to_id_verified: string;
+  // event_required_service: string;
+  // event_date_time: string;
+  // event_location: string;
+
+  // console.log(eventListing)
 
   return (
     <>
@@ -284,138 +351,161 @@ const DynamicCardTablePage = () => {
               </TableRow>
             </TableHeader>
             <TableBody className="overflow-y-auto bg-white">
-              {isLoading
-                ? [1, 2, 3]?.map((item: any) => (
-                    <TableRow key={item} className="!py-2">
-                      <TableCell className="py-4">
-                        <Skeleton className="h-[18px] w-[140px]" />
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <Skeleton className="h-[24px] w-[70px] rounded-full" />
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <div className="relative pl-2">
-                          <Skeleton className="h-[32px] w-[32px]" />
-                        </div>
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <Skeleton className="h-[16px] w-full" />
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <Skeleton className="h-[16px] w-[55px]" />
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <Skeleton className="h-[16px] w-[70px]" />
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <span className="space-y-1.5">
-                          <Skeleton className="h-[16px] w-full" />
-                          <Skeleton className="h-[16px] w-[80%]" />
-                        </span>
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <div className="line-clamp-3 space-y-1.5">
-                          <Skeleton className="h-[16px] w-full" />
-                          <Skeleton className="h-[16px] w-[70%]" />
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                : eventData?.length > 0 &&
-                  eventData?.map((event: any, id: any) => (
-                    <TableRow
-                      key={id}
-                      onClick={() => router.push(`/events/detail/${event?.id}`)}
-                      className="cursor-pointer"
-                    >
-                      {/* Event Title */}
-                      <TableCell className="text-[#350ABC] max-w-[180px] truncate overflow-hidden whitespace-nowrap font-[400] text-[14px]">
-                        {event?.event_title || "N/A"}
-                      </TableCell>
-                      {/* Event Status */}
-                      <TableCell className="text-[#2C2240] text-[14px] font-[400] capitalize">
-                        <div className="flex gap-2">
-                          <div
-                            className={`rounded-[32px] px-2 py-1 flex justify-center items-center gap-1 text-sm font-medium  ${
-                              event?.event_status === "assigned"
-                                ? "bg-[#EAFDE7] border-[#0C9000] text-[#0C9000] px-4"
-                                : event?.event_status === "open"
-                                ? "bg-[#E7F4FD] border-[#0076E6] text-[#0076E6] px-4"
-                                : "bg-[#FFEBEB] border-[#C20000] text-[#C20000] px-4"
-                            }`}
-                          >
-                            {event?.event_status !== "open" ? (
-                              <MdOutlineDone size={22} />
-                            ) : (
-                              ""
-                            )}
-                            {event?.event_status &&
-                            event?.event_status === "assigned"
-                              ? "hired"
-                              : event?.event_status}
+              {
+                isLoading
+                  ? [1, 2, 3]?.map((item: any) => (
+                      <TableRow key={item} className="!py-2">
+                        <TableCell className="py-4">
+                          <Skeleton className="h-[18px] w-[140px]" />
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <Skeleton className="h-[24px] w-[70px] rounded-full" />
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <div className="relative pl-2">
+                            <Skeleton className="h-[32px] w-[32px]" />
                           </div>
-                        </div>
-                      </TableCell>
-                      {/* Messages */}
-                      <TableCell className="text-[#350ABC]  truncate overflow-hidden whitespace-nowrap font-[400] text-[14px]">
-                        <div className="relative pl-2">
-                          <img
-                            alt="unread-icon"
-                            height={32}
-                            width={32}
-                            className=""
-                            src="/images/client-portal/all-events/Badge.svg"
-                          />
-                          {event?.unread_message_count > 0 && (
-                            <span className="text-[10px] bg-[#C70101] text-white absolute flex justify-center items-center top-[-15%] left-[34px] w-[12px] m-0 h-[12px] rounded-full font-[400]">
-                              {event?.unread_message_count}
-                            </span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-[#2C2240] text-[14px] font-[400]">
-                        <div
-                          className="flex items-center gap-1 text-[12px] text-[#350ABC]"
-                          style={{ width: "max-content" }}
-                        >
-                          <GoPerson size={14} />{" "}
-                          <span>
-                            {event?.event_total_offers === 0
-                              ? "No"
-                              : event?.event_total_offers}{" "}
-                            {event?.event_total_offers === 1
-                              ? "offer"
-                              : "offers"}
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <Skeleton className="h-[16px] w-full" />
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <Skeleton className="h-[16px] w-[55px]" />
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <Skeleton className="h-[16px] w-[70px]" />
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <span className="space-y-1.5">
+                            <Skeleton className="h-[16px] w-full" />
+                            <Skeleton className="h-[16px] w-[80%]" />
                           </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {event?.event_status === "assigned" ||
-                        event?.event_status === "completed" ? (
-                          <div className="flex flex-row items-center h-[80px] relative">
-                            <Avatar className="w-[50px] h-[50px]">
-                              <AvatarImage
-                                src={event?.event_assigned_to?.profile_pic}
-                                className="object-cover"
-                              />
-                              <AvatarFallback>
-                                {event?.event_assigned_to?.full_name[0]}
-                                {event?.event_assigned_to?.full_name?.split(" ")
-                                  ?.length > 1 &&
-                                  event?.event_assigned_to?.full_name?.split(
-                                    " "
-                                  )[1][0]}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="ml-2 text-[#2C2240] text-[14px] font-[400] whitespace-nowrap">
-                              {event?.event_assigned_to?.full_name}
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <div className="line-clamp-3 space-y-1.5">
+                            <Skeleton className="h-[16px] w-full" />
+                            <Skeleton className="h-[16px] w-[70%]" />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  : eventData?.length > 0 &&
+                    eventData?.map((event: any, id: any) => (
+                      <TableRow
+                        key={id}
+                        onClick={() =>
+                          router.push(`/events/detail/${event?.id}`)
+                        }
+                        className="cursor-pointer"
+                      >
+                        {/* Event Title */}
+                        <TableCell className="text-[#350ABC] max-w-[180px] truncate overflow-hidden whitespace-nowrap font-[400] text-[14px]">
+                          {event?.event_title || "N/A"}
+                        </TableCell>
+                        {/* Event Status */}
+                        <TableCell className="text-[#2C2240] text-[14px] font-[400] capitalize">
+                          <div className="flex gap-2">
+                            <div
+                              className={`rounded-[32px] px-2 py-1 flex justify-center items-center gap-1 text-sm font-medium  ${
+                                event?.event_status === "assigned"
+                                  ? "bg-[#EAFDE7] border-[#0C9000] text-[#0C9000] px-4"
+                                  : event?.event_status === "open"
+                                  ? "bg-[#E7F4FD] border-[#0076E6] text-[#0076E6] px-4"
+                                  : "bg-[#FFEBEB] border-[#C20000] text-[#C20000] px-4"
+                              }`}
+                            >
+                              {event?.event_status !== "open" ? (
+                                <MdOutlineDone size={22} />
+                              ) : (
+                                ""
+                              )}
+                              {event?.event_status &&
+                              event?.event_status === "assigned"
+                                ? "hired"
+                                : event?.event_status}
+                            </div>
+                          </div>
+                        </TableCell>
+                        {/* Messages */}
+                        <TableCell className="text-[#350ABC]  truncate overflow-hidden whitespace-nowrap font-[400] text-[14px]">
+                          <div className="relative pl-2">
+                            <img
+                              alt="unread-icon"
+                              height={32}
+                              width={32}
+                              className=""
+                              src="/images/client-portal/all-events/Badge.svg"
+                            />
+                            {event?.unread_message_count > 0 && (
+                              <span className="text-[10px] bg-[#C70101] text-white absolute flex justify-center items-center top-[-15%] left-[34px] w-[12px] m-0 h-[12px] rounded-full font-[400]">
+                                {event?.unread_message_count}
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-[#2C2240] text-[14px] font-[400]">
+                          <div
+                            className="flex items-center gap-1 text-[12px] text-[#350ABC]"
+                            style={{ width: "max-content" }}
+                          >
+                            <GoPerson size={14} />{" "}
+                            <span>
+                              {event?.event_total_offers === 0
+                                ? "No"
+                                : event?.event_total_offers}{" "}
+                              {event?.event_total_offers === 1
+                                ? "offer"
+                                : "offers"}
                             </span>
-                            <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger className="hover:bg-transparent">
-                                    <div className=" text-white pr-4 pl-2  rounded">
-                                      <VerificationIconMobile
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {event?.event_status === "assigned" ||
+                          event?.event_status === "completed" ? (
+                            <div className="flex flex-row items-center h-[80px] relative">
+                              <Avatar className="w-[50px] h-[50px]">
+                                <AvatarImage
+                                  src={event?.event_assigned_to?.profile_pic}
+                                  className="object-cover"
+                                />
+                                <AvatarFallback>
+                                  {event?.event_assigned_to?.full_name[0]}
+                                  {event?.event_assigned_to?.full_name?.split(
+                                    " "
+                                  )?.length > 1 &&
+                                    event?.event_assigned_to?.full_name?.split(
+                                      " "
+                                    )[1][0]}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="ml-2 text-[#2C2240] text-[14px] font-[400] whitespace-nowrap">
+                                {event?.event_assigned_to?.full_name}
+                              </span>
+                              <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
+                              {event?.event_assigned_to?.id_is_verified && event?.event_assigned_to?.id_is_verified && (
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger className="hover:bg-transparent">
+                                      <div className=" text-white pr-4 pl-2  rounded">
+                                        <VerificationIconMobile
+                                          id_is_verified={
+                                            event?.event_assigned_to
+                                              ?.id_is_verified
+                                          }
+                                          contact_is_verified={
+                                            event?.event_assigned_to
+                                              ?.contact_is_verified
+                                          }
+                                          height={23}
+                                          width={23}
+                                        />
+                                      </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent
+                                      side="bottom"
+                                      className="z-40"
+                                    >
+                                      <VerificationStatus
                                         id_is_verified={
                                           event?.event_assigned_to
                                             ?.id_is_verified
@@ -424,119 +514,103 @@ const DynamicCardTablePage = () => {
                                           event?.event_assigned_to
                                             ?.contact_is_verified
                                         }
-                                        height={23}
-                                        width={23}
                                       />
-                                    </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent
-                                    side="bottom"
-                                    className="z-40"
-                                  >
-                                    <VerificationStatus
-                                      id_is_verified={
-                                        event?.event_assigned_to?.id_is_verified
-                                      }
-                                      contact_is_verified={
-                                        event?.event_assigned_to
-                                          ?.contact_is_verified
-                                      }
-                                    />
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              )}
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="flex flex-row items-center h-[80px]">
-                            <span className="text-[14px] font-[400] text-[#2C2240]">
-                              Not Hired
-                            </span>
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-[#2C2240] text-[14px] font-[400]">
-                        {event?.event_required_service}
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-[14px] text-[#161616] font-[400] whitespace-nowrap">
-                          {formatDateAndTime(event.event_date_time)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-[#2C2240] text-[14px] font-[400]">
-                        <p className="line-clamp-3">
-                          {event?.event_location
-                            ?.replace("Los Angeles, California", "")
-                            ?.replace(", United States", "")}
-                          {event?.event_location?.includes(
-                            "Los Angeles, California"
-                          ) && <span> LA, California</span>}
-                        </p>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                  // ) : (
-                  //   <TableRow>
-                  //     <TableCell
-                  //       colSpan={8}
-                  //       className="text-center py-10 h-full min-h-fit !bg-[#f6f9fc]"
-                  //     >
-                  //       <div className="flex flex-col justify-center items-center">
-                  //         <div className="text-center pb-[48px]">
-                  //           <h1 className="text-[48px] font-[400] tracking-[-1.28px] leading-normal text-[#000000]">
-                  //             Lets find a{" "}
-                  //             <span className="bg-[#350ABC] rounded-[4px] text-[#FFF] px-3">
-                  //               TALENT
-                  //             </span>
-                  //           </h1>
-                  //           <p className="text-[32px] font-[400] tracking-[-1.28px] leading-normal text-[#000000]">
-                  //             for your upcoming event or project
-                  //           </p>
-                  //         </div>
-                  //         <Image
-                  //           src="/images/client-portal/no event creative image.webp"
-                  //           height={400}
-                  //           width={400}
-                  //           alt="No Event Image"
-                  //           priority={true}
-                  //           quality={100}
-                  //           layout="intrinsic"
-                  //         />
-                  //         <button
-                  //           onClick={() =>
-                  //             router.push(
-                  //               `${process.env.NEXT_PUBLIC_BASE_URL}/add-job?step=event-location`
-                  //             )
-                  //           }
-                  //           className="mt-[40px] bg-[#774DFD] py-[16px] text-[#F3F0FF] text-[18px] leading-[30px] flex justify-center items-center gap-2 tracking-[ -0.36px] font-[400] px-[24px] rounded-[4px]"
-                  //         >
-                  //           Post your first event{" "}
-                  //           <span>
-                  //             <svg
-                  //               xmlns="http://www.w3.org/2000/svg"
-                  //               width="21"
-                  //               height="21"
-                  //               viewBox="0 0 21 21"
-                  //               fill="none"
-                  //             >
-                  //               <path
-                  //                 d="M4.86523 10.3691H16.136"
-                  //                 stroke="#F3F0FF"
-                  //                 strokeLinecap="round"
-                  //                 strokeLinejoin="round"
-                  //               />
-                  //               <path
-                  //                 d="M10.5 4.73389L16.1354 10.3693L10.5 16.0047"
-                  //                 stroke="#F3F0FF"
-                  //                 strokeLinecap="round"
-                  //                 strokeLinejoin="round"
-                  //               />
-                  //             </svg>
-                  //           </span>
-                  //         </button>
-                  //       </div>
-                  //     </TableCell>
-                  //   </TableRow>
+                          ) : (
+                            <div className="flex flex-row items-center h-[80px]">
+                              <span className="text-[14px] font-[400] text-[#2C2240]">
+                                Not Hired
+                              </span>
+                            </div>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-[#2C2240] text-[14px] font-[400]">
+                          {event?.event_required_service}
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-[14px] text-[#161616] font-[400] whitespace-nowrap">
+                            {formatDateAndTime(event.event_date_time)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-[#2C2240] text-[14px] font-[400]">
+                          <p className="line-clamp-3">
+                            {event?.event_location
+                              ?.replace("Los Angeles, California", "")
+                              ?.replace(", United States", "")}
+                            {event?.event_location?.includes(
+                              "Los Angeles, California"
+                            ) && <span> LA, California</span>}
+                          </p>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                // ) : (
+                //   <TableRow>
+                //     <TableCell
+                //       colSpan={8}
+                //       className="text-center py-10 h-full min-h-fit !bg-[#f6f9fc]"
+                //     >
+                //       <div className="flex flex-col justify-center items-center">
+                //         <div className="text-center pb-[48px]">
+                //           <h1 className="text-[48px] font-[400] tracking-[-1.28px] leading-normal text-[#000000]">
+                //             Lets find a{" "}
+                //             <span className="bg-[#350ABC] rounded-[4px] text-[#FFF] px-3">
+                //               TALENT
+                //             </span>
+                //           </h1>
+                //           <p className="text-[32px] font-[400] tracking-[-1.28px] leading-normal text-[#000000]">
+                //             for your upcoming event or project
+                //           </p>
+                //         </div>
+                //         <Image
+                //           src="/images/client-portal/no event creative image.webp"
+                //           height={400}
+                //           width={400}
+                //           alt="No Event Image"
+                //           priority={true}
+                //           quality={100}
+                //           layout="intrinsic"
+                //         />
+                //         <button
+                //           onClick={() =>
+                //             router.push(
+                //               `${process.env.NEXT_PUBLIC_BASE_URL}/add-job?step=event-location`
+                //             )
+                //           }
+                //           className="mt-[40px] bg-[#774DFD] py-[16px] text-[#F3F0FF] text-[18px] leading-[30px] flex justify-center items-center gap-2 tracking-[ -0.36px] font-[400] px-[24px] rounded-[4px]"
+                //         >
+                //           Post your first event{" "}
+                //           <span>
+                //             <svg
+                //               xmlns="http://www.w3.org/2000/svg"
+                //               width="21"
+                //               height="21"
+                //               viewBox="0 0 21 21"
+                //               fill="none"
+                //             >
+                //               <path
+                //                 d="M4.86523 10.3691H16.136"
+                //                 stroke="#F3F0FF"
+                //                 strokeLinecap="round"
+                //                 strokeLinejoin="round"
+                //               />
+                //               <path
+                //                 d="M10.5 4.73389L16.1354 10.3693L10.5 16.0047"
+                //                 stroke="#F3F0FF"
+                //                 strokeLinecap="round"
+                //                 strokeLinejoin="round"
+                //               />
+                //             </svg>
+                //           </span>
+                //         </button>
+                //       </div>
+                //     </TableCell>
+                //   </TableRow>
               }
             </TableBody>
           </Table>

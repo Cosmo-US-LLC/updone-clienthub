@@ -38,6 +38,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
   const [isChatVisible, setIsChatVisible] = useState(true); // State for chat visibility
   const [isChatHidden, setIsChatHidden] = useState(false);
 
+  const [offerSort, setOfferSort] = useState("latest");
+
   useEffect(() => {
     if (selectedOffer !== null) {
       setIsChatVisible(true);
@@ -92,6 +94,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             },
             body: {
               job_id: jobDetailData?.id,
+              sort: offerSort == "latest" ? "" : offerSort,
             },
           },
           handleError
@@ -124,7 +127,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
     if (jobDetailData?.id) {
       GetOffers();
     }
-  }, [jobDetailData, messagesRefreshed]);
+  }, [jobDetailData, messagesRefreshed, offerSort]);
 
   const toggleMenu = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -508,6 +511,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                       selectedOffer={selectedOffer}
                       messagesRefreshed={messagesRefreshed}
                       isInModal={true}
+                      offerSort={offerSort}
+                      setOfferSort={setOfferSort}
                     />
                     {/* </Suspense> */}
                   </div>
@@ -567,6 +572,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   selectedOffer={selectedOffer}
                   messagesRefreshed={messagesRefreshed}
                   setIsChatHidden={setIsChatHidden}
+                  offerSort={offerSort}
+                  setOfferSort={setOfferSort}
                 />
                 {/* </Suspense> */}
               </div>

@@ -113,6 +113,7 @@ const StaffMap = ({ isJobDetailInvite, staff, handleStaffClick, isInvited, jobAp
                                 }} className={`text-[20px] flex justify-start items-center min-w-auto gap-2 text-[#2C2240] relative bottom-[1px] font-[600] ${montserrat.className}`}>
                                     {staff?.full_name?.length > 18 ? `${staff?.full_name?.slice(0, 18)}...` : staff?.full_name}
                                 </h3>
+                                {staff?.id_is_verified && staff?.worker?.id_is_verified && (
                                 <Tooltip content={
                                     <VerificationStatus
                                         id_is_verified={staff.id_is_verified}
@@ -123,6 +124,7 @@ const StaffMap = ({ isJobDetailInvite, staff, handleStaffClick, isInvited, jobAp
                                         <VerificationIcon id_is_verified={staff.id_is_verified} contact_is_verified={staff.contact_is_verified} height={30} width={30} />
                                     </div>
                                 </Tooltip>
+                                )}
                             </div>
                             <div className="flex items-center justify-center">
                                 <div className='relative bottom-[2px]'>

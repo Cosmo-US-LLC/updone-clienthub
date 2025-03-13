@@ -83,6 +83,8 @@ const TalentCard = ({
                     ? `${talent?.full_name?.slice(0, 18)}...`
                     : talent?.full_name}
                 </h3>
+                
+                {talent?.id_is_verified && talent?.worker?.id_is_verified && (
                 <Tooltip
                   content={
                     <VerificationStatus
@@ -100,6 +102,7 @@ const TalentCard = ({
                     />
                   </div>
                 </Tooltip>
+                )}
               </div>
               <div className="flex items-center justify-center">
                 <div className="relative bottom-[2px]">
