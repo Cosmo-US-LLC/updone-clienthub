@@ -114,7 +114,7 @@ const CardTable = ({
                     <span className="ml-2 text-[#2C2240] text-[14px] font-[400]">
                       {row?.talent_name}
                     </span>
-                    {row?.id_is_verified && row?.worker?.id_is_verified && (
+                    {(row?.id_is_verified && row?.worker?.id_is_verified) ? (
                     <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
                       <TooltipProvider>
                         <Tooltip>
@@ -137,7 +137,7 @@ const CardTable = ({
                         </Tooltip>
                       </TooltipProvider>
                     </div>
-                    )}
+                    ) : ''}
                     {openMenu?.rowIndex === index &&
                       openMenu?.menuType === "verified" && (
                         <div
@@ -313,7 +313,7 @@ const Page = () => {
                     <span className="ml-2 text-[#2C2240] text-[14px] font-[400]">
                       {row?.talent_name}
                     </span>
-                    {row?.id_is_verified && row?.worker?.id_is_verified && (
+                    {(row?.id_is_verified && row?.worker?.id_is_verified) ? (
                     <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
                       <TooltipProvider>
                         <Tooltip>
@@ -336,7 +336,7 @@ const Page = () => {
                         </Tooltip>
                       </TooltipProvider>
                     </div>
-                    )}
+                    ) : ''}
                     {/* {openMenu?.rowIndex === index &&
                       openMenu?.menuType === "verified" && (
                         <div

@@ -482,7 +482,7 @@ const DynamicCardTablePage = () => {
                                 {event?.event_assigned_to?.full_name}
                               </span>
                               <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
-                              {event?.event_assigned_to?.id_is_verified && event?.event_assigned_to?.id_is_verified && (
+                              {(event?.event_assigned_to?.id_is_verified && event?.event_assigned_to?.id_is_verified) ? (
                                 <TooltipProvider>
                                   <Tooltip>
                                     <TooltipTrigger className="hover:bg-transparent">
@@ -518,7 +518,7 @@ const DynamicCardTablePage = () => {
                                     </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
-                              )}
+                              ) : ''}
                               </div>
                             </div>
                           ) : (

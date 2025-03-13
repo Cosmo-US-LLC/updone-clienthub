@@ -104,28 +104,30 @@ const InviteCard = ({ data, isInvited }: StaffMapProps) => {
                         <VerificationIcon id_is_verified={staff.id_is_verified} contact_is_verified={staff.contact_is_verified} height={30} width={30} />
                     </div>
                 </Tooltip> */}
-                    {staff?.id_is_verified && staff?.worker?.id_is_verified && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger className="hover:bg-transparent">
-                      <div className=" text-white rounded w-[30px]">
-                        <VerificationIconMobile
+                {staff?.id_is_verified && staff?.worker?.id_is_verified ? (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="hover:bg-transparent">
+                        <div className=" text-white rounded w-[30px]">
+                          <VerificationIconMobile
+                            id_is_verified={staff.id_is_verified}
+                            contact_is_verified={staff.contact_is_verified}
+                            height={30}
+                            width={30}
+                          />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="z-40">
+                        <VerificationStatus
                           id_is_verified={staff.id_is_verified}
                           contact_is_verified={staff.contact_is_verified}
-                          height={30}
-                          width={30}
                         />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="z-40">
-                      <VerificationStatus
-                        id_is_verified={staff.id_is_verified}
-                        contact_is_verified={staff.contact_is_verified}
-                      />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                    )}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="flex items-center justify-center">
                 <div className="relative">

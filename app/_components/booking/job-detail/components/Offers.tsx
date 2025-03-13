@@ -93,7 +93,7 @@ const Offers = ({
                         ? `${offer.worker.full_name.slice(0, 17)}...`
                         : offer.worker.full_name}
                     </p>
-                    {offer?.worker?.id_is_verified && offer?.worker?.id_is_verified && (
+                    {(offer?.worker?.id_is_verified && offer?.worker?.id_is_verified) ? (
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger className="hover:bg-transparent">
@@ -118,7 +118,7 @@ const Offers = ({
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    )}
+                    ) : ''}
                   </div>
                   <div className="flex flex-row gap-1.5">
                     <BadgeCheck className="w-4 h-4 fill-[#4c4b4b] text-white" />
