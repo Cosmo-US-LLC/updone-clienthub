@@ -22,9 +22,9 @@ jobs:
       - name: Deploying to DigitalOcean droplet
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
           #port: ${{ secrets.PORT }}
           script: |
             cd ~/updone/updone-clienthub
