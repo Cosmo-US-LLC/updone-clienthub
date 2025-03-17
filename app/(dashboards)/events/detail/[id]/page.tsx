@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import JobDetailWorker from "@/app/_components/booking/worker/JobDetail";
 import loadable from "@/app/_components/ui/lazy-load";
@@ -10,7 +10,7 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from 'next/navigation'
+import { useParams } from "next/navigation";
 import JobDetail from "@/app/_components/booking/job-detail";
 
 // const JobDetail = loadable(
@@ -18,88 +18,76 @@ import JobDetail from "@/app/_components/booking/job-detail";
 // );
 
 const page = () => {
-    const params = useParams();
-    const { auth: storedData } = useAppSelector(selectAuth);
-    const [isWorker, setIsWorker] = useState<boolean | null>(null);
-    const router = useRouter();
-    const dispatch = useDispatch();
-    const { handleError } = useError();
+  const params = useParams();
+  const { auth: storedData } = useAppSelector(selectAuth);
+  const [isWorker, setIsWorker] = useState<boolean | null>(null);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { handleError } = useError();
 
-    useEffect(() => {
-        if (storedData?.user) {
-            if (storedData?.user?.role_id === 4) {
-                setIsWorker(false);
-            } else {
-                setIsWorker(true);
-            }
+  useEffect(() => {
+    if (storedData?.user) {
+      if (storedData?.user?.role_id === 4) {
+        setIsWorker(false);
+      } else {
+        setIsWorker(true);
+      }
+    }
+  }, [storedData, router]);
+  useEffect(() => {
+    if (storedData?.user) {
+      if (isWorker) {
+        router.push(`/staff/job-detail/${params.id}`);
+      }
+    }
+  }, [storedData, router, isWorker]);
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try {
+        var apiUrl;
+        if (storedData?.token) {
+          apiUrl = `/job/details`;
+        } else {
+          apiUrl = `/job/details/public`;
         }
-    }, [storedData, router]);
-    useEffect(() => {
-        if (storedData?.user) {
-            if (isWorker) {
-                router.push(`/staff/job-detail/${params.id}`);
-            }
+
+        // Fetch data from API
+        const apiResponse = await apiRequest(
+          apiUrl,
+          {
+            method: "POST",
+            headers: {
+              revalidate: true,
+              ...(storedData && {
+                Authorization: `Bearer ${storedData.token}`,
+              }),
+            },
+            body: {
+              job_id: params.id,
+            },
+          },
+          handleError
+        );
+
+        if (apiResponse?.job_not_found === true) {
+          // router.push("/events");
+          router.push(`${process.env.NEXT_PUBLIC_CLIENTHUB_URL}/talent/events`); // Redirect to talent homepage
+        } else {
+          dispatch(setJobData(apiResponse));
+          dispatch(setJobId(params.id));
         }
-    }, [storedData, router, isWorker]);
-    useEffect(() => {
-        const fetchJobDetails = async () => {
-            try {
-                var apiUrl;
-                if (storedData?.token) {
-                    apiUrl = `/job/details`;
-                } else {
-                    apiUrl = `/job/details/public`;
-                }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-                // Fetch data from API
-                const apiResponse = await apiRequest(
-                    apiUrl,
-                    {
-                        method: "POST",
-                        headers: {
-                            revalidate: true,
-                            ...(storedData && {
-                                Authorization: `Bearer ${storedData.token}`,
-                            }),
-                        },
-                        body: {
-                            job_id: params.id,
-                        },
-                    },
-                    handleError
-                );
+    fetchJobDetails();
+  }, []);
 
-                if (apiResponse?.job_not_found === true) {
-                    // router.push("/events");
-                    router.push(`${process.env.NEXT_PUBLIC_CLIENTHUB_URL}/talent/events`); // Redirect to talent homepage
-                } else {
-                    dispatch(setJobData(apiResponse));
-                    dispatch(setJobId(params.id));
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
+  return (
+    <>
+      <JobDetail jobId={params.id} />
 
-        fetchJobDetails();
-    }, []);
-
-    return (
-        // <div className="mt-4 p-1 h-screen max-h-[calc(100vh-133px)] overflow-y-hidden"></div>
-        <>
-        {/* <div className="max-lg:hidden mt-4 h-screen max-h-[calc(100vh-132px)] overflow-y-hidden">
-            {isWorker === true ? (
-                @ts-ignore
-                <JobDetailWorker jobId={params.id} />
-            ) : (
-                // <Suspense>
-                <JobDetail jobId={params.id} />
-                // </Suspense>
-            )}
-        </div> */}
-            <JobDetail jobId={params.id} />
-        
-      
       <div className="lg:hidden px-4">
         <p className="lg:hidden text-[18px] pt-4 mb-2">
           ClientHub is coming soon on your cellphone!
@@ -120,8 +108,8 @@ const page = () => {
           Go Back to Updone
         </button>
       </div>
-        </>
-    );
+    </>
+  );
 };
 
 export default page;

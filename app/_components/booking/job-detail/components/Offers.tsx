@@ -98,7 +98,7 @@ const Offers = ({
                         <Tooltip>
                           <TooltipTrigger className="hover:bg-transparent">
                             <div className=" text-white rounded w-[30px]">
-                              <VerificationIconMobile
+                              <VerificationIcon
                                 id_is_verified={offer.worker.id_is_verified}
                                 contact_is_verified={
                                   offer.worker.contact_is_verified
