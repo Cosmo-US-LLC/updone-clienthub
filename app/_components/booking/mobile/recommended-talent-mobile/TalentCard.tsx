@@ -49,16 +49,18 @@ const TalentCard = ({ talent, jobApiData, isSelected, onToggleSelect }: any) => 
                                     }} className={`text-[20px] flex justify-start items-center min-w-auto gap-2 ${isSelected ? 'text-white' : 'text-[#2C2240]'} relative bottom-[1px] font-[600] ${montserrat.className}`}>
                                         {talent?.full_name?.length > 18 ? `${talent?.full_name?.slice(0, 18)}...` : talent?.full_name}
                                     </h3>
-                                    <TooltipMobile content={
-                                        <VerificationStatusMobile
-                                            id_is_verified={talent.id_is_verified}
-                                            contact_is_verified={talent.contact_is_verified}
-                                        />
-                                    }>
-                                        <div className="text-white pr-4 pl-2 rounded">
-                                            <VerificationIconMobile id_is_verified={talent.id_is_verified} contact_is_verified={talent.contact_is_verified} height={30} width={30} />
-                                        </div>
-                                    </TooltipMobile>
+                                    {(talent?.id_is_verified && talent?.contact_is_verified) ? (
+                                        <TooltipMobile content={
+                                            <VerificationStatusMobile
+                                                id_is_verified={talent.id_is_verified}
+                                                contact_is_verified={talent.contact_is_verified}
+                                            />
+                                        }>
+                                            <div className="text-white pr-4 pl-2 rounded">
+                                                <VerificationIconMobile id_is_verified={talent.id_is_verified} contact_is_verified={talent.contact_is_verified} height={30} width={30} />
+                                            </div>
+                                        </TooltipMobile>
+                                    ) : ''}
                                 </div>
                                 <div className="flex items-center justify-center">
                                     <div className='relative bottom-[2px]'>

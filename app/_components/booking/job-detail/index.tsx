@@ -16,6 +16,16 @@ import JobDetailsTabs from "./components/JobDetailTabs";
 import TalentInfo from "./components/TalentInfo";
 import Modal from "react-modal";
 import { Skeleton } from "@/components/ui/skeleton";
+import ProgressBar from "./components/ProgressBar";
+
+const service_icons: any = {
+  Bartender: "/images/services/bartander.svg",
+  Waiter: "/images/services/waiter.svg",
+  "Cocktail server": "/images/services/cocktail.svg",
+  "Promo Model": "/images/services/model.svg",
+  "Event Helper": "/images/services/helper.svg",
+  Barback: "/images/services/barback.svg",
+};
 
 const JobDetail = ({ jobId }: { jobId?: any }) => {
   const [isOpenresetPasswordModal, setIsOpenResetPasswordModal] =
@@ -37,6 +47,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
 
   const [isChatVisible, setIsChatVisible] = useState(true); // State for chat visibility
   const [isChatHidden, setIsChatHidden] = useState(false);
+
+  const [offerSort, setOfferSort] = useState("latest");
 
   useEffect(() => {
     if (selectedOffer !== null) {
@@ -92,13 +104,14 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             },
             body: {
               job_id: jobDetailData?.id,
+              sort_by: offerSort == "latest" ? "" : offerSort,
             },
           },
           handleError
         );
 
         if (response?.offers) {
-          console.log(response)
+          console.log(response);
           setOffers(response?.offers);
           if (
             jobDetailData?.status === "assigned" ||
@@ -112,10 +125,10 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             });
           }
         } else {
-          console.error("Unexpected data format:", response);
+          console.log("Unexpected data format:", response);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log("Error fetching data:", error);
       } finally {
         setOffersLoading(false);
       }
@@ -124,7 +137,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
     if (jobDetailData?.id) {
       GetOffers();
     }
-  }, [jobDetailData, messagesRefreshed]);
+  }, [jobDetailData, messagesRefreshed, offerSort]);
 
   const toggleMenu = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -245,9 +258,9 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
   };
 
   return (
-    <div className="relative flex flex-row gap-5 bg-[#F6F9FC] h-[100%]">
+    <div className="relative grid grid-cols-7 gap-5 bg-[#F6F9FC] h-[100%] w-full overflow-y-auto">
       {/* Main Content */}
-      <div className="grow h-full">
+      <div className="col-span-5">
         {loading ? (
           // Skeleton
           <div className="bg-[#FFF] rounded-tl-[29px] rounded-[12px] mt-4 flex-col flex gap-[16px] !p-8">
@@ -291,22 +304,32 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                 : "rounded-[12px]"
             } bg-[#FFF] flex gap-[16px] !p-8`}
           >
-            <div className="w-full flex justify-start items-center mb-6">
+            <div
+              className={`flex justify-between items-baseline -mb-4 -mt-3  ${
+                jobDetailData?.status === "completed" &&
+                "opacity-[50%] !text-gray-300"
+              }`}
+            >
+              <h2 className={`font-light`}>Event Details</h2>
+              <ProgressBar status={jobDetailData?.status} />
+            </div>
+            <div className="w-full flex justify-start items-center mb-0">
               <div className="w-[100%] flex justify-between ">
-                <div className=" flex flex-col">
+                <div className=" flex flex-col overflow-hidden">
                   <h2
                     style={{ wordBreak: "break-word" }}
+                    title={jobDetailData?.title}
                     className={`${
                       jobDetailData?.status === "completed" &&
                       "opacity-[50%] !text-gray-300"
-                    } tracking-[0.2px] text-[#000000] !font-[600] text-[16px]`}
+                    } tracking-[0.2px] text-[#000000] text-4xl leading-[50px] font-light truncate`}
                   >
                     {jobDetailData?.title}
                   </h2>
 
                   <div
                     style={{ wordBreak: "break-word" }}
-                    className={`flex justify-start items-center  gap-[6px] !text-[14px] font-[400] tracking-[-0.32px] leading-[22px] text-[#6B6B6B] !w-[101%] ${
+                    className={`!text-[16px] font-[400] leading-[28px] text-[#6B6B6B] ${
                       jobDetailData?.status === "completed" &&
                       "opacity-[50%] !text-gray-300"
                     }`}
@@ -314,20 +337,14 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                     {jobDetailData?.description}
                   </div>
                 </div>
-                <p
-                  className={`${`h-[26px] flex px-[16px] rounded-[32px] items-center gap-1 text-[14px] font-[500] border-none leading-[30px]
-                      ${
-                        jobDetailData?.status === "assigned"
-                          ? "text-[#0C9000] bg-[#EAFDE7]"
-                          : jobDetailData?.status === "completed"
-                          ? "text-[#E60000] bg-[#FDE7E7]"
-                          : "text-[#0076E6] bg-[#E7F4FD]"
-                      }`}  `}
-                >
-                  {jobDetailData?.status && jobDetailData?.status}
-                </p>
               </div>
             </div>
+            <hr
+              className={` ${
+                jobDetailData?.status === "completed" &&
+                "opacity-50 !border-gray-300"
+              }`}
+            />
             <div
               className={`${
                 jobDetailData?.status === "completed" &&
@@ -397,11 +414,14 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                 </div>
                 <div className="flex flex-row gap-[14px] items-start">
                   <Image
-                    className="relative"
-                    width={32}
-                    height={28}
+                    className="relative p-1.5 border rounded w-[32px] h-[32px] bg-[#f1f4ff] border-[#d8e1ff]"
+                    width={20}
+                    height={18}
                     alt="verified"
-                    src="/images/staff-listing/glass.svg"
+                    src={
+                      service_icons[jobDetailData?.service_name] ||
+                      "/images/services/bartander.svg"
+                    }
                   />
 
                   <div>
@@ -508,6 +528,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                       selectedOffer={selectedOffer}
                       messagesRefreshed={messagesRefreshed}
                       isInModal={true}
+                      offerSort={offerSort}
+                      setOfferSort={setOfferSort}
                     />
                     {/* </Suspense> */}
                   </div>
@@ -567,6 +589,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   selectedOffer={selectedOffer}
                   messagesRefreshed={messagesRefreshed}
                   setIsChatHidden={setIsChatHidden}
+                  offerSort={offerSort}
+                  setOfferSort={setOfferSort}
                 />
                 {/* </Suspense> */}
               </div>
@@ -576,8 +600,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
       </div>
       {/* {} */}
 
-      {/* For completed job */}
-      <div className="w-[280px] flex flex-col gap-4">
+      {/* For completed job & Faq Panel */}
+      <div className="col-span-2 max-w-[390px] h-fit flex flex-col gap-4">
         {jobData?.status === "completed" && (
           <div
             className={`flex flex-col items-center px-4 py-5 bg-[white] h-fit border border-1 border-[#EBE6FF] rounded-[12px]`}

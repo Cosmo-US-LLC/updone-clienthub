@@ -114,6 +114,7 @@ const CardTable = ({
                     <span className="ml-2 text-[#2C2240] text-[14px] font-[400]">
                       {row?.talent_name}
                     </span>
+                    {(row?.id_is_verified && row?.contact_is_verified) ? (
                     <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
                       <TooltipProvider>
                         <Tooltip>
@@ -136,6 +137,7 @@ const CardTable = ({
                         </Tooltip>
                       </TooltipProvider>
                     </div>
+                    ) : ''}
                     {openMenu?.rowIndex === index &&
                       openMenu?.menuType === "verified" && (
                         <div
@@ -212,7 +214,7 @@ const headers = [
 ];
 
 const Page = () => {
-  const [transactionsData, setTransactionsData] = useState<any>(null);
+  const [transactionsData, setTransactionsData] = useState<any>([]);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -231,7 +233,7 @@ const Page = () => {
           //     page_size: 10
           // }
         });
-        setTransactionsData(response);
+        setTransactionsData(response?.length > 0 ? response : []);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -271,7 +273,7 @@ const Page = () => {
 
           <Table className="grow relative hover:bg-transparent">
             {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-            <TableHeader className="sticky -top-[2] z-10 bg-[#f6f9fc]">
+            <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
               <TableRow>
                 <TableHead className="w-[130px]">Payment ID</TableHead>
                 <TableHead>Event Detail</TableHead>
@@ -311,6 +313,7 @@ const Page = () => {
                     <span className="ml-2 text-[#2C2240] text-[14px] font-[400]">
                       {row?.talent_name}
                     </span>
+                    {(row?.id_is_verified && row?.contact_is_verified) ? (
                     <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
                       <TooltipProvider>
                         <Tooltip>
@@ -333,6 +336,7 @@ const Page = () => {
                         </Tooltip>
                       </TooltipProvider>
                     </div>
+                    ) : ''}
                     {/* {openMenu?.rowIndex === index &&
                       openMenu?.menuType === "verified" && (
                         <div

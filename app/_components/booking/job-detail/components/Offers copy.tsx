@@ -73,27 +73,29 @@ const Offers = ({ offers, job, setSelectedOffer }: { offers: any[]; job: any, se
                           ? `${offer.worker.full_name.slice(0, 17)}...`
                           : offer.worker.full_name}
                       </h3>
-                      <Tooltip
-                        content={
-                          <VerificationStatus
-                            id_is_verified={offer.worker.id_is_verified}
-                            contact_is_verified={
-                              offer.worker.contact_is_verified
-                            }
-                          />
-                        }
-                      >
-                        <div className=" text-white pr-4 pl-2  rounded">
-                          <VerificationIcon
-                            id_is_verified={offer.worker.id_is_verified}
-                            contact_is_verified={
-                              offer.worker.contact_is_verified
-                            }
-                            height={30}
-                            width={30}
-                          />
-                        </div>
-                      </Tooltip>
+                      {(offer?.worker?.id_is_verified && offer?.worker?.contact_is_verified) ? (
+                        <Tooltip
+                          content={
+                            <VerificationStatus
+                              id_is_verified={offer.worker.id_is_verified}
+                              contact_is_verified={
+                                offer.worker.contact_is_verified
+                              }
+                            />
+                          }
+                        >
+                          <div className=" text-white pr-4 pl-2  rounded">
+                            <VerificationIcon
+                              id_is_verified={offer.worker.id_is_verified}
+                              contact_is_verified={
+                                offer.worker.contact_is_verified
+                              }
+                              height={30}
+                              width={30}
+                            />
+                          </div>
+                        </Tooltip>
+                      ) : ''}
                     </div>
                     <h3 className="flex justify-center items-center gap-1 font-[500] leading-[24px] translate-[-2%] text-[16px]">
                       <span className="mb-[2px] mr-1 leading-[24px] text-[#2C2240] font-[600] tracking-[-0.28px] text-[16px]">

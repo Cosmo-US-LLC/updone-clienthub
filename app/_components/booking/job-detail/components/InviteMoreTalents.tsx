@@ -6,8 +6,18 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import React, { useEffect, useState } from "react";
 import TalentCard from "../../recommended-talent/TalentCard";
 
+const services: any = {
+  "Bartender": 1,
+  "Waiter": 2,
+  "Cocktail Server": 3,
+  "Barback": 6,
+  "Promo Model": 4,
+  "Event Helper": 4,
+};
+
 function InviteMoreTalents({
   jobId,
+  jobData,
   selectedTalentsLocal,
   setSelectedTalentsLocal,
   handleInviteSelected,
@@ -26,7 +36,7 @@ function InviteMoreTalents({
     setLoading(true);
     let body: any = {
       city_id: 1,
-      service_id: 1,
+      service_id: services[jobData?.service_name] || 1,
       page_number: currentPage,
       page_size: selectedCount || 12,
       order: "ASC",
@@ -61,15 +71,12 @@ function InviteMoreTalents({
 
   const fetchJobDetails = async () => {
     try {
-      const apiResponse = await apiRequest(
-        "/job/details/public",
-        {
-          method: "POST",
-          body: {
-            job_id: jobId,
-          },
+      const apiResponse = await apiRequest("/job/details/public", {
+        method: "POST",
+        body: {
+          job_id: jobId,
         },
-      );
+      });
       if (apiResponse) {
         setJobApiData(apiResponse);
       }

@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import Invites from './Invites'
 import Offers from './Offers'
 
-const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, setSelectedOffer, selectedOffer, messagesRefreshed, isInModal }: any) => {
+const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, setSelectedOffer, selectedOffer, messagesRefreshed, isInModal, offerSort, setOfferSort }: any) => {
     const [data, setData] = useState<any>(null);
     const { jobData } = useAppSelector(selectStaff);
     const { auth: storedData } = useAppSelector(selectAuth);
@@ -75,10 +75,12 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, se
                                 setSelectedOffer={setSelectedOffer}
                                 selectedOffer={selectedOffer}
                                 isInModal={isInModal}
+                                offerSort={offerSort}
+                                setOfferSort={setOfferSort}
                             />
                         )}
                         {activeTab === 'b' && (
-                            <Invites jobId={jobId} data={data} />
+                            <Invites jobId={jobId} data={data} jobData={jobData} />
                         )}
                     </section>
                 </div>
@@ -99,10 +101,12 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, se
                                 setSelectedOffer={setSelectedOffer}
                                 selectedOffer={selectedOffer}
                                 isInModal={isInModal}
+                                offerSort={offerSort}
+                                setOfferSort={setOfferSort}
                             />
                         )}
                         {activeTab === 'b' && (
-                            <Invites jobId={jobId} data={data} />
+                            <Invites jobId={jobId} data={data} jobData={jobData} />
                         )}
                     </section>
                 </div>

@@ -304,7 +304,7 @@ const headers = [
 ];
 
 const Page = () => {
-  const [transactionsData, setTransactionsData] = useState(null);
+  const [transactionsData, setTransactionsData] = useState([]);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -323,7 +323,7 @@ const Page = () => {
           //     page_size: 10
           // }
         });
-        setTransactionsData(response);
+        setTransactionsData(response?.length > 0 ? response : []);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -353,7 +353,7 @@ const Page = () => {
       ) : (
         <>
           <Table className="grow relative hover:bg-transparent">
-            <TableHeader className="sticky -top-[2] z-10 bg-[#f6f9fc]">
+            <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
               <TableRow>
                 <TableHead className="w-[130px]">Settlement ID</TableHead>
                 <TableHead>Event Title</TableHead>
@@ -404,6 +404,7 @@ const Page = () => {
                       <span className="ml-2 text-[#2C2240] text-[14px] font-[400]">
                         {row?.talent_name}
                       </span>
+                      {(row?.id_is_verified && row?.contact_is_verified) ? (
                       <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
                         <TooltipProvider>
                           <Tooltip>
@@ -426,6 +427,7 @@ const Page = () => {
                           </Tooltip>
                         </TooltipProvider>
                       </div>
+                      ) : ''}
                     </div>
                   </TableCell>
                   {/* Requested Service */}

@@ -46,7 +46,7 @@ const GalleryModal: React.FC<GalleryModalProps> = ({ show, onClose, images }) =>
                     easing="ease-in"
                     infinite={false}
                 >
-                    {images.map((imageUrl, index) => (
+                    {images?.map((imageUrl, index) => (
                         <div className="each-slide flex justify-center items-center relative" key={index}>
                             {/* Loader */}
                             {loading[index] && (

@@ -44,13 +44,11 @@ const TalentCard = ({
                 ? talent.profile_pic
                 : "/images/testiminial/testi3.jpg"
             }
-            quality={100}
-            objectFit="fill"
             width={120}
             height={120}
             alt=""
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,..."
+            // placeholder="blur"
+            // blurDataURL="data:image/jpeg;base64,..."
             priority={true}
           />
           <div className="text-center w-[75px] py-0.5 relative bottom-[15px] bg-[#e6e0fa] text-[#350ABC] rounded-md">
@@ -85,6 +83,8 @@ const TalentCard = ({
                     ? `${talent?.full_name?.slice(0, 18)}...`
                     : talent?.full_name}
                 </h3>
+                
+                {(talent?.id_is_verified && talent?.contact_is_verified) ? (
                 <Tooltip
                   content={
                     <VerificationStatus
@@ -102,6 +102,7 @@ const TalentCard = ({
                     />
                   </div>
                 </Tooltip>
+                ) : ''}
               </div>
               <div className="flex items-center justify-center">
                 <div className="relative bottom-[2px]">
