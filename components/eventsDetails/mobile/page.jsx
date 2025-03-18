@@ -6,6 +6,8 @@ import Link from "next/link";
 import { MdOutlineEventNote, MdLocalOffer, MdGroup } from "react-icons/md";
 import { PiCurrencyDollar } from "react-icons/pi";
 import dynamic from "next/dynamic";
+// import { setJobData, setJobId } from "@/app/lib/store/features/staffSlice";
+import { useDispatch } from "react-redux";
 
 const EventDetails = dynamic(() => import("./EventDetails/page"), {
   ssr: false,
@@ -31,7 +33,9 @@ const tabs = [
   },
 ];
 
-const Page = () => {
+const Page = ({ jobId, jobData }) => {
+  console.log("job id", jobId);
+  console.log("event details", jobData);
   const router = useRouter();
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState(tabs[0].name);
@@ -44,11 +48,11 @@ const Page = () => {
   }, [pathname]);
 
   return (
-    <div className="flex flex-col items-center px-4 py-4 gap-4 h-full w-full bg-[#F6F9FC]">
+    <div className="flex flex-col items-center px-4 py-4 gap-4 h-dvh w-full bg-[#F6F9FC]">
       <div className="flex items-center justify-between bg-[#FFF] rounded-full p-1 w-full   shadow-sm">
-        {tabs.map((tab) => (
+        {tabs.map((tab, index) => (
           <button
-            key={tab.name}
+            key={tab.name || index}
             onClick={() => setActiveTab(tab.name)}
             className={`flex items-center gap-2 px-5 py-[6px] text-[14px] font-[400] text-center rounded-full transition-all ${
               activeTab === tab.name

@@ -6,6 +6,7 @@ import { useError } from "@/app/lib/context/ErrorProvider";
 import { apiRequest } from "@/app/lib/services";
 import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { setJobData, setJobId } from "@/app/lib/store/features/staffSlice";
+import { selectStaff } from "@/app/lib/store/features/staffSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
@@ -20,10 +21,13 @@ const JobDetail = loadable(
 const page = () => {
     const params = useParams();
     const { auth: storedData } = useAppSelector(selectAuth);
+    const { jobData } = useAppSelector(selectStaff);
     const [isWorker, setIsWorker] = useState<boolean | null>(null);
     const router = useRouter();
     const dispatch = useDispatch();
     const { handleError } = useError();
+
+    console.log({jobData})
 
     useEffect(() => {
         if (storedData?.user) {
@@ -84,6 +88,10 @@ const page = () => {
         fetchJobDetails();
     }, []);
 
+
+
+     
+
     return (
         // <div className="mt-4 p-1 h-screen max-h-[calc(100vh-133px)] overflow-y-hidden"></div>
         <>
@@ -104,7 +112,7 @@ const page = () => {
         
       
       <div className="lg:hidden ">
-        <EventsDetails jobId={params.id} />
+        <EventsDetails jobId={params.id} jobData={jobData} />
         {/* <p className="lg:hidden text-[18px] pt-4 mb-2">
           ClientHub is coming soon on your cellphone!
           <br />

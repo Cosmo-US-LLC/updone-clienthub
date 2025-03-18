@@ -20,14 +20,15 @@ import FindATalent from "../../../ui/FindATalent";
 
 const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
   console.log("mobile my events page", formatDateAndTime);
-    const router = useRouter();
+  const router = useRouter();
   const [client, setClient] = useState(false);
 
   useEffect(() => {
     setClient(true);
   }, []);
   return (
-    <div className="flex flex-col justify-center items-center py-6 px-3 gap-4 w-full bg-[#F6F9FC]">
+    <div className="flex flex-col justify-center py-6 px-3 gap-4 w-full bg-[#F6F9FC]">
+      <h1 className="text-[#000] text-[20px] font-[400] pl-1">My Events</h1>
       {isLoading ? (
         [1, 2, 3].map((item) => (
           <div
@@ -68,7 +69,10 @@ const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
         ))
       ) : eventData?.length > 0 ? (
         eventData?.map((event: any) => (
-          <div className="bg-white w-full rounded-[12px] border-[2px] border-[#EBE6FF]" onClick={() => router.push(`/events/detail/${event?.id}`)}>
+          <div
+            className="bg-white w-full rounded-[12px] border-[2px] border-[#EBE6FF]"
+            onClick={() => router.push(`/events/detail/${event?.id}`)}
+          >
             <div className=" px-3 py-4">
               <div className="flex justify-between items-center mb-2">
                 <span
@@ -83,29 +87,28 @@ const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
                   {event.event_status.charAt(0).toUpperCase() +
                     event.event_status.slice(1)}
                 </span>
-                {event.event_status === "open" && (
-                  <span className="flex flex-row items-center gap-1 text-[#350ABC] text-[14px] font-[400]">
-                    <GoPerson className="text-lg text-[#350ABC]" />
-                    {event.event_total_offers} offers
-                  </span>
-                )}
+
+                <span className="flex flex-row items-center gap-1 text-[#350ABC] text-[14px] font-[400]">
+                  <GoPerson className="text-lg text-[#350ABC]" />
+                  {event.event_total_offers} offers
+                </span>
               </div>
 
-              <h2 className="text-[18px] font-[500] text-[#161616]">
+              <h2 className="text-[18px] font-[600] text-[#161616]">
                 {event.event_title}
               </h2>
 
               <div className=" flex items-center  gap-1 mt-2  ">
                 <HiOutlineLocationMarker className="w-[24px] h-[24px] stroke-1 text-[#161616]" />
-                <p className="text-[13px] font-[400]  text-[#161616] w-full">
+                <p className="text-[14px] font-[400]  text-[#161616] w-full">
                   {event.event_location}
                 </p>
               </div>
 
-              <div className="flex items-center justify-center gap-1 bg-[#F6F9FC] py-[10px] px-2 rounded-full mt-3">
+              <div className="flex flex-row items-center justify-center gap-2 bg-[#F6F9FC] py-[10px] px-2 rounded-full mt-3">
                 <HiOutlineCalendar className="w-[20px] h-[20px] stroke-1 text-[#774DFD]" />
 
-                <span className="text-[14px] font-[400] leading-[24px] pt-[1px]">
+                <span className="text-[13px] font-[400] leading-[24px] pt-1">
                   {formatDateAndTime(event.event_date_time)}
                 </span>
               </div>
@@ -166,29 +169,30 @@ const Page = ({ eventData, isLoading, formatDateAndTime }: any) => {
               )}
             </div>
 
-            {event.event_status !== "open" && event.event_status !== "completed" && (
-              <div
-                className={`flex justify-around p-3  rounded-b-lg ${
-                  event.event_status === "assigned"
-                    ? "bg-[#774DFD] text-white "
-                    : "bg-[#EBE6FF] text-[#161616]"
-                }`}
-              >
-                {event.event_status === "assigned" && (
-                  <>
-                    <MdMailOutline className="text-xl cursor-pointer" />
-                    <div className="w-[1px] h-5 bg-slate-50"></div>
-                    <MdCall className="text-xl cursor-pointer" />
-                  </>
-                )}
-                {/* <MdAttachMoney className="text-xl cursor-pointer" /> */}
-              </div>
-            )}
+            {event.event_status !== "open" &&
+              event.event_status !== "completed" && (
+                <div
+                  className={`flex justify-around p-3  rounded-b-lg ${
+                    event.event_status === "assigned"
+                      ? "bg-[#774DFD] text-white "
+                      : "bg-[#EBE6FF] text-[#161616]"
+                  }`}
+                >
+                  {event.event_status === "assigned" && (
+                    <>
+                      <MdMailOutline className="text-xl cursor-pointer" />
+                      <div className="w-[1px] h-5 bg-slate-50"></div>
+                      <MdCall className="text-xl cursor-pointer" />
+                    </>
+                  )}
+                  {/* <MdAttachMoney className="text-xl cursor-pointer" /> */}
+                </div>
+              )}
           </div>
         ))
       ) : (
         // <p>No events found</p>
-        <FindATalent/>
+        <FindATalent />
       )}
     </div>
   );

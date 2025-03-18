@@ -35,35 +35,26 @@ const Invites = () => {
       ratePerHour: "$50/hr",
       totalAmount: "$400",
     },
-  ]); // Example invites data
+  ]);
 
   return (
     <div className="flex flex-col gap-5 ">
-      <h1 className="text-[28px] font-[600] tracking-tight text-[#161616] mt-1">
-        Your Sent Invites
-      </h1>
-      {/* <div className="bg-purple-100 max-w-[80px] flex justify-center items-center text-purple-600 text-[14px] font-[600] px-4 py-2 rounded-lg">
-                  {invite.ratePerHour}
-                </div> */}
+      <h1 className="text-[16px] font-[400] text-[#161616] mt-1">Invites</h1>
 
       {invitesData.length > 0 ? (
         <div className="flex flex-col gap-4 w-full">
           {invitesData.map((invite, index) => (
             <div className="flex flex-col" key={index}>
-              <div
-                key={index}
-                className="bg-[#FCFBFF] p-4 rounded-t-lg border"
-              >
-                {/* <div className="flex items-center justify-between"> */}
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={invite.profilePic}
-                      alt={invite.name}
-                      className="w-14 h-14 rounded-full border"
-                    />
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-1">
+              <div key={index} className="bg-[#FCFBFF] p-4 rounded-t-lg border">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={invite.profilePic}
+                    alt={invite.name}
+                    className="w-[60px] h-[60px] rounded-full border"
+                  />
+                  <div className="flex flex-col gap-1 w-full">
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-1">
                         <p className="text-gray-900 test-[16px] font-[600]">
                           {invite.name}
                         </p>
@@ -99,45 +90,43 @@ const Invites = () => {
                             </Tooltip>
                           </TooltipProvider>
                         </div>
-                        </div>
-                        <div className="flex items-center gap-1 text-gray-500">
-                          <FaStar className="text-yellow-500 mb-1" />
-                          <span className="text-[14px]">{invite.rating}/5</span>
-                        </div>
                       </div>
-                      <div className="w-full flex flex-row justify-between">
-                        <div className="flex  gap-1 text-gray-500 text-sm">
-                          <HiOutlineLocationMarker className="text-[22px]" />
-                          <span className="text-[14px] font-[500]">
-                            {invite.location}
-                          </span>
-                        </div>
-                        <p className="text-gray-500 text-[14px]">
-                          {invite.jobs} Jobs
-                        </p>
+                      <div className="flex items-center gap-1 text-gray-500">
+                        <FaStar className="text-yellow-500 mb-1" />
+                        <span className="text-[14px]">{invite.rating}/5</span>
                       </div>
                     </div>
-                  {/* </div> */}
+                    <div className="w-full flex flex-row justify-between">
+                      <div className="flex  gap-1 text-gray-500 text-sm">
+                        <HiOutlineLocationMarker className="text-[22px]" />
+                        <span className="text-[14px] font-[500]">
+                          {invite.location}
+                        </span>
+                      </div>
+                      <p className="text-gray-500 text-[14px]">
+                        {invite.jobs} Jobs
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2 bg-blue-100 px-4 py-[10px] rounded-full mt-6 text-gray-700 text-[14px]">
+                <div className="flex min-w-[300px] items-center justify-center gap-3 bg-[#F4FAFF] px-4 py-[10px] rounded-full mt-4 text-gray-700 text-[14px]">
                   <FaSuitcase className="text-blue-600" />
-                  <span>
-                    Last job was a <strong>{invite.lastJob.role}</strong>,{" "}
-                    {invite.lastJob.date}
-                  </span>
+                  <span>The last job was on {invite.lastJob.date}</span>
                 </div>
-
-                {/* Rate Per Hour & Total Amount */}
-                {/* <div className="bg-purple-100 text-purple-600 text-xs font-medium px-3 py-1 rounded-full">
-              {invite.ratePerHour}
-            </div> */}
               </div>
-              <div className="flex gap-1 items-center justify-center  bg-[#FFF] border rounded-b-lg py-2">
-                <p className="text-gray-900 text-[22px] font-[600]">
-                  {invite.totalAmount}
-                </p>
-                <p className="text-gray-500 text-[16px] mt-1">Total</p>
+              <div className="flex justify-around border rounded-b-lg py-2 bg-white">
+                <div className="flex items-center justify-center gap-1">
+                  <p className="text-[14px] font-[400] text-gray-500">From</p>
+                  <p className="text-[16px] font-[600]">{invite.ratePerHour}</p>
+                </div>
+                <div className="w-[1px] bg-[#E9E9E9] "></div>
+                <div className="flex items-center justify-center gap-1">
+                  <p className="text-gray-500 text-[16px]  ">Total</p>
+                  <p className="text-gray-900 text-[16px] font-[600]">
+                    {invite.totalAmount}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

@@ -57,9 +57,9 @@ const Offers = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <h1 className="text-[28px] font-[600] tracking-[0.5px] text-[#161616] mt-1">
-        Rate Proposals
-      </h1>
+      <h1 className="text-[16px] font-[400] tracking-[0.5px] text-[#161616] mt-1">
+        Talent Offers
+             </h1>
  
       {offersData.length > 0 ? (
         <div className="space-y-4">
@@ -128,10 +128,10 @@ const Offers = () => {
               </div>
 
            
-              <div className="flex items-center gap-2 bg-[#F4FAFF] px-4 py-[10px] rounded-full mt-4 text-gray-700 text-[14px]">
+              <div className="flex min-w-[300px] items-center justify-center gap-4 bg-[#F4FAFF] px-4 py-[10px] rounded-full mt-4 text-gray-700 text-[14px]">
                 <FaSuitcase className="text-blue-600" />
                 <span>
-                  Last job was a <strong>{offer.lastJob.role}</strong>,{" "}
+                  Last job was a  {""}
                   {offer.lastJob.date}
                 </span>
               </div>
@@ -152,21 +152,21 @@ const Offers = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-4 mt-6">
+              <div className="flex justify-end gap-4 mt-7">
                 <div className="relative flex items-center">
-                  <button className="bg-[#FFEFD7] border-[1px] border-[#161616] text-[#161616] text-[14px] font-medium px-4 py-2 rounded-full">
-                    Talk To Me
+                  <button className="  border-[1px] border-[#161616] text-[#161616] text-[14px] font-medium px-4 py-2 rounded-full">
+                    Let's Talk
                   </button>
                   {/* <FaFileInvoiceDollar className="text-gray-500 text-lg" /> */}
                   {offer.notification > 0 && (
-                    <span className="absolute -top-2 -right-1 z-10 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                    <span className="absolute -top-2 -right-1 z-10 bg-[#774DFD] text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
                       {offer.notification}
                     </span>
                   )}
                 </div>
 
-                <button className="bg-[#350ABC] text-white text-[14px] font-[400] px-4 py-2 rounded-full">
-                  Hire Now
+                <button className="bg-[#350ABC] text-white text-[14px] font-[400] px-6 py-2 rounded-full">
+                  Hire Me
                 </button>
               </div>
             </div>

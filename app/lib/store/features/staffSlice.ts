@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Staff } from "@/app/lib/types"; // Assuming this path is correct and provides the Staff type
+import { Staff } from "@/app/lib/types";
 import { RootState } from "../store";
 
 interface StaffState {

@@ -32,12 +32,33 @@ import { PiUserLight } from "react-icons/pi";
 import Link from "next/link";
 import { apiRequest } from "@/app/lib/services";
 import { SidebarTrigger } from "../ui/sidebar";
+import {
+  Sheet,
+  SheetClose,
+  //   SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { LuLogOut } from "react-icons/lu";
+import { BsPlusLg } from "react-icons/bs";
 
 function NavbarClienthub() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isClient, setIsClient] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const user = storedData?.user;
+  const token = storedData?.token;
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    console.log(!isOpen);
+  };
 
   useEffect(() => {
     const authData = Cookies.get("authData");
@@ -90,34 +111,154 @@ function NavbarClienthub() {
 
   return (
     <header className="bg-white min-h-[65px] flex items-center shadow-md">
-      <nav className="px-4 md:px-8 h-full w-full flex justify-end items-center">
-        {/* Logo */}
-        {/* <div className="flex gap-4">
-          <Link
-            href={`/`}
-            className="relative"
-          >
-            <p className="text-2xl font-light text-[#4A4A4A] leading-[15px]">
-              Client<span className="font-medium text-[#6265F1]">Hub</span>
-            </p>
-            <p className="flex gap-1 w-[80px] items-center text-[12px] absolute left-[70%] whitespace-nowrap">
-              by{" "}
-              <span className="">
-                <Image
-                  src={"/logo.svg"}
-                  alt="Updone"
-                  height={140}
-                  width={160}
-                  className="w-[55px] h-fit relative"
-                />
-              </span>
-            </p>
-            <div className="h-[8px]"></div>
+      <nav className="md:px-8 h-full w-full flex justify-end items-center">
+        <div className="lg:hidden flex items-center justify-between z-[100] bg-[#fff] fixed w-full px-[24px] h-[65px]">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger onClick={toggleMenu} className="relative z-[70]">
+              <Image
+                src={"/images/hamburger.png"}
+                alt="ham"
+                width={32}
+                height={32}
+                className={`transition-transform duration-500 ease-in-out ${
+                  isOpen ? "scale-x-[-1]" : "scale-x-[1]"
+                }`}
+              />
+            </SheetTrigger>
+            <SheetContent
+              side={"left"}
+              className="fixed bottom-0 z-[50] w-[80%] mt-[65px] h-full max-h-[calc(100dvh-65px)] flex flex-col bg-gray-50 overflow-y-auto"
+            >
+              <SheetHeader hidden>
+                <SheetTitle hidden></SheetTitle>
+                <SheetDescription hidden></SheetDescription>
+              </SheetHeader>
+              <div className="grow px-2 flex flex-col justify-between">
+                <ul className="list-none space-y-6">
+                  <Link
+                    href={
+                      user && user?.role_id == 3
+                        ? `${process.env.NEXT_PUBLIC_TALENTPRO_URL}/auth?token=${token}`
+                        : "/add-job/location"
+                    }
+                  >
+                    <button className="bg-[#350abc] text-white rounded-full px-4 py-2 font-semibold">
+                      {user && user?.role_id == 3
+                        ? "Go to Talent Pro"
+                        : "Book a Talent Now"}
+                    </button>
+                  </Link>
+                  {/* Use setActiveTab to switch between tabs */}
+                  {user == false ? (
+                    <>
+                      <li onClick={toggleMenu}>
+                        <Link href="/signin">Log in</Link>
+                      </li>
+                      <li onClick={toggleMenu}>
+                        <Link href="/signup">Sign up</Link>
+                      </li>
+                      <li onClick={toggleMenu}>
+                        <Link href="/">Home</Link>
+                      </li>
+                    </>
+                  ) : (
+                    <li onClick={toggleMenu}>
+                      <Link
+                        href={`${
+                          user?.role_id == 4
+                            ? process.env.NEXT_PUBLIC_CLIENTHUB_URL
+                            : process.env.NEXT_PUBLIC_TALENTPRO_URL
+                        }/auth?token=${token}`}
+                      >
+                        Home
+                      </Link>
+                    </li>
+                  )}
+                  <li onClick={toggleMenu}>
+                    <Link href="/about">About Us</Link>
+                  </li>
+                  <li onClick={toggleMenu}>
+                    <Link href="/contact-us">Contact</Link>
+                  </li>
+                </ul>
+
+                <div className="mt-4 space-y-8">
+                  {user != false && (
+                    <div className="space-y-4">
+                      <div className="w-full pl-2 py-2 rounded-lg flex items-center gap-3">
+                        <Avatar>
+                          <AvatarImage src={user?.profile_pic} />
+                          <AvatarFallback>
+                            {`
+                        ${user?.name?.split(" ")[0][0]}${
+                              user?.name?.split(" ")?.length > 1
+                                ? user?.name?.split(" ")[1][0]
+                                : ""
+                            }`}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-[16px]">{user?.name}</p>
+                          <p className="text-neutral-600 text-[14px] w-[180px] truncate">
+                            {user?.email}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleLogout()}
+                        className="w-full text-red-500 px-4 py-2 flex justify-center items-center gap-2 rounded-lg bg-red-50"
+                      >
+                        Logout
+                        <LuLogOut className="text-red-500" />
+                      </button>
+                    </div>
+                  )}
+                  <p className="text-neutral-500 text-center text-xs">
+                    Copyright &copy; 2025 Updone.
+                    <br />
+                    All rights reserved.
+                    <br />
+                    <Link
+                      className="pt-1 underline"
+                      href={"terms-condition"}
+                      onClick={toggleMenu}
+                    >
+                      Terms & Conditions
+                    </Link>
+                    ,&nbsp;
+                    <Link
+                      className="pt-1 underline"
+                      href={"privacy-policy"}
+                      onClick={toggleMenu}
+                    >
+                      Privacy Policy
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          <Link href={"/"}>
+            <Image
+              src="/images/logo.svg"
+              className="object-contain"
+              alt="headerLogo"
+              height={28}
+              width={98.45}
+            />
           </Link>
-        </div> */}
-        {/* <div className="flex items-center">
-          <SidebarTrigger className="!h-[30px] w-[30px]" />
-        </div> */}
+
+          <Link href={"/add-job/location"} aria-label="Add an Event">
+            <button
+              aria-label="Add Event"
+              title="Add Event"
+              className="bg-[#774dfd] text-white rounded-full p-2"
+            >
+              <BsPlusLg size={22} />
+            </button>
+          </Link>
+        </div>
 
         <div className=" flex items-center gap-3">
           <Link
