@@ -11,7 +11,7 @@ function TalentImage({ talent }: any) {
       ? JSON.parse(talent?.gallery)
       : [talent.profile_pic];
 
-  console.log(talent, galleryImages);
+  // console.log(talent, galleryImages);
 
   return (
     <div className="relative">

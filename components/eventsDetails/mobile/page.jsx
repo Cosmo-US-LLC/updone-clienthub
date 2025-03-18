@@ -15,30 +15,11 @@ const EventDetails = dynamic(() => import("./EventDetails/page"), {
 const Offers = dynamic(() => import("./Offers/page"), { ssr: false });
 const Invites = dynamic(() => import("./Invites/page"), { ssr: false });
 
-const tabs = [
-  {
-    name: "Event Details",
-    icon: <MdOutlineEventNote className="text-lg" />,
-    component: <EventDetails />,
-  },
-  {
-    name: "Offers",
-    icon: <PiCurrencyDollar className="text-lg" />,
-    component: <Offers />,
-  },
-  {
-    name: "Invites",
-    icon: <MdGroup className="text-lg" />,
-    component: <Invites />,
-  },
-];
-
 const Page = ({ jobId, jobData }) => {
-  console.log("job id", jobId);
+  // console.log("job id", jobId);
   console.log("event details", jobData);
   const router = useRouter();
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState(tabs[0].name);
 
   useEffect(() => {
     if (pathname === "/eventsDetails/mobile") {
@@ -47,12 +28,32 @@ const Page = ({ jobId, jobData }) => {
     }
   }, [pathname]);
 
+  const tabs = [
+    {
+      name: "Event Details",
+      icon: <MdOutlineEventNote className="text-lg" />,
+      component: <EventDetails jobData={jobData}/>,
+    },
+    {
+      name: "Offers",
+      icon: <PiCurrencyDollar className="text-lg" />,
+      component: <Offers jobData={jobData}/>,
+    },
+    {
+      name: "Invites",
+      icon: <MdGroup className="text-lg" />,
+      component: <Invites jobData={jobData}/>,
+    },
+  ];
+
+  const [activeTab, setActiveTab] = useState(tabs[0].name);
+  
   return (
     <div className="flex flex-col items-center px-4 py-4 gap-4 h-dvh w-full bg-[#F6F9FC]">
       <div className="flex items-center justify-between bg-[#FFF] rounded-full p-1 w-full   shadow-sm">
         {tabs.map((tab, index) => (
           <button
-            key={tab.name || index}
+            key={index}
             onClick={() => setActiveTab(tab.name)}
             className={`flex items-center gap-2 px-5 py-[6px] text-[14px] font-[400] text-center rounded-full transition-all ${
               activeTab === tab.name

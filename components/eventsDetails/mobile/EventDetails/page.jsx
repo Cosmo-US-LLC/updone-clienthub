@@ -16,8 +16,8 @@ import VerificationIconMobile from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
 import Image from "next/image";
 
-const EventDetails = () => {
-  const [status, setStatus] = useState("Assigned");
+const EventDetails = ({ jobData }) => {
+  const [status, setStatus] = useState(jobData?.status);
   const [copiedText, setCopiedText] = useState("");
 
   const copyToClipboard = (text) => {
@@ -30,13 +30,34 @@ const EventDetails = () => {
     });
   };
 
+  const formatLocation = (location) => {
+    // Check if "Los Angeles, California" is part of the location
+    let formattedLocation = location.replace(
+      "Los Angeles, California",
+      "LA, California"
+    );
+
+    // Remove "United States" if it exists
+    formattedLocation = formattedLocation.replace(", United States", "");
+
+    // Split the location into the first part and the remaining location
+    const firstCommaIndex = formattedLocation.indexOf(",");
+    const firstPart = formattedLocation.substring(0, firstCommaIndex); // "1 World Way"
+    const secondPart = formattedLocation.substring(firstCommaIndex + 1).trim(); // "LA, California 90045"
+
+    return {
+      firstPart: firstPart.trim(),
+      secondPart: secondPart.trim(),
+    };
+  };
+
   return (
-    <div className="py-1 px-6 mb-10 w-[100vw] h-full  bg-[#F6F9FC] flex flex-col">
-      <div className="flex items-center justify-between mt-2">
-        <h2 className="text-[16px] font-[400] text-[#161616]">Event Details</h2>
+    <div className="pb-1 px-6 mb-10 w-[100vw] h-full  bg-[#F6F9FC] flex flex-col">
+      <div className="flex items-end justify-between">
+        <h2 className="text-[16px] font-[300] text-[#161616] leading-[0.7]">Event Details</h2>
         <span
-          className={`flex items-center text-[14px] font-medium px-3  py-1 rounded-full ${
-            status === "Assigned"
+          className={`flex items-center text-[14px] font-medium px-3 py-1 rounded-full ${
+            status === "assigned"
               ? "text-[#0C9000] bg-green-100 border-[1px] border-[#0C9000]"
               : "text-[#0076E6] bg-[#E7F4FD] border-[1px] border-[#0076E6]"
           }`}
@@ -44,11 +65,11 @@ const EventDetails = () => {
           <FaCheck className="text-[14px] mr-1" /> {status}
         </span>
       </div>
-      <h1 className="text-[22px] font-[400] text-[#161616] mt-4 first-letter:uppercase">
-        hosting a corporate event
+      <h1 className="text-[22px] font-[400] text-[#161616] mt-2 first-letter:uppercase">
+        {jobData?.title || ""}
       </h1>
 
-      {status === "Assigned" && (
+      {status === "assigned" && (
         <div className="bg-white p-4 rounded-lg shadow-md mt-6 mb-4 border">
           <h3 className="text-gray-900 text-[16px] font-[600] mb-2 flex">
             Hired Talent
@@ -145,12 +166,12 @@ const EventDetails = () => {
                 height={40}
               />
               <div className="flex flex-col">
-              <p className="text-gray-500 text-[14px] font-[400]">
-                Email Address
-              </p>
-              <p className="text-[#774DFD] text-[14px] font-[600]">
-                williamjosop987@gmail.com
-              </p>
+                <p className="text-gray-500 text-[14px] font-[400]">
+                  Email Address
+                </p>
+                <p className="text-[#774DFD] text-[14px] font-[600]">
+                  williamjosop987@gmail.com
+                </p>
               </div>
             </div>
             <div className="relative flex items-center">
@@ -173,9 +194,7 @@ const EventDetails = () => {
         Event Description
       </h3> */}
       <p className="text-gray-600 text-[14px] font-[400] mt-2">
-        Join us for an exclusive corporate networking event designed to connect
-        industry professionals. Enjoy a sophisticated evening with top-tier
-        cocktails, engaging conversations, and valuable business connections.
+        {jobData?.description || ""}
       </p>
 
       <hr className="my-6 border-gray-200" />
@@ -190,7 +209,7 @@ const EventDetails = () => {
               Requested Service:
             </p>
             <p className="text-gray-600 text-[14px]">
-              Professional Cocktail Server
+              {jobData?.service_name || ""}
             </p>
           </div>
         </div>
@@ -212,10 +231,21 @@ const EventDetails = () => {
             <HiOutlineLocationMarker className="text-[#E229C7] text-xl" />
           </div>
           <div>
-            <p className="text-gray-900 text-[16px] font-[600]">
+            {jobData?.event_location && (
+              <>
+                <div className="text-gray-900 text-[16px] font-[600]">
+                  {formatLocation(jobData?.event_location).firstPart}
+                </div>
+
+                <div className="text-gray-600 text-[14px]">
+                  {formatLocation(jobData?.event_location).secondPart}
+                </div>
+              </>
+            )}
+            {/* <p className="text-gray-900 text-[16px] font-[600]">
               West Hollywood
             </p>
-            <p className="text-gray-600 text-[14px]">Los Angeles, California</p>
+            <p className="text-gray-600 text-[14px]">Los Angeles, California</p> */}
           </div>
         </div>
       </div>

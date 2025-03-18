@@ -11,20 +11,20 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from 'next/navigation'
-import EventsDetails from '@/components/eventsDetails/mobile/page'
+import { useParams } from "next/navigation";
+import EventsDetails from "@/components/eventsDetails/mobile/page";
 import JobDetail from "@/app/_components/booking/job-detail";
 
 const page = () => {
   const params = useParams();
   const { auth: storedData } = useAppSelector(selectAuth);
-    const { jobData } = useAppSelector(selectStaff);
+  const { jobData } = useAppSelector(selectStaff);
   const [isWorker, setIsWorker] = useState<boolean | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
   const { handleError } = useError();
 
-    console.log({jobData})
+  // console.log({ jobData });
 
   useEffect(() => {
     if (storedData?.user) {
@@ -85,14 +85,10 @@ const page = () => {
     fetchJobDetails();
   }, []);
 
-
-
-     
-
-    return (
-        // <div className="mt-4 p-1 h-screen max-h-[calc(100vh-133px)] overflow-y-hidden"></div>
-        <>
-        {/* <div className="max-lg:hidden mt-4 h-screen max-h-[calc(100vh-132px)] overflow-y-hidden">
+  return (
+    // <div className="mt-4 p-1 h-screen max-h-[calc(100vh-133px)] overflow-y-hidden"></div>
+    <>
+      {/* <div className="max-lg:hidden mt-4 h-screen max-h-[calc(100vh-132px)] overflow-y-hidden">
             {isWorker === true ? (
                 @ts-ignore
                 <JobDetailWorker jobId={params.id} />
@@ -102,12 +98,10 @@ const page = () => {
                 // </Suspense>
             )}
         </div> */}
-        <div className="max-lg:hidden">
+      <div className="max-lg:hidden">
         <JobDetail jobId={params.id} />
-        </div>
-           
-        
-      
+      </div>
+
       <div className="lg:hidden ">
         <EventsDetails jobId={params.id} jobData={jobData} />
         {/* <p className="lg:hidden text-[18px] pt-4 mb-2">

@@ -18,7 +18,7 @@ import {
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
 
-const Offers = () => {
+const Offers = ({jobData}) => {
   const [offersData, setOffersData] = useState([
     {
       profilePic: "https://randomuser.me/api/portraits/women/47.jpg",

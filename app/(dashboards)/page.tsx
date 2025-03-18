@@ -111,13 +111,6 @@ const DynamicCardTablePage = () => {
     setUserName(storedData ? storedData?.user?.name : "");
   }, []);
 
-  if (!userName)
-    return (
-      <div className="h-[50svh]">
-        <RenderLoader />
-      </div>
-    );
-
   const formatDateAndTime = (event_date_time: any) => {
     const formattedResults: any = [];
 
@@ -186,46 +179,6 @@ const DynamicCardTablePage = () => {
       event_location: event?.event_location,
     };
   };
-
-  const fetchOffers2 = async () => {
-    try {
-      setIsLoading(true);
-      console.log(storedData);
-      const response = await apiRequest("/client/events", {
-        method: "POST",
-        headers: {
-          revalidate: true,
-          ...(storedData && { Authorization: `Bearer ${storedData?.token}` }),
-        },
-        body: {
-          page_number: 1,
-          page_size: 100,
-        },
-      });
-      setGetEventData(response?.records);
-      setEventListing(response?.records?.map(convertEventToPayment))
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    setIsCloseClicked(localStorage?.getItem("eventsBanner") || false);
-  }, []);
-
-  useEffect(() => {
-    fetchOffers2();
-    setUserName(storedData ? storedData?.user?.name : "");
-  }, []);
-
-  if (!userName)
-    return (
-      <div className="h-[50svh]">
-        <RenderLoader />
-      </div>
-    );
   
   // Data Table Headers
   const columns: ColumnDef<Payment>[] = [
@@ -256,6 +209,14 @@ const DynamicCardTablePage = () => {
   // event_location: string;
 
   // console.log(eventListing)
+
+  if (!userName) {
+    return (
+      <div className="h-[50svh]">
+        <RenderLoader />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -655,47 +616,10 @@ const DynamicCardTablePage = () => {
             </TableBody>
           </Table>
         )}
-
-        <p className="lg:hidden text-[18px] pt-4 mb-2">
-          ClientHub is coming soon on your cellphone!
-          <br />
-          <br />
-          <span className="text-[16px] text-neutral-600">
-            Meanwhile, you can manage your events, view offers, talk to talents,
-            and hire them on desktop.
-          </span>
-        </p>
-
-        <button
-          onClick={() => {
-            router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
-          }}
-          className="lg:hidden mt-6 items-center justify-center min-w-[250px] py-2 rounded-full bg-[#350ABC] text-white shadow-md"
-        >
-          Go Back to Updone
-        </button>
       </div>
 
       <div className="lg:hidden overflow-hidden">
         <MyEvents isLoading={isLoading} eventData={eventData} formatDateAndTime={formatDateAndTime} />
-        {/* <p className="lg:hidden text-[18px] pt-4 mb-2">
-          ClientHub is coming soon on your cellphone!
-          <br />
-          <br />
-          <span className="text-[16px] text-neutral-600">
-            Meanwhile, you can manage your events, view offers, talk to talents,
-            and hire them on desktop.
-          </span>
-        </p> */}
-
-        {/* <button
-          onClick={() => {
-            router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
-          }}
-          className="lg:hidden w-fit mx-auto mt-6 items-center justify-center min-w-[250px] py-2 rounded-full bg-[#350ABC] text-white shadow-md"
-        >
-          Go Back to Updone
-        </button> */}
       </div>
     </>
   );

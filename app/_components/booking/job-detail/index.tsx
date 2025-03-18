@@ -34,7 +34,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
   const [offers, setOffers] = useState<any[]>([]);
   const [offersLoading, setOffersLoading] = useState<boolean>(true);
   const [jobDetailData, setData] = useState<any>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("a");
   const { auth: storedData } = useAppSelector(selectAuth);
   const router = useRouter();
