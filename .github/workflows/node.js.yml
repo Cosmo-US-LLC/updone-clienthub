@@ -65,7 +65,7 @@ jobs:
 
     - name: Deploy application via SSH
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USERNAME }}@${{ secrets.DO_HOST }} '
+        ssh -v -o StrictHostKeyChecking=no ${{ secrets.DO_USERNAME }}@${{ secrets.DO_HOST }} '
           # Verify Node.js version
           node --version 2>&1
 
