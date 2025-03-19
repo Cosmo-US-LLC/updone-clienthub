@@ -18,6 +18,7 @@ function page() {
 
   async function storeUser() {
     if (token) {
+      dispatch(setAuth({ token, user: null }));
       await apiRequest(`/profile`, {
         method: "POST",
         headers: {
@@ -42,7 +43,7 @@ function page() {
   useEffect(() => {
     console.log("res", storedData);
     // storeUser();
-    if (storedData?.token && storedData?.user?.id) {
+    if (storedData?.token && storedData?.token == token && storedData?.user?.id) {
       router.push("/");
     }
   }, [storedData]);
