@@ -96,6 +96,7 @@ const page = () => {
                 // <Suspense>
                 <JobDetail jobId={params.id} />
                 // </Suspense>
+                +
             )}
         </div> */}
       <div className="max-lg:hidden">

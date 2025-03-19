@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/tooltip";
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 
 const EventDetails = ({ jobData }) => {
@@ -54,9 +55,11 @@ const EventDetails = ({ jobData }) => {
   return (
     <div className="pb-1 px-6 mb-10 w-[100vw] h-full  bg-[#F6F9FC] flex flex-col">
       <div className="flex items-end justify-between">
-        <h2 className="text-[16px] font-[300] text-[#161616] leading-[0.7]">Event Details</h2>
+        <h2 className="text-[16px] font-[300] text-[#161616] leading-[0.7]">
+          Event Details
+        </h2>
         <span
-          className={`flex items-center text-[14px] font-medium px-3 py-1 rounded-full ${
+          className={`flex items-center text-[14px] font-medium px-3 py-1 rounded-full capitalize ${
             status === "assigned"
               ? "text-[#0C9000] bg-green-100 border-[1px] border-[#0C9000]"
               : "text-[#0076E6] bg-[#E7F4FD] border-[1px] border-[#0076E6]"
@@ -70,47 +73,53 @@ const EventDetails = ({ jobData }) => {
       </h1>
 
       {status === "assigned" && (
-        <div className="bg-white p-4 rounded-lg shadow-md mt-6 mb-4 border">
+        <div className="bg-white p-4 rounded-lg shadow-md my-3 border">
           <h3 className="text-gray-900 text-[16px] font-[600] mb-2 flex">
             Hired Talent
           </h3>
           <div className="flex items-center gap-3">
-            <img
-              src="https://randomuser.me/api/portraits/women/44.jpg"
-              alt="Karina A."
-              className="w-12 h-12 rounded-full border"
-            />
+            <Avatar className="w-[62px] h-[62px]">
+              <AvatarImage
+                src={jobData?.invite?.worker?.profile_pic}
+                className="object-cover"
+                width={100}
+                height={100}
+              />
+              <AvatarFallback>
+                {jobData?.invite?.worker?.full_name[0]}
+                {jobData?.invite?.worker?.full_name?.split(" ")?.length > 1 &&
+                  jobData?.invite?.worker?.full_name?.split(" ")[1][0]}
+              </AvatarFallback>
+            </Avatar>
             <div className="flex items-center gap-2">
-              <p className="text-gray-900 text-[16px] font-[600]">Karina A.</p>
+              <p className="text-gray-900 text-[16px] font-[600]">
+                {jobData?.invite?.worker?.full_name || "N/A"}
+              </p>
               <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger className="hover:bg-transparent">
-                      <div className=" text-white rounded">
-                        <VerificationIconMobile
-                          id_is_verified={
-                            event?.event_assigned_to?.id_is_verified
-                          }
-                          contact_is_verified={
-                            event?.event_assigned_to?.contact_is_verified
-                          }
-                          height={23}
-                          width={23}
-                        />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="z-40">
-                      <VerificationStatus
-                        id_is_verified={
-                          event?.event_assigned_to?.id_is_verified
-                        }
-                        contact_is_verified={
-                          event?.event_assigned_to?.contact_is_verified
-                        }
-                      />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                {(event?.event_assigned_to?.id_is_verified && event?.event_assigned_to?.contact_is_verified) ? (
+                  <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger className="hover:bg-transparent">
+                          <div className=" text-white pr-4 pl-2  rounded">
+                            <VerificationIcon
+                              id_is_verified={event?.event_assigned_to?.id_is_verified}
+                              contact_is_verified={event?.event_assigned_to?.contact_is_verified}
+                              height={23}
+                              width={23}
+                            />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <VerificationStatus
+                            id_is_verified={event?.event_assigned_to?.id_is_verified}
+                            contact_is_verified={event?.event_assigned_to?.contact_is_verified}
+                          />
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                ) : ''}
               </div>
               {/* <FaCheck className="text-green-500 text-md" title="Verified" /> */}
             </div>
@@ -139,7 +148,7 @@ const EventDetails = ({ jobData }) => {
                   Contact Number:
                 </p>
                 <p className="text-[#774DFD] text-[14px] font-[500]">
-                  +1 987-345-8735
+                  {jobData?.invite?.worker?.user?.phone_number || "N/A"}
                 </p>
               </div>
             </div>
@@ -147,7 +156,7 @@ const EventDetails = ({ jobData }) => {
               <MdOutlineContentCopy
                 className="text-gray-500 cursor-pointer hover:text-gray-700"
                 title="Copy"
-                onClick={() => copyToClipboard("+1 987-345-8735")}
+                onClick={() => copyToClipboard(jobData?.invite?.worker?.user?.phone_number)}
               />
               {copiedText === "+1 987-345-8735" && (
                 <span className="absolute -top-7 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-md">
@@ -170,7 +179,7 @@ const EventDetails = ({ jobData }) => {
                   Email Address
                 </p>
                 <p className="text-[#774DFD] text-[14px] font-[600]">
-                  williamjosop987@gmail.com
+                {jobData?.invite?.worker?.user?.email || "N/A"}
                 </p>
               </div>
             </div>
@@ -178,7 +187,7 @@ const EventDetails = ({ jobData }) => {
               <MdOutlineContentCopy
                 className="text-gray-500 cursor-pointer hover:text-gray-700"
                 title="Copy"
-                onClick={() => copyToClipboard("williamjosop987@gmail.com")}
+                onClick={() => copyToClipboard(jobData?.invite?.worker?.user?.email)}
               />
               {copiedText === "williamjosop987@gmail.com" && (
                 <span className="absolute -top-7 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-md">
