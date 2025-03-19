@@ -17,6 +17,14 @@ import TalentInfo from "./components/TalentInfo";
 import Modal from "react-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProgressBar from "./components/ProgressBar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const service_icons: any = {
   Bartender: "/images/services/bartander.svg",
@@ -125,10 +133,10 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             });
           }
         } else {
-          console.log("Unexpected data format:", response);
+          console.error("Unexpected data format:", response);
         }
       } catch (error) {
-        console.log("Error fetching data:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setOffersLoading(false);
       }
@@ -258,9 +266,9 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
   };
 
   return (
-    <div className="relative grid grid-cols-7 gap-5 bg-[#F6F9FC] h-[100%] w-full overflow-y-auto">
+    <div className="relative flex flex-row gap-4 bg-[#F6F9FC] h-[100%] overflow-hidden">
       {/* Main Content */}
-      <div className="col-span-5">
+      <div className="grow h-full max-w-4xl 3xl:max-w-6xl flex flex-col">
         {loading ? (
           // Skeleton
           <div className="bg-[#FFF] rounded-tl-[29px] rounded-[12px] mt-4 flex-col flex gap-[16px] !p-8">
@@ -305,12 +313,12 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             } bg-[#FFF] flex gap-[16px] !p-8`}
           >
             <div
-              className={`flex justify-between items-baseline -mb-4 -mt-3  ${
+              className={`flex justify-between items-baseline  -mt-3  ${
                 jobDetailData?.status === "completed" &&
                 "opacity-[50%] !text-gray-300"
               }`}
             >
-              <h2 className={`font-light`}>Event Details</h2>
+              {/* <h2></h2> */}
               <ProgressBar status={jobDetailData?.status} />
             </div>
             <div className="w-full flex justify-start items-center mb-0">
@@ -334,13 +342,35 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                       "opacity-[50%] !text-gray-300"
                     }`}
                   >
-                    {jobDetailData?.description}
+                    <span>
+                      {jobDetailData?.description?.length > 250
+                        ? `${jobDetailData?.description.slice(0, 250)}...`
+                        : jobDetailData?.description}
+                    </span>
+                    {jobDetailData?.description?.length > 250 && (
+                      <Dialog>
+                        <DialogTrigger
+                          className="ml-1 text-[#350ABC] hover:text-[#350ABC] hover:bg-white cursor-pointer"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          view more
+                        </DialogTrigger>
+                        <DialogContent className="p-6">
+                          <DialogHeader>
+                            <DialogTitle className="text-2xl">{jobDetailData?.title}</DialogTitle>
+                            <DialogDescription className="text-md">
+                              {jobDetailData?.description}
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
             <hr
-              className={` ${
+              className={`mb-2 ${
                 jobDetailData?.status === "completed" &&
                 "opacity-50 !border-gray-300"
               }`}
@@ -369,7 +399,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   >
                     {jobDetailData?.event_location && (
                       <>
-                        <div className=" text-[#161616] text-[16px] leading-normal font-[600]">
+                        <div className=" text-[#161616] text-[14px] leading-normal font-[600]">
                           {
                             formatLocation(jobDetailData?.event_location)
                               .firstPart
@@ -541,7 +571,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
         {storedData?.token && jobDetailData?.status === "open" && (
           <>
             {/* Tabs */}
-            <div className="bg-[#FFF] rounded-[12px]">
+            <div className="grow rounded-[12px] flex flex-col">
               <div className="w-full flex justify-center items-center mt-[12px] bg-[#FFF] rounded-tl-[24px] rounded-tr-[24px]">
                 <div className="inline-flex space-x-4 border-b max-w-full mx-auto border-[#DFDFDF]">
                   <div
@@ -577,7 +607,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   </div>
                 </div>
               </div>
-              <div className="h-[100%] h-[calc(100vh-430px)] overflow-y-auto max-w-full mx-auto bg-[#FFF] rounded-bl-[24px] rounded-br-[24px]">
+              {/* <div className="h-[100%] h-[calc(100vh-430px)] overflow-y-auto max-w-full mx-auto bg-[#FFF] rounded-bl-[24px] rounded-br-[24px]"> */}
+              <div className="h-[calc(100vh-480px)] overflow-y-auto w-full mx-auto bg-[#FFF] rounded-bl-[24px] rounded-br-[24px]">
                 {/* <Suspense fallback={<>Loading...</>}> */}
                 <JobDetailsTabs
                   jobId={jobId}
@@ -600,8 +631,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
       </div>
       {/* {} */}
 
-      {/* For completed job & Faq Panel */}
-      <div className="col-span-2 max-w-[390px] h-fit flex flex-col gap-4">
+      {/* For completed job */}
+      <div className="min-w-[280px] w-full flex flex-col gap-4">
         {jobData?.status === "completed" && (
           <div
             className={`flex flex-col items-center px-4 py-5 bg-[white] h-fit border border-1 border-[#EBE6FF] rounded-[12px]`}
