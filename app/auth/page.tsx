@@ -18,6 +18,7 @@ function page() {
 
   async function storeUser() {
     if (token) {
+      dispatch(setAuth({ token, user: null }));
       await apiRequest(`/profile`, {
         method: "POST",
         headers: {

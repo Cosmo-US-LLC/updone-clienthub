@@ -266,9 +266,10 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
   };
 
   return (
-    <div className="relative flex flex-row gap-4 bg-[#F6F9FC] h-[100%] overflow-hidden">
+    <div className="relative flex flex-row gap-4 bg-[#F6F9FC] h-[100%] w-fit overflow-hidden">
       {/* Main Content */}
-      <div className="grow h-full max-w-4xl 3xl:max-w-6xl flex flex-col">
+      <div className="grow h-full max-w-4xl flex flex-col">
+      {/* <div className="grow h-full max-w-4xl 3xl:max-w-5xl flex flex-col"> */}
         {loading ? (
           // Skeleton
           <div className="bg-[#FFF] rounded-tl-[29px] rounded-[12px] mt-4 flex-col flex gap-[16px] !p-8">
@@ -632,7 +633,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
       {/* {} */}
 
       {/* For completed job */}
-      <div className="min-w-[280px] w-full flex flex-col gap-4">
+      <div className="w-[280px] flex flex-col gap-4">
         {jobData?.status === "completed" && (
           <div
             className={`flex flex-col items-center px-4 py-5 bg-[white] h-fit border border-1 border-[#EBE6FF] rounded-[12px]`}
