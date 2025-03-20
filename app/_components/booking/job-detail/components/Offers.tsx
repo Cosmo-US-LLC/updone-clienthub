@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import VerificationIconMobile from "@/app/_components/ui/shield";
-import { BadgeCheck, ChevronDown, List } from "lucide-react";
+import { BadgeCheck, ChevronDown, List, Star } from "lucide-react";
 
 const Offers = ({
   offers,
@@ -57,6 +57,29 @@ const Offers = ({
   const [showModal, setShowModal] = useState(false);
   // const galleryImages = talent?.gallery?.length > 0 ? talent?.gallery : [talent.profile_pic];
 
+  function timeAgo(dateTimeString: string) {
+    const inputDate: any = new Date(dateTimeString);
+    const now: any = new Date();
+    const diffMs = now - inputDate;
+    
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      return `${hours} hours ago`;
+    } else if (days < 7) {
+      return `${days} days ago`;
+    } else if (days < 14) {
+      return `1 week ago`;
+    } else {
+      const weeks = Math.floor(days / 7);
+      return `${weeks} weeks ago`;
+    }
+  }  
+
   return (
     <>
       <div className="py-2 flex justify-end px-2">
@@ -86,8 +109,8 @@ const Offers = ({
               <div className="flex flex-row items-center justify-start gap-2">
                 <TalentImage talent={offer.worker} />
 
-                <div className="flex flex-col">
-                  <div className="flex flex-row items-center">
+                <div className="flex flex-col w-[156px]">
+                  <div className="flex flex-row gap-1.5 items-center">
                     <p className="text-[16px] font-[500] leading-[8px]">
                       {offer.worker.full_name.length > 17
                         ? `${offer.worker.full_name.slice(0, 17)}...`
@@ -118,15 +141,21 @@ const Offers = ({
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    ) : ''}
+                    ) : <div className="h-[30px]"></div>}
                   </div>
                   <div className="flex flex-row gap-1.5">
+                    <p className="text-[#4C4B4B] text-[12px] font-[400] leading-[16px]">
+                      Last seen {offer?.worker?.user?.last_active ? `${timeAgo(offer?.worker?.user?.last_active)}` : "weeks ago"}
+                      {/* <>{console.log(offer?.worker?.user?.last_active)}</> */}
+                    </p>
+                  </div>
+                  {/* <div className="flex flex-row gap-1.5">
                     <BadgeCheck className="w-4 h-4 fill-[#4c4b4b] text-white" />
                     <p className="text-[#4C4B4B] text-[14px] font-[400] leading-[16px]">
                       {offer?.worker?.total_jobs_count} Jobs
                     </p>
-                  </div>
-                  <div className="flex flex-row gap-2 pl-0.5">
+                  </div> */}
+                  {/* <div className="flex flex-row gap-2 pl-0.5">
                     <Image
                       width={12}
                       height={12}
@@ -136,7 +165,26 @@ const Offers = ({
                     <p className="text-[#4C4B4B] text-[14px] font-[400] leading-[24px]">
                       {parseFloat(offer?.worker?.rating).toFixed(1)}
                     </p>
-                  </div>
+                  </div> */}
+                </div>
+                <div className="w-4"></div>
+                <div>
+                  <p className="text-[#4C4B4B] font-[400] text-[12px] leading-[20px]">
+                    Rating
+                  </p>
+                  <p className="text-[#4C4B4B] font-[500] text-[18px] leading-[27px] flex gap-1 items-center">
+                    <Star className="fill-[#4C4B4B] stroke-none w-5 h-5" />
+                    {parseFloat(offer?.worker?.rating).toFixed(1)}
+                  </p>
+                </div>
+                <div className="w-4"></div>
+                <div>
+                  <p className="text-[#4C4B4B] font-[400] text-[12px] leading-[20px]">
+                    Jobs Completed
+                  </p>
+                  <p className="text-[#4C4B4B] font-[500] text-[18px] leading-[27px]">
+                    {offer?.worker?.total_jobs_count} Jobs
+                  </p>
                 </div>
               </div>
 

@@ -17,6 +17,14 @@ import TalentInfo from "./components/TalentInfo";
 import Modal from "react-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProgressBar from "./components/ProgressBar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const service_icons: any = {
   Bartender: "/images/services/bartander.svg",
@@ -125,10 +133,10 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             });
           }
         } else {
-          console.log("Unexpected data format:", response);
+          console.error("Unexpected data format:", response);
         }
       } catch (error) {
-        console.log("Error fetching data:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setOffersLoading(false);
       }
@@ -258,21 +266,18 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
   };
 
   return (
-    <div className="relative grid grid-cols-7 gap-5 bg-[#F6F9FC] h-[100%] w-full overflow-y-auto">
-      {/* Main Content */}
-      <div className="col-span-5">
+    <div className="relative flex flex-row justify-between gap-4 bg-[#F6F9FC] h-[100%] w-full overflow-hidden">
+      <div className="grow h-full flex flex-col">
         {loading ? (
           // Skeleton
           <div className="bg-[#FFF] rounded-tl-[29px] rounded-[12px] mt-4 flex-col flex gap-[16px] !p-8">
             <div className="space-y-3 mb-5">
-              <div className="flex justify-between items-center">
-                <Skeleton className="h-[22px] w-[180px]" />
-                <Skeleton className="h-[26px] w-[70px] rounded-full" />
-              </div>
-              <Skeleton className="h-[22px] w-[280px]" />
+              <Skeleton className="h-[22px] w-[250px]" />
+              <Skeleton className="h-[26px] w-[170px] rounded-full" />
+              <Skeleton className="h-[22px] w-[380px]" />
             </div>
-
-            <div className="grid grid-cols-3">
+            <hr className={`mb-2 opacity-50 !border-gray-300`} />
+            <div className="grid grid-cols-3 gap-10">
               <div className="flex items-start gap-3">
                 <Skeleton className="h-[32px] w-[32px]" />
                 <div className="space-y-3">
@@ -297,20 +302,19 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             </div>
           </div>
         ) : (
-          <div
-            className={`!bg-[#FFF] flex-col ${
+          <div className={`!bg-[#FFF] flex-col ${
               !storedData?.token
                 ? "rounded-tl-[29px] rounded-[12px]"
                 : "rounded-[12px]"
             } bg-[#FFF] flex gap-[16px] !p-8`}
           >
             <div
-              className={`flex justify-between items-baseline -mb-4 -mt-3  ${
+              className={`flex justify-between items-baseline -mt-3 -mb-1 ${
                 jobDetailData?.status === "completed" &&
                 "opacity-[50%] !text-gray-300"
               }`}
             >
-              <h2 className={`font-light`}>Event Details</h2>
+              {/* <h2></h2> */}
               <ProgressBar status={jobDetailData?.status} />
             </div>
             <div className="w-full flex justify-start items-center mb-0">
@@ -319,7 +323,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   <h2
                     style={{ wordBreak: "break-word" }}
                     title={jobDetailData?.title}
-                    className={`${
+                    className={`max-w-[50vw] ${
                       jobDetailData?.status === "completed" &&
                       "opacity-[50%] !text-gray-300"
                     } tracking-[0.2px] text-[#000000] text-4xl leading-[50px] font-light truncate`}
@@ -334,13 +338,37 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                       "opacity-[50%] !text-gray-300"
                     }`}
                   >
-                    {jobDetailData?.description}
+                    <span>
+                      {jobDetailData?.description?.length > 250
+                        ? `${jobDetailData?.description.slice(0, 250)}...`
+                        : jobDetailData?.description}
+                    </span>
+                    {jobDetailData?.description?.length > 250 && (
+                      <Dialog>
+                        <DialogTrigger
+                          className="ml-1 text-[#350ABC] hover:text-[#350ABC] hover:bg-white cursor-pointer"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          view more
+                        </DialogTrigger>
+                        <DialogContent className="p-6">
+                          <DialogHeader>
+                            <DialogTitle className="text-2xl">
+                              {jobDetailData?.title}
+                            </DialogTitle>
+                            <DialogDescription className="text-md">
+                              {jobDetailData?.description}
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
             <hr
-              className={` ${
+              className={`mb-2 ${
                 jobDetailData?.status === "completed" &&
                 "opacity-50 !border-gray-300"
               }`}
@@ -351,7 +379,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                 "opacity-[50%] !text-gray-300 "
               }`}
             >
-              <div className="flex flex-row justify-between">
+              {/* <div className="flex flex-row justify-between"> */}
+              <div className="grid grid-cols-3">
                 <div className="flex flex-row gap-[14px] items-start  ">
                   <Image
                     className="relative"
@@ -369,7 +398,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   >
                     {jobDetailData?.event_location && (
                       <>
-                        <div className=" text-[#161616] text-[16px] leading-normal font-[600]">
+                        <div className=" text-[#161616] text-[14px] leading-normal font-[600]">
                           {
                             formatLocation(jobDetailData?.event_location)
                               .firstPart
@@ -453,11 +482,11 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
         {storedData?.token &&
           (jobDetailData?.status === "assigned" ||
             jobDetailData?.status === "completed") && (
-            <>
+            <div className="overflow-y-auto pb-5">
               <TalentInfo jobDetailData={jobDetailData} />
               <div className="flex flex-row items-center justify-center w-full cursor-pointer">
                 <div
-                  className="mt-4 min-h-[10px] h-full p-4 rounded-full bg-[white] shadow-xl"
+                  className="mt-4 min-h-[10px] h-full p-4 rounded-full bg-[white] shadow-lg"
                   onClick={() => {
                     setModalIsOpen(true);
                   }}
@@ -467,7 +496,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   </p>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
         {storedData?.token &&
@@ -541,8 +570,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
         {storedData?.token && jobDetailData?.status === "open" && (
           <>
             {/* Tabs */}
-            <div className="bg-[#FFF] rounded-[12px]">
-              <div className="w-full flex justify-center items-center mt-[12px] bg-[#FFF] rounded-tl-[24px] rounded-tr-[24px]">
+            <div className="grow flex flex-col overflow-hidden">
+              <div className="w-full flex justify-center items-center mt-[12px] bg-[#FFF] !rounded-t-xl">
                 <div className="inline-flex space-x-4 border-b max-w-full mx-auto border-[#DFDFDF]">
                   <div
                     onClick={() => handleTabClick("a")}
@@ -577,8 +606,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   </div>
                 </div>
               </div>
-              <div className="h-[100%] h-[calc(100vh-430px)] overflow-y-auto max-w-full mx-auto bg-[#FFF] rounded-bl-[24px] rounded-br-[24px]">
-                {/* <Suspense fallback={<>Loading...</>}> */}
+              {/* <div className="h-[100%] h-[calc(100vh-430px)] overflow-y-auto max-w-full mx-auto bg-[#FFF] rounded-bl-[24px] rounded-br-[24px]"> */}
+              <div className="overflow-y-auto w-full mx-auto bg-[#FFF] !rounded-b-xl">
                 <JobDetailsTabs
                   jobId={jobId}
                   setOffers={setOffers}
@@ -592,16 +621,14 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   offerSort={offerSort}
                   setOfferSort={setOfferSort}
                 />
-                {/* </Suspense> */}
               </div>
             </div>
           </>
         )}
       </div>
-      {/* {} */}
 
-      {/* For completed job & Faq Panel */}
-      <div className="col-span-2 max-w-[390px] h-fit flex flex-col gap-4">
+      {/* For completed job */}
+      <div className="min-w-[280px] max-w-[320px] flex flex-col gap-4">
         {jobData?.status === "completed" && (
           <div
             className={`flex flex-col items-center px-4 py-5 bg-[white] h-fit border border-1 border-[#EBE6FF] rounded-[12px]`}
@@ -763,6 +790,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
           </div>
         </div>
       </div>
+
       {/* Chat Panel */}
       {isChatHidden === false && selectedOffer !== null && (
         <div
