@@ -177,8 +177,12 @@ const DynamicCardTablePage = () => {
 
   useEffect(() => {
     fetchOffers();
-    setUserName(storedData ? storedData?.user?.name : "");
+    // setUserName(storedData ? storedData?.user?.name : "");
   }, []);
+  useEffect(() => {
+    // fetchOffers();
+    setUserName(storedData ? storedData?.user?.name : "");
+  }, [storedData]);
 
   if (!userName)
     return (
