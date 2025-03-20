@@ -482,11 +482,11 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
         {storedData?.token &&
           (jobDetailData?.status === "assigned" ||
             jobDetailData?.status === "completed") && (
-            <>
+            <div className="overflow-y-auto pb-5">
               <TalentInfo jobDetailData={jobDetailData} />
               <div className="flex flex-row items-center justify-center w-full cursor-pointer">
                 <div
-                  className="mt-4 min-h-[10px] h-full p-4 rounded-full bg-[white] shadow-xl"
+                  className="mt-4 min-h-[10px] h-full p-4 rounded-full bg-[white] shadow-lg"
                   onClick={() => {
                     setModalIsOpen(true);
                   }}
@@ -496,7 +496,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   </p>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
         {storedData?.token &&
