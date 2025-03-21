@@ -509,7 +509,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             >
               <>
                 {/* Tabs */}
-                <div className="bg-[#FFF] rounded-[12px]">
+                <div className="bg-[#FFF] rounded-[12px] px-2 pb-1">
                   <div className="w-full flex justify-center items-center mt-[20px] bg-[#FFF] rounded-tl-[24px] rounded-tr-[24px]">
                     <div className="inline-flex space-x-4 border-b max-w-full mx-auto border-[#DFDFDF]">
                       <div

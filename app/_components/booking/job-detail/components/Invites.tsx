@@ -18,7 +18,7 @@ import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import { Loader } from "@/app/_components/ui/dashboard-loader";
 
-const Invites = ({ data, jobId, jobData }: any) => {
+const Invites = ({ data, jobId, jobData, isInModal }: any) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [inviteMore, setInviteMore] = useState(false);
@@ -82,7 +82,7 @@ const Invites = ({ data, jobId, jobData }: any) => {
         }`}
       >
         {data?.map((staff: any, index: number) => (
-          <div key={staff.id} className="w-[304px] relative mt-8">
+          <div key={staff.id} className={"w-[304px] relative " + (!isInModal ? "mt-8" : "pb-2")}>
             <InviteCard
               isInvited={staff?.worker?.has_offered}
               index={index}

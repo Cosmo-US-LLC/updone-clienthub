@@ -82,22 +82,24 @@ const Offers = ({
 
   return (
     <>
-      <div className="py-2 flex justify-end px-2">
-        <Select value={offerSort} onValueChange={setOfferSort}>
-          <SelectTrigger className="w-[250px] text-left rounded-lg h-[32px] hover:text-neutral-800 hover:bg-neutral-50">
-            <div className="flex justify-start items-center gap-2">
-              {/* <SelectValue placeholder="Theme" /> */}
-              <List className="w-4 h-4 text-black" />
-              Sort by: <SelectValue placeholder="Latest (Default)" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="latest">Latest (Default)</SelectItem>
-            <SelectItem value="verified_first">Verified First</SelectItem>
-            <SelectItem value="lowest_first">Lowest First</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {!isInModal && (
+        <div className="py-2 flex justify-end px-2">
+          <Select value={offerSort} onValueChange={setOfferSort}>
+            <SelectTrigger className="w-[250px] text-left rounded-lg h-[32px] hover:text-neutral-800 hover:bg-neutral-50">
+              <div className="flex justify-start items-center gap-2">
+                {/* <SelectValue placeholder="Theme" /> */}
+                <List className="w-4 h-4 text-black" />
+                Sort by: <SelectValue placeholder="Latest (Default)" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="latest">Latest (Default)</SelectItem>
+              <SelectItem value="verified_first">Verified First</SelectItem>
+              <SelectItem value="lowest_first">Lowest First</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div className={`flex flex-col`}>
         {offers?.length > 0 &&
