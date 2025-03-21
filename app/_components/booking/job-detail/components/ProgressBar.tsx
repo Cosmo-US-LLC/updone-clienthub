@@ -70,7 +70,8 @@ function ProgressBar({ status }: any) {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="font-normal">
-                    Your event is open to receive offers from Talents.
+                    {/* Your event is open to receive offers from Talents. */}
+                    Talents can make offer at your event and you can talk to multiple talents.
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -107,7 +108,8 @@ function ProgressBar({ status }: any) {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="font-normal">
-                    Your event has been assigned to a Talent.
+                    {/* Your event has been assigned to a Talent. */}
+                    You hired a talent. You can connect with them via email or mobile to discuss the details of the event.
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -144,7 +146,8 @@ function ProgressBar({ status }: any) {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="font-normal">
-                    Your event has been Completed.
+                    {/* Your event has been Completed. */}
+                    Your event is completed and you can release payment to the talent.
                   </p>
                 </TooltipContent>
               </Tooltip>
