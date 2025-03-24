@@ -33,7 +33,7 @@ function TalentImage({ talent }: any) {
           setShowModal(true);
         }}
       >
-        <AvatarImage src={talent?.profile_pic} alt="Talent Profile Picture" />
+        <AvatarImage src={talent?.profile_pic} alt="Talent Profile Picture" className="object-cover" />
         <AvatarFallback>
           {talent?.full_name?.split(" ")?.length > 1
             ? `${talent?.full_name?.split(" ")[0][0]}${

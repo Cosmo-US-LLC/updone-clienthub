@@ -1,4 +1,9 @@
-import Tooltip from "@/app/_components/common/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import VerificationIcon from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
 import { montserrat } from "@/app/lib/Fonts";
@@ -7,6 +12,9 @@ import { useState } from 'react';
 import { useSelector } from "react-redux";
 import { RootState } from "../../../lib/store/store";
 import GalleryModal from "../../ui/gallery";
+import { Camera } from "lucide-react";
+import VerificationIconMobile from "@/app/_components/ui/shield";
+import Cookies from "js-cookie";
 
 const TalentCard = ({
   talent,
@@ -16,6 +24,7 @@ const TalentCard = ({
 }: any) => {
   const jobCreateState = useSelector((state: RootState) => state.jobCreate);
   const [showModal, setShowModal] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const galleryImages = talent?.gallery?.length > 0 ? talent?.gallery : [talent.profile_pic];
 
   function calculateTotal(hourRate: string, amount: string) {
@@ -24,37 +33,88 @@ const TalentCard = ({
     return parsedHourRate * totalHours;
   }
 
+  // const logProfileView = async () => {
+  //   try {
+  //     await axiosCall
+  //       .post(`/profile/view/${talent.id}`)
+  //       .then(({ response }) => {
+  //         console.log("Profile view logged successfully:", response?.data);
+  //       })
+  //       .catch((err) => {
+  //         console.error(
+  //           "Error logging profile view:",
+  //           err?.message || "Something went wrong!"
+  //         );
+  //       });
+  //   } catch (err) {
+  //     console.error("Unexpected error logging profile view:", err);
+  //   }
+  // };
+
+  function timeAgo(dateTimeString: any) {
+    const inputDate: any = new Date(dateTimeString);
+    const now: any = new Date();
+    const diffMs = now - inputDate;
+
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      return `${hours} hours ago`;
+    } else if (days < 7) {
+      return `${days} days ago`;
+    } else if (days < 14) {
+      return `1 week ago`;
+    } else {
+      const weeks = Math.floor(days / 7);
+      return `${weeks} weeks ago`;
+    }
+  }
+
   return (
     <div
       onClick={onToggleSelect}
-      className={`shadow-sm ${talent.alreadyInvited === false && "cursor-pointer"
-        } border border-1 w-full sm:w-full md:w-full lg:w-full min-h-[184px] rounded-2xl py-[16px] px-[12px] ${isSelected ? "bg-[#2C2240] border-[#2C2240]" : "bg-white"
-        }`}
+      className={`shadow-sm ${
+        talent.alreadyInvited === false && "cursor-pointer"
+      } border border-1 w-full sm:w-full md:w-full lg:w-full min-h-[175px] rounded-2xl py-[12px] px-[12px] ${
+        isSelected ? "bg-[#2C2240] border-[#2C2240]" : "bg-white"
+      }`}
     >
-      <div className="flex w-[100%] flex-row gap-4">
-        <div className="flex flex-col items-center">
+      <div className="flex w-[100%] flex-row gap-6">
+        <>{console.log(talent)}</>
+        <div className="flex flex-col items-center relative">
           <Image
             onClick={(event) => {
               event.stopPropagation();
-              setShowModal(true)
+              // logProfileView();
+              setShowModal(true);
             }}
-            className="w-[74px] h-[74px] rounded-full object-cover relative border-4 border-[#EBE6FF]"
+            className="w-[80px] h-[104px] rounded-xl object-cover relative"
+            // className="w-[74px] h-[74px] rounded-full object-cover relative border-4 border-[#EBE6FF]"
             src={
               talent.profile_pic
                 ? talent.profile_pic
                 : "/images/testiminial/testi3.jpg"
             }
+            quality={100}
+            objectFit="fill"
             width={120}
             height={120}
             alt=""
-            // placeholder="blur"
-            // blurDataURL="data:image/jpeg;base64,..."
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,..."
             priority={true}
           />
-          <div className="text-center w-[75px] py-0.5 relative bottom-[15px] bg-[#e6e0fa] text-[#350ABC] rounded-md">
+          {/* <div className="text-center w-[75px] py-0.5 relative bottom-[15px] bg-[#e6e0fa] text-[#350ABC] rounded-md">
             <span className="text-[16px] font-[400]">
               ${parseFloat(talent?.per_hours_rate).toFixed(0)}/hr
             </span>
+          </div> */}
+          <div className="absolute bottom-2 right-1 bg-black/40 text-white stroke-white px-1.5 py-px rounded-lg shadow text-[10px] w-fit h-fit flex items-center gap-1">
+            {talent?.gallery?.length > 1 ? ("+"+(talent?.gallery?.length - 1)) : ""} <Camera className="w-3 h-3 stroke-black/40 fill-white" />
           </div>
         </div>
         {/* Reusable Modal Component */}
@@ -63,48 +123,72 @@ const TalentCard = ({
           onClose={() => setShowModal(false)}
           images={galleryImages}
         />
-        {/* <div className=""> */}
-
         <div className="flex flex-col flex-1">
           <div className="flex flex-col items-center w-full relative">
-            <div className="text-center flex justify-between w-full items-center font-bold text-lg mb-[10px]">
-              <div className="flex justify-start items-center">
+            <div className="text-center grid grid-cols-8 w-full gap-2 items-center font-bold text-lg mb-[10px]">
+              <div className="flex justify-start col-span-6 items-center gap-2">
                 <h3
-                  style={{
-                    letterSpacing: "-1%",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                  className={`text-[20px] flex justify-start items-center min-w-auto gap-2 ${isSelected ? "text-white" : "text-[#2C2240]"
-                    } relative bottom-[1px] font-[600] ${montserrat.className}`}
+                  className={`truncate text-left inline-block whitespace-nowrap text-[20px] font-[600] capitalize ${
+                    isSelected ? "text-white" : "text-[#2C2240]"
+                  } pb-[1px] ${montserrat.className}`}
                 >
-                  {talent?.full_name?.length > 18
-                    ? `${talent?.full_name?.slice(0, 18)}...`
-                    : talent?.full_name}
+                  {talent?.full_name}
                 </h3>
-                
-                {(talent?.id_is_verified && talent?.contact_is_verified) ? (
-                <Tooltip
-                  content={
-                    <VerificationStatus
-                      id_is_verified={talent.id_is_verified}
-                      contact_is_verified={talent.contact_is_verified}
-                    />
-                  }
-                >
-                  <div className=" text-white pr-4 pl-2  rounded">
-                    <VerificationIcon
-                      id_is_verified={talent.id_is_verified}
-                      contact_is_verified={talent.contact_is_verified}
-                      height={30}
-                      width={30}
-                    />
-                  </div>
-                </Tooltip>
-                ) : ''}
+                {talent.id_is_verified && talent.contact_is_verified ? (
+                  <TooltipProvider>
+                    <Tooltip open={isTooltipOpen}>
+                      <TooltipTrigger
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setIsTooltipOpen(!isTooltipOpen);
+                        }}
+                      >
+                        <div className=" text-white rounded w-[30px]">
+                          <VerificationIconMobile
+                            id_is_verified={talent.id_is_verified}
+                            contact_is_verified={talent.contact_is_verified}
+                            height={30}
+                            width={30}
+                          />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="z-40">
+                        <VerificationStatus
+                          id_is_verified={talent.id_is_verified}
+                          contact_is_verified={talent.contact_is_verified}
+                        />
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  ""
+                )}
               </div>
-              <div className="flex items-center justify-center">
+              <div className={"col-span-2 flex items-center justify-end font-[400] whitespace-nowrap text-sm text-neutral-600 " + (isSelected ? "text-white" : "text-[#2C2240]")}>
+                Last seen{" "}
+                {talent?.last_active
+                  ? `${timeAgo(talent?.last_active)}`
+                  : "weeks ago"}
+              </div>
+            </div>
+            <div className="text-center flex justify-between w-full items-center font-bold text-lg mb-1">
+              <div className="text-center text-[14px] font-normal text-[#989898] flex gap-2">
+              <Image
+                  src={`/images/gallery/${isSelected ? "location-white.svg" : "location.svg"
+                    }`}
+                  alt="location-svg"
+                  width={16}
+                  height={16}
+                />{" "}
+                <span
+                  className={`flex justify-start items-center !text-[16px] !font-[400] ${
+                    isSelected ? "text-white" : "text-[#00000080]"
+                  } cursor-pointer`}
+                >
+                  {talent?.city}
+                </span>
+              </div>
+              <div className="col-span-2 flex items-center justify-end">
                 <div className="relative bottom-[2px]">
                   <svg
                     className="w-4 h-4 text-[#F79809] me-1"
@@ -117,43 +201,22 @@ const TalentCard = ({
                   </svg>
                 </div>
                 <p
-                  className={`ms-1 text-[14px] font-normal text-black ${isSelected ? "text-white" : "text-[#2C2240]"
-                    }`}
+                  className={`ms-1 text-[14px] font-normal text-black ${
+                    isSelected ? "text-white" : "text-[#2C2240]"
+                  }`}
                 >
-                  {parseFloat(talent?.rating).toFixed(1)}/5
+                  {parseFloat(talent?.rating).toFixed(1)}
                 </p>
               </div>
             </div>
-            <div className="text-center flex justify-between w-full items-center font-bold text-lg mb-1">
-              <div className="text-center text-[14px] font-normal text-[#989898] flex gap-2">
-                <Image
-                  src={`/images/gallery/${isSelected ? "location-white.svg" : "location.svg"
-                    }`}
-                  alt="location-svg"
-                  width={16}
-                  height={16}
-                />{" "}
-                <span
-                  className={`flex justify-start items-center !text-[16px] !font-[400] ${isSelected ? "text-white" : "text-[#00000080]"
-                    } cursor-pointer`}
-                >
-                  {talent?.city}
-                </span>
-              </div>
-              <span
-                className={`text-[16px] font-[400] leading-[28px] ${isSelected ? "text-white" : "text-[#6B6B6B]"
-                  }`}
-              >
-                {talent?.total_jobs_count} Jobs
-              </span>
-            </div>
           </div>
 
-          <div className="flex justify-start items-center mt-2 w-full">
+          <div className="flex justify-between items-center mt-2 w-full">
             <div className="flex items-center ">
               <p
-                className={`leading-[24px] ${isSelected ? "text-white" : "text-[#989898]"
-                  } text-[14px] font-normal inline-flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-sm`}
+                className={`leading-[24px] ${
+                  isSelected ? "text-white" : "text-[#989898]"
+                } text-[14px] font-normal inline-flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-sm`}
               >
                 <span className="mr-2 flex-shrink-0">
                   <svg
@@ -189,37 +252,55 @@ const TalentCard = ({
                 Last job was on {talent?.last_job}
               </p>
             </div>
+            <span
+              className={`text-[16px] font-[400] leading-[28px] ${
+                isSelected ? "text-white" : "text-[#6B6B6B]"
+              }`}
+            >
+              {talent?.total_jobs_count} Jobs
+            </span>
           </div>
         </div>
       </div>
       {/* </div> */}
-      <div
-        className={`border-t ${isSelected ? "border-[#3b2e55]" : "border-gray-300"
-          }  mt-4`}
-      />
+      {/* <div
+        className={`border-t ${
+          isSelected ? "border-[#3b2e55]" : "border-gray-300"
+        }  mt-4`}
+      /> */}
       <div className={`flex justify-around items-center relative w-full mt-4`}>
         <div className={`flex justify-between w-full items-center`}>
-          <div
-            className={`${isSelected ? "text-white" : "text-black"
+          <div className="flex items-center gap-6">
+            <div className="text-center w-[80px] bg-[#e6e0fa] text-[#350ABC] rounded-md py-0.5">
+              <span className="text-[16px] font-[400]">
+                ${parseFloat(talent?.per_hours_rate).toFixed(0)}/hr
+              </span>
+            </div>
+            <div
+              className={`${
+                isSelected ? "text-white" : "text-black"
               } font-[500] text-[20px]`}
-          >
-            $
-            {calculateTotal(
-              talent?.per_hours_rate,
-              jobApiData
-                ? jobApiData?.total_hours
-                : jobCreateState.selectedHours
-            )}{" "}
-            <span
-              className={`!text-[12px] !leading-[14.63px] ${isSelected ? "text-white" : "text-black"
-                }`}
             >
-              Total.
-            </span>
+              $
+              {calculateTotal(
+                talent?.per_hours_rate,
+                jobApiData
+                  ? jobApiData?.total_hours
+                  : Cookies.get("event_hours")?.split(" ")[0]
+              )}{" "}
+              <span
+                className={`!text-[12px] !leading-[14.63px] ${
+                  isSelected ? "text-white" : "text-black"
+                }`}
+              >
+                Total.
+              </span>
+            </div>
           </div>
           <div
-            className={`${isSelected ? "text-white" : "text-black"
-              } font-medium text-[14px] flex flex-row items-center gap-2`}
+            className={`${
+              isSelected ? "text-white" : "text-black"
+            } font-medium text-[14px] flex flex-row items-center gap-2`}
           >
             {talent.alreadyInvited === true
               ? "Already invited"
@@ -236,10 +317,11 @@ const TalentCard = ({
               <label
                 htmlFor={`checkbox-${talent.id}`} // Bind label to the input
                 className={`h-[24px] w-[24px] border-[1px] rounded-full flex items-center justify-center cursor-pointer
-        ${isSelected || talent?.alreadyInvited
+                ${
+                  isSelected || talent?.alreadyInvited
                     ? "bg-white border-white"
                     : "border-black"
-                  }`}
+                }`}
               >
                 {(isSelected || talent?.alreadyInvited) && (
                   <svg

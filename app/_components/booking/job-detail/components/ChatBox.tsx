@@ -23,7 +23,7 @@ const ChatBox = ({
   setMessagesRefreshed,
   messagesRefreshed,
   onChatVisibilityChange,
-  onChatClose
+  onChatClose,
 }: any) => {
   const { auth: storedData } = useAppSelector(selectAuth);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -46,7 +46,7 @@ const ChatBox = ({
     if (selectedOffer !== null) {
       setIsChatBodyVisible(true);
     }
-  }, [selectedOffer])
+  }, [selectedOffer]);
 
   const toggleChatVisibility = () => {
     const newVisibility = !isChatBodyVisible;
@@ -157,11 +157,39 @@ const ChatBox = ({
     return acc;
   }, {});
 
+  function timeAgo(dateTimeString: string) {
+    const inputDate: any = new Date(dateTimeString);
+    const now: any = new Date();
+    const diffMs = now - inputDate;
+
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      return `${hours} hours ago`;
+    } else if (days < 7) {
+      return `${days} days ago`;
+    } else if (days < 14) {
+      return `1 week ago`;
+    } else {
+      const weeks = Math.floor(days / 7);
+      return `${weeks} weeks ago`;
+    }
+  }
+
   return (
-    <div className={`w-full ${isChatBodyVisible ? "h-full" : "h-[0px]"} bg-[#FDF7ED] pb-20 relative flex flex-col gap-4 border border-1 border-[#F7DDB7] rounded-xl`}>
+    <div
+      className={`w-full ${
+        isChatBodyVisible ? "h-full" : "h-[0px]"
+      } bg-[#FDF7ED] pb-20 relative flex flex-col gap-4 border border-1 border-[#F7DDB7] rounded-xl`}
+    >
       <div
         onClick={toggleChatVisibility}
-        className={`absolute top-0 h-[60px] bg-[#FFEFD7] w-full rounded-t-xl p-2 cursor-pointer border border-red-300`}>
+        className={`absolute top-0 h-[60px] bg-[#FFEFD7] w-full rounded-t-xl p-2 cursor-pointer border border-red-300`}
+      >
         <div className="flex flex-row justify-between">
           <div className="flex flex-row items-center justify-between gap-2">
             <Image
@@ -171,8 +199,16 @@ const ChatBox = ({
               src={selectedOffer?.worker?.profile_pic}
               alt="user-img"
             />
-            <p className="text-[12px] font-[500] leading-[8px]">
+            <p className="text-[14px] font-[500] leading-[16px]">
               {selectedOffer?.worker?.full_name}
+              <br />
+              <span className="text-[12px] text-neutral-600">
+                Last seen{" "}
+                {selectedOffer?.worker?.user?.last_active
+                  ? `${timeAgo(selectedOffer?.worker?.user?.last_active)}`
+                  : "weeks ago"}
+              </span>
+              {/* <>{console.log(timeAgo(selectedOffer?.worker?.user?.last_active))}</> */}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -198,7 +234,9 @@ const ChatBox = ({
 
       {isChatBodyVisible && (
         <>
-          <div className={`relative flex-1 overflow-y-auto p-4 mt-[84px] max-h-[88%]  `}>
+          <div
+            className={`relative flex-1 overflow-y-auto p-4 mt-[84px] max-h-[88%]  `}
+          >
             {Object.entries(groupedMessages).map(([date, msgs]: any) => (
               <div key={date}>
                 {/* Date Timestamp */}
@@ -210,10 +248,11 @@ const ChatBox = ({
                 {msgs.map((msg: any) => (
                   <div
                     key={msg.id}
-                    className={`flex mb-2 ${msg?.sender_user_id === storedData?.user?.id
+                    className={`flex mb-2 ${
+                      msg?.sender_user_id === storedData?.user?.id
                         ? "justify-end" // Sender's messages on the right
                         : "justify-start" // Receiver's messages on the left
-                      }`}
+                    }`}
                   >
                     {msg?.sender_user_id === storedData?.user?.id ? (
                       // Sender's div
@@ -293,13 +332,11 @@ const ChatBox = ({
                     </div>
                   )}
                 </div> */}
-
               </div>
             ))}
             {/* Ref for Auto-Scroll */}
             <div ref={messagesEndRef} />
           </div>
-
 
           {/* Message Input */}
           {job?.status === "completed" ? (
@@ -321,7 +358,12 @@ const ChatBox = ({
                 type="text"
                 value={messageBody}
                 onChange={(e) => setMessageBody(e.target.value)}
-                className="!h-[35px] w-full bg-[#FFEFD7] !text-[12px] flex-1 p-1 border border-gray-300 outline-none !rounded-xl"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    sendMessage();
+                  }
+                }}
+                className="!h-[38px] w-full bg-[#FFEFD7] !text-[12px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl"
                 placeholder="Add your comment here..."
               />
               <div onClick={sendMessage}>
@@ -337,8 +379,6 @@ const ChatBox = ({
           )}
         </>
       )}
-
-
     </div>
   );
 };
