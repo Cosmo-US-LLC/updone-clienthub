@@ -5,6 +5,7 @@ import Tooltip from "@/app/_components/common/tooltip";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
 import VerificationIcon from "@/app/_components/ui/shield-mobile";
 import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const TalentInfo = ({ jobDetailData }: any) => {
     const [contactTooltipVisible, setContactTooltipVisible] = useState(false);
@@ -55,7 +56,7 @@ const TalentInfo = ({ jobDetailData }: any) => {
             <div className="border border-1 border-[#EBE6FF] bg-[#FFEFD7] min-h-[320px] h-full w-full rounded-[12px] p-4 flex flex-col p-8">
                 <p className="font-[500] leading-[8px] text-[16px]">You Hired!</p>
                 <div className="flex items-center mt-4">
-                    <div className="rounded-full overflow-hidden border-[1px] border-white">
+                    {/* <div className="rounded-full overflow-hidden border-[1px] border-white">
                         <Image
                             width={53}
                             height={53}
@@ -64,7 +65,20 @@ const TalentInfo = ({ jobDetailData }: any) => {
                             src={jobDetailData?.invite?.worker?.profile_pic}
                             alt="user"
                         />
-                    </div>
+                    </div> */}
+                    <Avatar className="h-[53px] w-[53px] rounded-full border-[1px] border-white">
+                        <AvatarImage
+                            src={jobDetailData?.invite?.worker?.profile_pic}
+                            className="object-cover"
+                            width={100}
+                            height={100}
+                        />
+                        <AvatarFallback>
+                            {jobDetailData?.invite?.worker?.full_name[0]}
+                            {jobDetailData?.invite?.worker?.full_name?.split(" ")?.length > 1 &&
+                            jobDetailData?.invite?.workerh?.full_name?.split(" ")[1][0]}
+                        </AvatarFallback>
+                    </Avatar>
                     <div className="ml-4">
                         <h2
                             className={`${montserrat.className} text-[black] leading-[27px] font-[500] text-[18px] flex items-center`}

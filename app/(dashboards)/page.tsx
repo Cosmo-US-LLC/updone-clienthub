@@ -102,11 +102,12 @@ const DynamicCardTablePage = () => {
     }
   };
 
+  // useEffect(() => {
+  // }, []);
+  
   useEffect(() => {
     setIsCloseClicked(localStorage?.getItem("eventsBanner") || false);
-  }, []);
 
-  useEffect(() => {
     fetchOffers();
     setUserName(storedData ? storedData?.user?.name : "");
   }, []);

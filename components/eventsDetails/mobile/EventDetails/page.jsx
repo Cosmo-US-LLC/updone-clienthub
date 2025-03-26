@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsCalendarEvent } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { MdOutlineContentCopy } from "react-icons/md";
@@ -16,6 +16,8 @@ import VerificationIconMobile from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const EventDetails = ({ jobData }) => {
   const [status, setStatus] = useState(jobData?.status);
@@ -52,8 +54,16 @@ const EventDetails = ({ jobData }) => {
     };
   };
 
+  useEffect(() => {
+    setStatus(jobData?.status);
+  }, [jobData]);
+
   return (
-    <div className="pb-1 px-6 mb-10 w-[100vw] h-full  bg-[#F6F9FC] flex flex-col">
+    <div
+      className={`pb-1 px-2 mb-10 w-[calc(100vw-24px)] h-full bg-[#F6F9FC] flex flex-col ${
+        status === "completed" && "opacity-50 pointer-events-none"
+      }`}
+    >
       <div className="flex items-end justify-between">
         <h2 className="text-[16px] font-[300] text-[#161616] leading-[0.7]">
           Event Details
@@ -68,12 +78,12 @@ const EventDetails = ({ jobData }) => {
           <FaCheck className="text-[14px] mr-1" /> {status}
         </span>
       </div>
-      <h1 className="text-[22px] font-[400] text-[#161616] mt-2 first-letter:uppercase">
+      <h1 className="text-[22px] font-[400] text-[#161616] mt-2 first-letter:uppercase truncate">
         {jobData?.title || ""}
       </h1>
-
-      {status === "assigned" && (
-        <div className="bg-white p-4 rounded-lg shadow-md my-3 border">
+      {/* {status} */}
+      {(status == "assigned" || status == "completed") && (
+        <div className="bg-white p-4 rounded-lg shadow-md my-3 border pointer-events-auto">
           <h3 className="text-gray-900 text-[16px] font-[600] mb-2 flex">
             Hired Talent
           </h3>
@@ -96,15 +106,20 @@ const EventDetails = ({ jobData }) => {
                 {jobData?.invite?.worker?.full_name || "N/A"}
               </p>
               <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
-                {(event?.event_assigned_to?.id_is_verified && event?.event_assigned_to?.contact_is_verified) ? (
+                {event?.event_assigned_to?.id_is_verified &&
+                event?.event_assigned_to?.contact_is_verified ? (
                   <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger className="hover:bg-transparent">
                           <div className=" text-white pr-4 pl-2  rounded">
                             <VerificationIcon
-                              id_is_verified={event?.event_assigned_to?.id_is_verified}
-                              contact_is_verified={event?.event_assigned_to?.contact_is_verified}
+                              id_is_verified={
+                                event?.event_assigned_to?.id_is_verified
+                              }
+                              contact_is_verified={
+                                event?.event_assigned_to?.contact_is_verified
+                              }
                               height={23}
                               width={23}
                             />
@@ -112,14 +127,20 @@ const EventDetails = ({ jobData }) => {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <VerificationStatus
-                            id_is_verified={event?.event_assigned_to?.id_is_verified}
-                            contact_is_verified={event?.event_assigned_to?.contact_is_verified}
+                            id_is_verified={
+                              event?.event_assigned_to?.id_is_verified
+                            }
+                            contact_is_verified={
+                              event?.event_assigned_to?.contact_is_verified
+                            }
                           />
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                ) : ''}
+                ) : (
+                  ""
+                )}
               </div>
               {/* <FaCheck className="text-green-500 text-md" title="Verified" /> */}
             </div>
@@ -156,7 +177,9 @@ const EventDetails = ({ jobData }) => {
               <MdOutlineContentCopy
                 className="text-gray-500 cursor-pointer hover:text-gray-700"
                 title="Copy"
-                onClick={() => copyToClipboard(jobData?.invite?.worker?.user?.phone_number)}
+                onClick={() =>
+                  copyToClipboard(jobData?.invite?.worker?.user?.phone_number)
+                }
               />
               {copiedText === "+1 987-345-8735" && (
                 <span className="absolute -top-7 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-md">
@@ -179,7 +202,7 @@ const EventDetails = ({ jobData }) => {
                   Email Address
                 </p>
                 <p className="text-[#774DFD] text-[14px] font-[600]">
-                {jobData?.invite?.worker?.user?.email || "N/A"}
+                  {jobData?.invite?.worker?.user?.email || "N/A"}
                 </p>
               </div>
             </div>
@@ -187,7 +210,9 @@ const EventDetails = ({ jobData }) => {
               <MdOutlineContentCopy
                 className="text-gray-500 cursor-pointer hover:text-gray-700"
                 title="Copy"
-                onClick={() => copyToClipboard(jobData?.invite?.worker?.user?.email)}
+                onClick={() =>
+                  copyToClipboard(jobData?.invite?.worker?.user?.email)
+                }
               />
               {copiedText === "williamjosop987@gmail.com" && (
                 <span className="absolute -top-7 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-md">
@@ -196,6 +221,14 @@ const EventDetails = ({ jobData }) => {
               )}
             </div>
           </div>
+
+          {status == "assigned" && (
+            <div className="w-full flex justify-center pt-4">
+              <Link href={`/events/detail/${jobData?.id}/chat`} className="flex gap-1 items-center px-4 py-2 rounded-full bg-[#350abc] text-white text-sm">
+                Chat Now <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </div>
       )}
 

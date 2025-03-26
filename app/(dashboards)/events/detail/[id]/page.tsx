@@ -14,12 +14,14 @@ import { useDispatch } from "react-redux";
 import { useParams } from "next/navigation";
 import EventsDetails from "@/components/eventsDetails/mobile/page";
 import JobDetail from "@/app/_components/booking/job-detail";
+import Loading from "@/app/loading";
 
 const page = () => {
   const params = useParams();
   const { auth: storedData } = useAppSelector(selectAuth);
   const { jobData } = useAppSelector(selectStaff);
   const [isWorker, setIsWorker] = useState<boolean | null>(null);
+  const [render, setRender] = useState<boolean>(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const { handleError } = useError();
@@ -85,6 +87,19 @@ const page = () => {
     fetchJobDetails();
   }, []);
 
+  useEffect(()=>{
+    setRender(true);
+
+    return () => {
+      dispatch(setJobData(null));
+      dispatch(setJobId(null));
+    }
+  }, [])
+
+  if (!render || !jobData) {
+    return <Loading />
+  }
+
   return (
     // <div className="mt-4 p-1 h-screen max-h-[calc(100vh-133px)] overflow-y-hidden"></div>
     <>
@@ -99,9 +114,7 @@ const page = () => {
                 +
             )}
         </div> */}
-      <div className="max-lg:hidden">
-        <JobDetail jobId={params.id} />
-      </div>
+      <JobDetail jobId={params.id} />
 
       <div className="lg:hidden ">
         <EventsDetails jobId={params.id} jobData={jobData} />

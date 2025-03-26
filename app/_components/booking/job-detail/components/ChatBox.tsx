@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setOffersId } from "@/app/lib/store/features/bookingSlice";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Message = {
   id: number;
@@ -192,13 +193,26 @@ const ChatBox = ({
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-row items-center justify-between gap-2">
-            <Image
+            {/* <Image
               width={60}
               height={60}
               className="h-[45px] w-[45px] object-cover rounded-[50%] border-2 border-[#F3F0FF]"
               src={selectedOffer?.worker?.profile_pic}
               alt="user-img"
-            />
+            /> */}
+            <Avatar className="h-[45px] w-[45px] rounded-full border-2 border-[#F3F0FF]">
+              <AvatarImage
+                src={selectedOffer?.worker?.profile_pic}
+                className="object-cover"
+                width={100}
+                height={100}
+              />
+              <AvatarFallback>
+                {selectedOffer?.worker?.full_name[0]}
+                {selectedOffer?.worker?.full_name?.split(" ")?.length > 1 &&
+                  selectedOffer?.worker?.full_name?.split(" ")[1][0]}
+              </AvatarFallback>
+            </Avatar>
             <p className="text-[14px] font-[500] leading-[16px]">
               {selectedOffer?.worker?.full_name}
               <br />

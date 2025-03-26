@@ -7,8 +7,9 @@ function layout({ children }: any) {
 
   return (
     <>
-      <div className="max-lg:hidden">{children}</div>
-      <div className="px-4">
+      {/* <div className="max-lg:hidden">{children}</div> */}
+      <div className="">{children}</div>
+      {/* <div className="px-4">
         <p className="lg:hidden text-[18px] pt-4 mb-2">
           ClientHub is coming soon on your cellphone!
           <br />
@@ -27,7 +28,7 @@ function layout({ children }: any) {
         >
           Go Back to Updone
         </button>
-      </div>
+      </div> */}
     </>
   );
 }

@@ -1,12 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import {
-  FaStar,
-  FaCheckCircle,
-  FaSuitcase,
-  FaFileInvoiceDollar,
-} from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaStar, FaSuitcase } from "react-icons/fa";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import Image from "next/image";
 import {
@@ -15,124 +10,190 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
+import Loading from "@/app/loading";
+import { ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
+import ChatContainer from "../../ChatContainer";
+import { setOffersId } from "@/app/lib/store/features/bookingSlice";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const Offers = ({jobData}) => {
-  const [offersData, setOffersData] = useState([
-    {
-      profilePic: "https://randomuser.me/api/portraits/women/47.jpg",
-      name: "Kristin W.",
-      rating: 5.0,
-      jobs: 69,
-      location: "Santa Monica",
-      lastJob: { role: "BAR BACK", date: "25th June" },
-      offeredRate: "$50",
-      totalAmount: "$350",
-      notification: 3, // Red badge notification count
-    },
-    {
-      profilePic: "https://randomuser.me/api/portraits/men/48.jpg",
-      name: "Jacob S.",
-      rating: 5.0,
-      jobs: 32,
-      location: "Los Angeles",
-      lastJob: { role: "BAR BACK", date: "25th June" },
-      offeredRate: "$350",
-      totalAmount: "$350",
-      notification: 0, // No notifications
-    },
-    {
-      profilePic: "https://randomuser.me/api/portraits/women/49.jpg",
-      name: "Cristina W.",
-      rating: 5.0,
-      jobs: 120,
-      location: "West Hollywood",
-      lastJob: { role: "BAR BACK", date: "25th June" },
-      offeredRate: "$350",
-      totalAmount: "$350",
-      notification: 0,
-    },
-  ]);  
+const Offers = ({
+  jobData,
+  selectedOffer,
+  setSelectedOffer,
+  GetOffers,
+  offersData,
+  offersLoading,
+}) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const [chatModal, setChatModal] = useState(false);
+  const [offerModal, setOfferModal] = useState(false);
+  const [offerModalId, setOfferModalId] = useState(null);
+
+  const payPayment = (offer) => {
+    setOfferModalId(offer?.invite_id);
+    setSelectedOffer(offer);
+    setOfferModal(true);
+    // dispatch(setOffersId(invite_id));
+    // router.push(`/events/payment/${invite_id}`);
+  };
+  const payPaymentConfirm = () => {
+    dispatch(setOffersId(offerModalId));
+    // setSelectedOffer(null)
+    router.push(`/events/payment/${offerModalId}`);
+  };
+  const payPaymentCancel = (value) => {
+    if (!value) {
+      setOfferModalId(null);
+      setSelectedOffer(null);
+      setOfferModal(false);
+    }
+  };
+
+  function timeAgo(dateTimeString) {
+    const inputDate = new Date(dateTimeString);
+    const now = new Date();
+    const diffMs = now - inputDate;
+
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (minutes < 6) {
+      return `just now`;
+    } else if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      return `${hours} hours ago`;
+    } else if (days < 7) {
+      return `${days} days ago`;
+    } else if (days < 14) {
+      return `1 week ago`;
+    } else {
+      const weeks = Math.floor(days / 7);
+      return `${weeks} weeks ago`;
+    }
+  }
 
   return (
-    <div className="flex flex-col gap-5">
-      <h1 className="text-[16px] font-[400] tracking-[0.5px] text-[#161616] mt-1">
+    <div className="!min-w-full">
+      <h1 className="text-[16px] font-[500] tracking-[0.5px] text-[#161616] mb-2 !w-full !text-left">
         Talent Offers
-             </h1>
- 
-      {offersData.length > 0 ? (
-        <div className="space-y-4">
+      </h1>
+
+      {offersLoading ? (
+        <Loading />
+      ) : offersData.length > 0 ? (
+        <div className="flex flex-col gap-3">
           {offersData.map((offer, index) => (
             <div
               key={index}
               className="bg-white p-4 rounded-lg border-[2px] border-[#E9E9E9]   "
             >
-            
               <div className="flex items-center justify-between">
-               
                 <div className="flex items-center gap-3">
-                  <img
-                    src={offer.profilePic}
-                    alt={offer.name}
-                    className="w-12 h-12 rounded-full border"
-                  />
+                  {/* <img
+                    src={offer?.worker?.profile_pic}
+                    alt={offer?.worker?.full_name}
+                    className="w-12 h-12 rounded-full border object-cover"
+                  /> */}
+                  <Avatar className="w-12 h-12 rounded-full border">
+                    <AvatarImage
+                      src={offer?.worker?.profile_pic}
+                      className="object-cover"
+                      width={100}
+                      height={100}
+                    />
+                    <AvatarFallback>
+                      {offer?.worker?.full_name[0]}
+                      {offer?.worker?.full_name?.split(" ")?.length > 1 &&
+                        offer?.worker?.full_name?.split(" ")[1][0]}
+                    </AvatarFallback>
+                  </Avatar>
                   <div className="flex items-center gap-2">
-                    <p className="text-gray-900 text-[16px] font-[600]">{offer.name}</p>
-                    <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger className="hover:bg-transparent">
-                            <div className=" text-white rounded">
-                              <VerificationIconMobile
+                    <p className="text-gray-900 text-[16px] font-[600]">
+                      {offer?.worker?.full_name}
+                    </p>
+                    {offer?.worker?.id_is_verified &&
+                    offer?.worker?.contact_is_verified ? (
+                      <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger className="hover:bg-transparent">
+                              <div className=" text-white rounded">
+                                <VerificationIconMobile
+                                  id_is_verified={offer?.worker?.id_is_verified}
+                                  contact_is_verified={
+                                    offer?.worker?.contact_is_verified
+                                  }
+                                  height={23}
+                                  width={23}
+                                />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="z-40">
+                              <VerificationStatus
                                 id_is_verified={
                                   event?.event_assigned_to?.id_is_verified
                                 }
                                 contact_is_verified={
                                   event?.event_assigned_to?.contact_is_verified
                                 }
-                                height={23}
-                                width={23}
                               />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className="z-40">
-                            <VerificationStatus
-                              id_is_verified={
-                                event?.event_assigned_to?.id_is_verified
-                              }
-                              contact_is_verified={
-                                event?.event_assigned_to?.contact_is_verified
-                              }
-                            />
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
-             
+
                 <div className="flex items-center gap-1 text-gray-500">
                   <FaStar className="text-yellow-500 mb-1" />
-                  <span className="text-[14px]">{offer.rating}/5</span>
+                  <span className="text-[14px]">
+                    {parseFloat(offer?.worker?.rating).toFixed(1)}
+                  </span>
                 </div>
               </div>
 
-          
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-1 text-gray-500 text-[14px] font-[400]">
-                  <HiOutlineLocationMarker  className="text-[22px]"/>
-                  <span>{offer.location}</span>
+                  <HiOutlineLocationMarker className="text-[22px]" />
+                  <span>{offer?.worker?.city}</span>
                 </div>
-                <p className="text-gray-500 text-[14px] font-[400]">{offer.jobs} Jobs</p>
+                <p className="text-gray-500 text-[14px] font-[400]">
+                  {offer?.worker?.total_jobs_count} Jobs
+                </p>
               </div>
 
-           
               <div className="flex min-w-[300px] items-center justify-center gap-4 bg-[#F4FAFF] px-4 py-[10px] rounded-full mt-4 text-gray-700 text-[14px]">
                 <FaSuitcase className="text-blue-600" />
                 <span>
-                  Last job was a  {""}
-                  {offer.lastJob.date}
+                  Last job was a {""}
+                  {offer?.worker?.last_job}
                 </span>
               </div>
 
@@ -140,35 +201,46 @@ const Offers = ({jobData}) => {
                 <div className=" flex flex-col justify-center items-center">
                   <p className="text-gray-500 text-[14px]">Offered rate</p>
                   <p className="text-gray-900 text-[18px] font-[600]">
-                    {offer.offeredRate}
+                    ${offer?.offered_price}
                   </p>
                 </div>
                 <div className="w-[1px] bg-[#E9E9E9]"></div>
                 <div className="flex flex-col justify-center items-center">
                   <p className="text-gray-500 text-[14px]">Total</p>
                   <p className="text-gray-900 text-[18px] font-[600]">
-                    {offer.totalAmount}
+                    ${offer?.total_price}
                   </p>
                 </div>
               </div>
 
-              <div className="flex justify-end gap-4 mt-7">
-                <div className="relative flex items-center">
-                  <button className="  border-[1px] border-[#161616] text-[#161616] text-[14px] font-medium px-4 py-2 rounded-full">
-                    Let's Talk
-                  </button>
-                  {/* <FaFileInvoiceDollar className="text-gray-500 text-lg" /> */}
-                  {offer.notification > 0 && (
-                    <span className="absolute -top-2 -right-1 z-10 bg-[#774DFD] text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                      {offer.notification}
-                    </span>
-                  )}
-                </div>
+              {jobData?.status == "open" && (
+                <div className="flex justify-end gap-4 mt-7">
+                  <div className="relative flex items-center">
+                    <button
+                      onClick={() => {
+                        setSelectedOffer(offer);
+                        setChatModal(true);
+                      }}
+                      className="border-[1px] border-[#161616] text-[#161616] text-[14px] font-medium px-4 py-2 rounded-full"
+                    >
+                      Let's Talk
+                    </button>
+                    {/* <FaFileInvoiceDollar className="text-gray-500 text-lg" /> */}
+                    {offer?.notification > 0 && (
+                      <span className="absolute -top-2 -right-1 z-10 bg-[#774DFD] text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                        {offer?.notification}
+                      </span>
+                    )}
+                  </div>
 
-                <button className="bg-[#350ABC] text-white text-[14px] font-[400] px-6 py-2 rounded-full">
-                  Hire Me
-                </button>
-              </div>
+                  <button
+                    onClick={() => payPayment(offer)}
+                    className="bg-[#350ABC] text-white text-[14px] font-[400] px-6 py-2 rounded-full"
+                  >
+                    Hire Me
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -185,8 +257,7 @@ const Offers = ({jobData}) => {
             No offer yet to show
           </h2>
           <p className="text-gray-500 text-sm mt-2 px-6">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eius.
+            No offers yet, check back in couple of hours or invite more talent!
           </p>
 
           <button className="bg-purple-600 text-white text-sm font-medium px-6 py-3 rounded-full mt-6">
@@ -194,6 +265,102 @@ const Offers = ({jobData}) => {
           </button>
         </div>
       )}
+
+      {/* Lets Hire Popup */}
+      <Dialog open={offerModal} onOpenChange={payPaymentCancel}>
+        <DialogContent className="max-w-[80vw] rounded-2xl space-y-5">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Offer Breakdown</DialogTitle>
+            <DialogDescription>
+              Lobortis posuere in leo pretium lectus commodo nam convallis.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div>
+            <div className="flex justify-between items-center">
+              <span>Total Number of hours:</span>
+              <span>{selectedOffer?.working_hours} h</span>
+            </div>
+            <hr className="my-3" />
+            <div className="flex justify-between items-center">
+              <span>Rate per hours:</span>
+              <span>${selectedOffer?.offered_price}</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <div className="flex justify-center items-center gap-5">
+              <span className="text-neutral-600 text-sm">Total.</span>
+              <span className="text-black text-3xl font-[500]">
+                ${parseFloat(selectedOffer?.total_price).toFixed(2)}
+              </span>
+            </div>
+            <hr className="w-full my-3" />
+            <button
+              onClick={() => payPaymentConfirm()}
+              className="rounded-full bg-[#350abc] text-white px-4 py-2 flex gap-2 items-center"
+            >
+              <ArrowRight className="w-4 h-4 text-white" />
+              Hire Now
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Chat Sheet */}
+      <Sheet open={chatModal} onOpenChange={setChatModal}>
+        {/* <SheetTrigger>Open</SheetTrigger> */}
+        <SheetContent className="z-[190] w-full flex flex-col">
+          <SheetHeader>
+            {/* <div className="flex justify-end">
+            </div> */}
+            <SheetTitle className="flex items-center text-left gap-3">
+              {console.log(selectedOffer)}
+              <ChevronLeft
+                className=""
+                onClick={() => {
+                  setSelectedOffer(null);
+                  setChatModal(false);
+                }}
+              />
+              {/* <img
+                src={selectedOffer?.worker?.profile_pic}
+                alt={selectedOffer?.worker?.full_name}
+                className="w-12 h-12 rounded-full border object-cover"
+              /> */}
+              <Avatar className="w-12 h-12 rounded-full border">
+                <AvatarImage
+                  src={selectedOffer?.worker?.profile_pic}
+                  className="object-cover"
+                  width={100}
+                  height={100}
+                />
+                <AvatarFallback>
+                  {selectedOffer?.worker?.full_name[0]}
+                  {selectedOffer?.worker?.full_name?.split(" ")?.length > 1 &&
+                    selectedOffer?.worker?.full_name?.split(" ")[1][0]}
+                </AvatarFallback>
+              </Avatar>
+              <div className="pl-1">
+                <div className="text-xl leading-tight">
+                  {selectedOffer?.worker?.full_name}
+                  <br />
+                </div>
+                <div className="font-normal leading-tight text-sm text-neutral-600">
+                  Last seen{" "}
+                  {selectedOffer?.worker?.user?.last_active
+                    ? `${timeAgo(selectedOffer?.worker?.user?.last_active)}`
+                    : "weeks ago"}
+                </div>
+              </div>
+            </SheetTitle>
+            <SheetDescription hidden></SheetDescription>
+          </SheetHeader>
+          <div className="grow">
+            <ChatContainer job={jobData} selectedOffer={selectedOffer} />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

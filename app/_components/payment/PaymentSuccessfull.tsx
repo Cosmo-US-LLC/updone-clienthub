@@ -78,9 +78,9 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
   }, [stripe]);
 
   return (
-    <div className="flex flex-col  items-center justify-center min-h-[100%] !px-8">
+    <div className="flex flex-col  items-center justify-center min-h-[100%] !px-8 max-lg:pt-20">
       {/* Container */}
-      <div className="flex flex-col !max-h-[520px] items-center justify-center p-8 bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+      <div className="flex flex-col !max-h-[520px] items-center justify-center p-8 bg-white rounded-xl lg:shadow-lg max-w-lg mx-auto">
         {/* Success SVG */}
         <div className="mb-4 mt-8 relative bottom-0">
           <Image

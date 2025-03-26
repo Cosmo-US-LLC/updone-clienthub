@@ -148,37 +148,24 @@ function NavbarClienthub() {
                         : "Book a Talent Now"}
                     </button>
                   </Link>
-                  {/* Use setActiveTab to switch between tabs */}
-                  {user == false ? (
-                    <>
-                      <li onClick={toggleMenu}>
-                        <Link href="/signin">Log in</Link>
-                      </li>
-                      <li onClick={toggleMenu}>
-                        <Link href="/signup">Sign up</Link>
-                      </li>
-                      <li onClick={toggleMenu}>
-                        <Link href="/">Home</Link>
-                      </li>
-                    </>
-                  ) : (
-                    <li onClick={toggleMenu}>
-                      <Link
-                        href={`${
-                          user?.role_id == 4
-                            ? process.env.NEXT_PUBLIC_CLIENTHUB_URL
-                            : process.env.NEXT_PUBLIC_TALENTPRO_URL
-                        }/auth?token=${token}`}
-                      >
-                        Home
-                      </Link>
-                    </li>
-                  )}
+
                   <li onClick={toggleMenu}>
-                    <Link href="/about">About Us</Link>
+                    <Link href="/">My Events</Link>
                   </li>
                   <li onClick={toggleMenu}>
-                    <Link href="/contact-us">Contact</Link>
+                    <Link href="/">Payments</Link>
+                  </li>
+                  <li onClick={toggleMenu}>
+                    <Link href="/">Settlements</Link>
+                  </li>
+                  <li onClick={toggleMenu}>
+                    <Link href="/">Reviews</Link>
+                  </li>
+                  <li onClick={toggleMenu}>
+                    <Link href="/">Account Settings</Link>
+                  </li>
+                  <li onClick={toggleMenu}>
+                    <Link href="/">Payment Methods</Link>
                   </li>
                 </ul>
 
@@ -239,14 +226,25 @@ function NavbarClienthub() {
             </SheetContent>
           </Sheet>
 
-          <Link href={"/"}>
-            <Image
-              src="/images/logo.svg"
-              className="object-contain"
-              alt="headerLogo"
-              height={28}
-              width={98.45}
-            />
+          <Link href={"/"} className="mr-8">
+            <div className="relative w-fit group-data-[collapsible=icon]:hidden">
+              <p className="text-2xl font-light text-[#4A4A4A] leading-[15px]">
+                Client<span className="font-medium text-[#6265F1]">Hub</span>
+              </p>
+              <p className="flex gap-1 w-[80px] items-center text-[12px] absolute left-[70%] whitespace-nowrap">
+                by{" "}
+                <span>
+                  <Image
+                    src={"/logo.svg"}
+                    alt="Updone"
+                    height={140}
+                    width={160}
+                    className="w-[55px] h-fit relative"
+                  />
+                </span>
+              </p>
+              <div className="h-[8px]"></div>
+            </div>
           </Link>
 
           <Link href={"/add-job/location"} aria-label="Add an Event">

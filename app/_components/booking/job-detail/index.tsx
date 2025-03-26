@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Loading from "@/app/loading";
 
 const service_icons: any = {
   Bartender: "/images/services/bartander.svg",
@@ -266,7 +267,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
   };
 
   return (
-    <div className="relative flex flex-row justify-between gap-4 bg-[#F6F9FC] h-[100%] w-full overflow-hidden">
+    <div className="max-lg:hidden relative flex flex-row justify-between gap-4 bg-[#F6F9FC] h-[100%] w-full overflow-hidden">
       <div className="grow h-full flex flex-col">
         {loading ? (
           // Skeleton

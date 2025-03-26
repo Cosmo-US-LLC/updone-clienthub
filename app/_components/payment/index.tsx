@@ -36,12 +36,12 @@ const PaymentPay = ({
       minute: "numeric",
       hour12: true,
     });
-    return `${formattedDate}, ${formattedStartTime}, ${formattedEndTime}`;
+    return `${formattedDate}, ${formattedStartTime} - ${formattedEndTime}`;
   }
 
   return (
     <>
-      <div className="max-w-[1279px] mx-auto relative bottom-[25px]">
+      <div className="max-w-[1279px] mx-auto relative bottom-[25px] max-lg:pb-0 max-lg:p-4">
         <div
           className="hover:text-purple-600 cursor-pointer"
           onClick={() => {
@@ -57,9 +57,9 @@ const PaymentPay = ({
           </div>
         </div>
       </div>
-      <div className="flex gap-[18px] justify-start items-start max-w-[1279px] mx-auto mb-[100px] h-fit">
+      <div className="flex max-lg:flex-col gap-[18px] max-lg:px-4 justify-start items-start max-w-[1279px] mx-auto mb-[100px] h-fit">
         <div
-          className="w-[40%] bg-[#fff] rounded-[12px]"
+          className="max-lg:hidden lg:w-[40%] bg-[#fff] rounded-[12px]"
           style={{ boxShadow: "0px 4px 26px 0px rgba(0, 0, 0, 0.05)" }}
         >
           <div className="py-[32px] px-[16px] text-center w-[99%] mx-auto relative top-[3px] space-y-[12px] bg-[#FAFAFC] rounded-[12px]">
@@ -181,7 +181,7 @@ const PaymentPay = ({
           </div>
         </div>
         <div
-          className={`${styles.payment_section} max-w-[600px] flex flex-col !pb-0 min-h-[41rem] h-full`}
+          className={`${styles.payment_section} max-lg:w-full max-w-[600px] flex flex-col !pb-0 min-h-[41rem] h-full`}
         >
           <StripeCheckoutForm
             offerId={offerId}
