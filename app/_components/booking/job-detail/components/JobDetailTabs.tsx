@@ -15,21 +15,22 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, se
     const { handleError } = useError();
     const [job, setJob] = useState<any>({});
 
+    const fetchDataIfNeeded = async () => {
+        try {
+            const newData = await apiRequest(`/job/${jobData?.id}/invites`, {
+                method: 'GET',
+                headers: {
+                    ...(storedData && { 'Authorization': `Bearer ${storedData.token}` })
+                }
+            }, handleError);
+            setData(newData);
+        } catch (error) {
+        }
+    };
     useEffect(() => {
-        const fetchDataIfNeeded = async () => {
-            try {
-                const newData = await apiRequest(`/job/${jobData?.id}/invites`, {
-                    method: 'GET',
-                    headers: {
-                        ...(storedData && { 'Authorization': `Bearer ${storedData.token}` })
-                    }
-                }, handleError);
-                setData(newData);
-            } catch (error) {
-            }
-        };
-
-        fetchDataIfNeeded();
+        if (jobData?.id) {
+            fetchDataIfNeeded();
+        }
     }, [jobData?.id]);
 
     // useEffect(() => {

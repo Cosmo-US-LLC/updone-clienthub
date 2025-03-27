@@ -18,8 +18,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { formatPhoneNumber } from "@/lib/utils";
 
-const EventDetails = ({ jobData }) => {
+const EventDetails = ({ jobData, releaseData }) => {
+  const router = useRouter();
   const [status, setStatus] = useState(jobData?.status);
   const [copiedText, setCopiedText] = useState("");
 
@@ -60,11 +63,13 @@ const EventDetails = ({ jobData }) => {
 
   return (
     <div
-      className={`pb-1 px-2 mb-10 w-[calc(100vw-24px)] h-full bg-[#F6F9FC] flex flex-col ${
-        status === "completed" && "opacity-50 pointer-events-none"
-      }`}
+      className={`pb-1 px-2 mb-10 w-[calc(100vw-24px)] h-full bg-[#F6F9FC] flex flex-col`}
     >
-      <div className="flex items-end justify-between">
+      <div
+        className={`flex items-end justify-between ${
+          status === "completed" && "opacity-50 pointer-events-none"
+        }`}
+      >
         <h2 className="text-[16px] font-[300] text-[#161616] leading-[0.7]">
           Event Details
         </h2>
@@ -78,16 +83,28 @@ const EventDetails = ({ jobData }) => {
           <FaCheck className="text-[14px] mr-1" /> {status}
         </span>
       </div>
-      <h1 className="text-[22px] font-[400] text-[#161616] mt-2 first-letter:uppercase truncate">
+      <h1
+        className={`text-[22px] font-[400] text-[#161616] mt-2 first-letter:uppercase truncate ${
+          status === "completed" && "opacity-50 pointer-events-none"
+        }`}
+      >
         {jobData?.title || ""}
       </h1>
       {/* {status} */}
       {(status == "assigned" || status == "completed") && (
         <div className="bg-white p-4 rounded-lg shadow-md my-3 border pointer-events-auto">
-          <h3 className="text-gray-900 text-[16px] font-[600] mb-2 flex">
+          <h3
+            className={`text-gray-900 text-[16px] font-[600] mb-2 flex ${
+              status === "completed" && "opacity-50 pointer-events-none"
+            }`}
+          >
             Hired Talent
           </h3>
-          <div className="flex items-center gap-3">
+          <div
+            className={`flex items-center gap-3 ${
+              status === "completed" && "opacity-50 pointer-events-none"
+            }`}
+          >
             <Avatar className="w-[62px] h-[62px]">
               <AvatarImage
                 src={jobData?.invite?.worker?.profile_pic}
@@ -146,7 +163,11 @@ const EventDetails = ({ jobData }) => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-3 border-t pt-3 relative">
+          <div
+            className={`flex items-center justify-between mt-3 border-t pt-3 relative ${
+              status === "completed" && "opacity-50 pointer-events-none"
+            }`}
+          >
             <div className="flex justify-center items-center gap-[10px]">
               <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center bg-[#774DFD]">
                 <svg
@@ -169,7 +190,7 @@ const EventDetails = ({ jobData }) => {
                   Contact Number:
                 </p>
                 <p className="text-[#774DFD] text-[14px] font-[500]">
-                  {jobData?.invite?.worker?.user?.phone_number || "N/A"}
+                  {formatPhoneNumber(jobData?.invite?.worker?.user?.phone_number) || "N/A"}
                 </p>
               </div>
             </div>
@@ -178,10 +199,10 @@ const EventDetails = ({ jobData }) => {
                 className="text-gray-500 cursor-pointer hover:text-gray-700"
                 title="Copy"
                 onClick={() =>
-                  copyToClipboard(jobData?.invite?.worker?.user?.phone_number)
+                  copyToClipboard(formatPhoneNumber(jobData?.invite?.worker?.user?.phone_number))
                 }
               />
-              {copiedText === "+1 987-345-8735" && (
+              {copiedText === "987-345-8735" && (
                 <span className="absolute -top-7 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-md">
                   Copied!
                 </span>
@@ -189,7 +210,11 @@ const EventDetails = ({ jobData }) => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-3 border-t pt-3 relative">
+          <div
+            className={`flex items-center justify-between mt-3 border-t pt-3 relative ${
+              status === "completed" && "opacity-50 pointer-events-none"
+            }`}
+          >
             <div className="flex justify-center items-center gap-[10px]">
               <Image
                 src="/images/client-portal/event-details/email-filled.svg"
@@ -221,10 +246,81 @@ const EventDetails = ({ jobData }) => {
               )}
             </div>
           </div>
+          {status == "completed" && (
+            <div className="w-full pt-4 border-t border-[#f4f4f4] mt-4">
+              <div className="flex items-baseline gap-2 justify-center w-full pb-1">
+                <span className="text-left text-sm font-[500]">
+                  Total Amount:
+                </span>
+                <span className="text-left text-3xl font-semibold">
+                  $
+                  {releaseData?.includes_settlement === true
+                    ? releaseData?.initial_payment +
+                      releaseData?.additional_amount_requested
+                    : releaseData?.initial_payment}
+                </span>
+              </div>
+              <button
+                disabled={releaseData?.release_status !== "release_requested"}
+                onClick={() => {
+                  if (releaseData?.release_status === "release_requested") {
+                    router.push(`/events/detail/${jobData?.id}/payment-request`);
+                  }
+                }}
+                className={`mx-auto z-[1] px-4 py-2 flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:pointer-events-none min-h-[42px] w-[200px] rounded-full ${
+                  releaseData?.release_status === "release_requested"
+                    ? "bg-[#350ABC]"
+                    : "bg-[#F3F0FF]"
+                } `}
+              >
+                <p
+                  className={`text-[14px] font-[400] ${
+                    releaseData?.release_status === "release_approved"
+                      ? "text-[black]"
+                      : "text-[white]"
+                  } `}
+                >
+                  {releaseData?.release_status === "release_approved"
+                    ? "Payment Released"
+                    : "Release Payment"}
+                </p>
+              </button>
+              {releaseData?.release_status === "release_pending" && (
+                <div className="mx-auto rounded-[8px] mt-3 p-2 bg-[#F9F7FF] w-[95%] min-h-[52px] flex flex-row items-center justify-start gap-4">
+                  <img
+                    src="/images/client-portal/event-details/exclamation.svg"
+                    className="h-[16px] w-[16px]"
+                    alt="info_1"
+                  />
+                  <p className="text-sm">
+                    You can release payment once the Talent confirms the final
+                    amount.
+                  </p>
+                </div>
+              )}
+              {releaseData?.release_status === "release_requested" &&
+                releaseData?.includes_settlement === true && (
+                  <div className="rounded-[8px] mt-4 p-2 bg-[#F9F7FF] w-[95%] min-h-[52px] flex flex-row items-center justify-start gap-4">
+                    <img
+                      src="/images/client-portal/event-details/exclamation.svg"
+                      className="h-[16px] w-[16px]"
+                      alt="info_1"
+                    />
+                    <p className="text-sm">
+                      The Talent worked extra hours at your event.
+                    </p>
+                  </div>
+                )}
+            </div>
+          )}
+          {console.log(releaseData)}
 
           {status == "assigned" && (
             <div className="w-full flex justify-center pt-4">
-              <Link href={`/events/detail/${jobData?.id}/chat`} className="flex gap-1 items-center px-4 py-2 rounded-full bg-[#350abc] text-white text-sm">
+              <Link
+                href={`/events/detail/${jobData?.id}/chat`}
+                className="flex gap-1 items-center px-4 py-2 rounded-full bg-[#350abc] text-white text-sm"
+              >
                 Chat Now <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -235,13 +331,21 @@ const EventDetails = ({ jobData }) => {
       {/* <h3 className="text-[16px] font-[500] text-gray-900 mt-4">
         Event Description
       </h3> */}
-      <p className="text-gray-600 text-[14px] font-[400] mt-2">
+      <p
+        className={`text-gray-600 text-[14px] font-[400] mt-2 ${
+          status === "completed" && "opacity-50 pointer-events-none"
+        }`}
+      >
         {jobData?.description || ""}
       </p>
 
       <hr className="my-6 border-gray-200" />
 
-      <div className="space-y-4 flex flex-col">
+      <div
+        className={`space-y-4 flex flex-col ${
+          status === "completed" && "opacity-50 pointer-events-none"
+        }`}
+      >
         <div className="flex items-center gap-5">
           <div className="p-2 bg-[#B4C4FF] rounded-md border-[1px] border-[#585EFF]">
             <LiaGlassCheersSolid className="text-[#585EFF] text-xl" />

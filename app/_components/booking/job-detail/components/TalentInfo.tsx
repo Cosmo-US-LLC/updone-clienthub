@@ -6,6 +6,7 @@ import { VerificationStatus } from "@/app/_components/ui/verified-status-check-t
 import VerificationIcon from "@/app/_components/ui/shield-mobile";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatPhoneNumber } from "@/lib/utils";
 
 const TalentInfo = ({ jobDetailData }: any) => {
     const [contactTooltipVisible, setContactTooltipVisible] = useState(false);
@@ -133,7 +134,7 @@ const TalentInfo = ({ jobDetailData }: any) => {
                                 Phone Number:
                             </p>
                             <p className="text-[#4C4B4B] font-[400] text-[16px]">
-                                {jobDetailData?.invite?.worker?.user?.phone_number}
+                                {formatPhoneNumber(jobDetailData?.invite?.worker?.user?.phone_number)}
                             </p>
                         </div>
                         <div className="">
@@ -144,7 +145,7 @@ const TalentInfo = ({ jobDetailData }: any) => {
                                 height={16}
                                 className="absolute right-0 cursor-pointer"
                                 onClick={() => {
-                                    handleCopyPhoneNumber(jobDetailData?.invite?.worker?.user?.phone_number);
+                                    handleCopyPhoneNumber(formatPhoneNumber(jobDetailData?.invite?.worker?.user?.phone_number));
                                 }}
                             />
                             {contactTooltipVisible && (
@@ -207,7 +208,7 @@ const TalentInfo = ({ jobDetailData }: any) => {
                         If you have any queries then contact us at:
                         <ul style={{ listStyleType: "circle", marginLeft: "20px" }} className="pt-2">
                             <li className="font-[400] leading-[24px] text-[16px] text-[#4C4B4B]">
-                                 <a href="tel:+18006510072" className="text-blue-500 hover:underline">+1 (800) 651-0072</a>
+                                 <a href="tel:+18006510072" className="text-blue-500 hover:underline">(800) 651-0072</a>
                             </li>
                             <li className="font-[400] leading-[24px] text-[16px] text-[#4C4B4B]">
                              <a href="mailto:info@updone.com" className="text-blue-500 hover:underline">info@updone.com</a>

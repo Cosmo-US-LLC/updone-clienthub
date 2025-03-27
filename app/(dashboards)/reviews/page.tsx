@@ -5,7 +5,7 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <div className='w-full flex justify-center items-start h-full relative' >
+    <div className='w-full max-w-[1350px] mx-auto flex justify-center items-start h-full relative' >
       <NoDataFound
         title="Share Your Feedback and Add Reviews"
         description={
@@ -15,7 +15,6 @@ const Page = () => {
         }
           image="/images/client-portal/payment/reviews image.webp"
       />
-
     </div>
   )
 }

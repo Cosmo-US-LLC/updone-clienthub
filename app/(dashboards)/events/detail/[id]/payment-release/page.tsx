@@ -56,7 +56,7 @@ const Page = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex-1 flex justify-center items-center">
+        <div className="flex-1 flex justify-center max-lg:max-h-[70svh] items-start lg:items-center">
           {clientSecret && (
             <Elements
               options={{

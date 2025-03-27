@@ -66,7 +66,7 @@ const PaymentSuccessfull = ({ jobId, clientSecret }: any) => {
   return (
     // ${is-Mobile === false ? "w-[50%] m-auto" : "bg-[#F3F0FF] min-h-screen"}
     <div
-      className={`max-lg:bg-[#F3F0FF] max-lg:min-h-screen lg:w-[50%] lg:m-auto flex flex-col items-center justify-center`}
+      className={`max-lg:bg-[#F3F0FF] max-lg:min-h-[100dvh] lg:w-[50%] lg:m-auto flex flex-col items-center justify-center max-lg:pb-32`}
     >
       <div className="flex items-center justify-center w-24 h-24 rounded-full bg-gray-200">
         <svg

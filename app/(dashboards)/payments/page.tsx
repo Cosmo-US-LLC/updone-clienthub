@@ -253,12 +253,13 @@ const Page = () => {
     >
       {isLoading ? (
         <RenderLoader />
-      ) : transactionsData?.length == 0 ? (
-        <div className="h-full flex justify-center items-center flex-col">
+      ) : transactionsData?.length !== 0 ? (
+        <div className="h-full flex justify-center items-center flex-col gap-5">
           <Image
             width={151}
             height={151}
             alt=""
+            className="w-44 h-44"
             src="/images/client-portal/payment/no-payment.svg"
           />
           <p className="text-[#000000] text-[40px] leading-[32px] font-[300]">

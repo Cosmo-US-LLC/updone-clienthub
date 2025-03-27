@@ -228,7 +228,7 @@ const DynamicCardTablePage = () => {
           <p className="font-medium text-[20px] mb-2">
             Welcome Back, {/* @ts-ignore */}
             {userName?.split(" ")[0]}&nbsp;
-            {userName?.split(" ")[1]?.length > 0 && userName?.split(" ")[1][0]}
+            {userName?.split(" ")[1]?.length > 0 && userName?.split(" ")[1][0]}.
           </p>
           {!isCloseClicked && (
             <div

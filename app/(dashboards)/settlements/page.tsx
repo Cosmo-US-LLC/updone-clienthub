@@ -344,12 +344,15 @@ const Page = () => {
       {isLoading ? (
         <RenderLoader />
       ) : transactionsData?.length == 0 ? (
-        <NoDataFound
-          isSettlement
-          title="No settlements available."
-          description={""}
-          image="/images/client-portal/payment/settlements image.webp"
-        />
+        <div className="w-full max-w-[1350px] mx-auto flex justify-center items-start h-full relative">
+          <NoDataFound
+            // isSettlement
+            title="Manage Settlements for Extra Hours."
+            // description={""}
+            description={"Sometimes, events go beyond the planned schedule. This section will allow you to review and approve any additional payments for talents who worked extra hours. Once you have any pending settlements, they will appear here."}
+            image="/images/client-portal/payment/settlements image.webp"
+          />
+        </div>
       ) : (
         <>
           <Table className="grow relative hover:bg-transparent">

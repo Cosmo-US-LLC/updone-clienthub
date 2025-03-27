@@ -114,18 +114,50 @@ const Page = ({ jobId, jobData }) => {
     }
   };
 
+  // Payment Check
+  const [releaseData, setReleaseData] = useState([]);
+  const getJobDetailsApi = async () => {
+    const body = {
+      job_id: Number(jobId),
+    };
+    try {
+      const newData = await apiRequest(
+        `/client/payment-request`,
+        {
+          method: "POST",
+          body: body,
+          headers: {
+            ...(storedData && {
+              Authorization: `Bearer ${storedData.token}`,
+            }),
+          },
+        }
+      );
+      setReleaseData(newData);
+    } catch (error) {
+      console.error("following is error: ", error);
+    }
+  };
+  
   useEffect(() => {
-    if (jobId) {
+    if (jobData?.id) {
       GetOffers();
       GetInvites();
+      getJobDetailsApi();
     }
-  }, [jobId]);
+  }, [jobData?.id]);
+
+  useEffect(() => {
+    if (jobData?.status === "completed") {
+      getJobDetailsApi();
+    }
+  }, [jobData]);
 
   const tabs = [
     {
       name: "Event Details",
       icon: <MdOutlineEventNote className="text-lg" />,
-      component: <EventDetails jobData={jobData} />,
+      component: <EventDetails jobData={jobData} releaseData={releaseData} />,
     },
     {
       name: "Offers",
