@@ -253,7 +253,7 @@ const Page = () => {
     >
       {isLoading ? (
         <RenderLoader />
-      ) : transactionsData?.length !== 0 ? (
+      ) : transactionsData?.length == 0 ? (
         <div className="h-full flex justify-center items-center flex-col gap-5">
           <Image
             width={151}

@@ -136,11 +136,7 @@ function NavbarClienthub() {
               <div className="grow px-2 flex flex-col justify-between">
                 <ul className="list-none space-y-6">
                   <Link
-                    href={
-                      user && user?.role_id == 3
-                        ? `${process.env.NEXT_PUBLIC_TALENTPRO_URL}/auth?token=${token}`
-                        : "/add-job/location"
-                    }
+                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`}
                   >
                     <button className="bg-[#350abc] text-white rounded-full px-4 py-2 font-semibold">
                       {user && user?.role_id == 3
@@ -247,7 +243,7 @@ function NavbarClienthub() {
             </div>
           </Link>
 
-          <Link href={"/add-job/location"} aria-label="Add an Event">
+          <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`} aria-label="Add an Event">
             <button
               aria-label="Add Event"
               title="Add Event"

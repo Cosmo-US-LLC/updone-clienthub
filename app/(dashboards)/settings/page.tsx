@@ -158,16 +158,16 @@ const Page = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="my-12 w-[820px]">
+        <div className="my-12 w-[820px] max-lg:px-4">
           {/* <div className='flex flex-col relative right-[292px] my-[20px] justify-start items-start ga-y-[10px]'>
               <span className='text-[#2C2240] text-[20px] leading-[26px] font-[700]'>Account</span>
               <p className='text-[#6B6B6B] leading-[24px] font-[400] text-[14px]'>Manage your Updone profile</p>
               <p></p>
             </div> */}
           {/* Full Name and Phone Number */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[28px] mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-[28px] mb-4">
             <div>
-              <label className="text-[#2C2240] text-[16px] font-[500] leading-normal">
+              <label className="text-[#2C2240] text-[14px] lg:text-[16px] font-[500] leading-normal">
                 Full Name
               </label>
               <div className="relative mt-[8px] w-full">
@@ -200,7 +200,7 @@ const Page = () => {
               )}
             </div>
             <div>
-              <label className="text-[#2C2240] text-[16px] font-[500] leading-normal">
+              <label className="text-[#2C2240] text-[14px] lg:text-[16px] font-[500] leading-normal">
                 Phone Number
               </label>
               <div className="relative mt-[8px] w-full">
@@ -236,7 +236,7 @@ const Page = () => {
 
           {/* Company Name */}
           <div className="mb-4">
-            <label className="text-[#2C2240] text-[16px] font-[500] leading-normal">
+            <label className="text-[#2C2240] text-[14px] lg:text-[16px] font-[500] leading-normal">
               Company
             </label>
             <div className="relative mt-[8px] w-full">
@@ -270,9 +270,9 @@ const Page = () => {
           <div className="mb-4">
             <div className="w-full border-b-[1px] border-[#DFDFDF] block my-8"></div>
 
-            <div className="flex !gap-[28px]">
+            <div className="flex max-lg:flex-col gap-[18px] lg:!gap-[28px]">
               <div className="relative w-full">
-                <p className="text-[#2C2240] text-[16px] font-[500] leading-normal">
+                <p className="text-[#2C2240] text-[14px] lg:text-[16px] font-[500] leading-normal">
                   Email
                 </p>
                 <p className="text-sm text-[#6B6B6B] font-[500] leading-[19px] text-[16px] mt-2">
@@ -308,13 +308,13 @@ const Page = () => {
           {/* Password Section */}
           <div
             className={`${
-              showPasswordFields && "bg-[#FFF] !mb-6 px-[20px]"
+              showPasswordFields && "bg-[#FFF] !mb-6 lg:px-[20px]"
             } mb-2 py-[40px] relative`}
           >
             <div className="flex  justify-between items-center w-full">
               {!showPasswordFields && (
                 <div
-                  className="text-sm text-[#2C2240] text-[16px] relative bottom-[6px] font-[500] leading-normal"
+                  className="text-sm text-[#2C2240] text-[14px] lg:text-[16px] relative bottom-[6px] font-[500] leading-normal"
                   onClick={() => setShowPasswordFields(!showPasswordFields)}
                 >
                   {showPasswordFields ? "" : "Password"}
@@ -332,108 +332,106 @@ const Page = () => {
             </div>
 
             {showPasswordFields && (
-              <div className="flex flex-row gap-[28px]">
-                <div className="flex flex-row gap-2">
-                  <div>
-                    <label className="text-[#2C2240] text-[16px] font-[500] leading-normal">
-                      Old Password
-                    </label>
-                    <div className="flex flex-row">
-                      <div className="flex flex-col justify-start items-center gap-3">
-                        <div className="relative mt-[7px]">
-                          <input
-                            style={{
-                              ...loginInputStyles, // Apply base styles
-                              ...(!!passwordVerificationError && {
-                                boxShadow:
-                                  "rgb(255 0 0 / 18%) 0px 0px 12px 0px",
-                                background: "#FFF5F5",
-                              }), // Only apply boxShadow when passwordVerificationError is true
-                            }}
-                            type={showPassword ? "text" : "password"} // Switch between password and text
-                            value={profile.currentPassword}
-                            onChange={(e) =>
-                              handleInputChange(
-                                "currentPassword",
-                                e.target.value
-                              )
-                            }
-                            onFocus={() => {
-                              setPasswordVerificationError(""); // Clear the error when the input is focused
-                            }}
-                            className={`defaultsearch shadow-lg ${
-                              !!passwordVerificationError &&
-                              "!border-[1px] !border-red-200"
-                            } w-[240px] pb-[20px] pt-[20px] pl-[12px] min-h-[52px] focus:outline-blue-200`}
-                            placeholder="Password*"
-                          />
+              <div className="flex flex-col lg:flex-row gap-[18px] lg:gap-[28px]">
+                <div className="w-full">
+                  <label className="text-[#2C2240] text-[14px] lg:text-[16px] font-[500] leading-normal">
+                    Old Password
+                  </label>
+                  <div className="flex flex-col max-lg:items-start lg:flex-row">
+                    <div className="flex flex-col justify-start items-center gap-3 w-full">
+                      <div className="relative mt-[7px] max-lg:w-full">
+                        <input
+                          style={{
+                            ...loginInputStyles, // Apply base styles
+                            ...(!!passwordVerificationError && {
+                              boxShadow:
+                                "rgb(255 0 0 / 18%) 0px 0px 12px 0px",
+                              background: "#FFF5F5",
+                            }), // Only apply boxShadow when passwordVerificationError is true
+                          }}
+                          type={showPassword ? "text" : "password"} // Switch between password and text
+                          value={profile.currentPassword}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "currentPassword",
+                              e.target.value
+                            )
+                          }
+                          onFocus={() => {
+                            setPasswordVerificationError(""); // Clear the error when the input is focused
+                          }}
+                          className={`defaultsearch shadow-lg ${
+                            !!passwordVerificationError &&
+                            "!border-[1px] !border-red-200"
+                          } w-full lg:w-[240px] pb-[20px] pt-[20px] pl-[12px] min-h-[52px] focus:outline-blue-200`}
+                          placeholder="Password*"
+                        />
 
-                          {/* Show/Hide password toggle icon */}
-                          <div
-                            className={`absolute inset-y-0 right-3 flex items-center cursor-pointer`}
-                            onClick={() => {
-                              setShowPassword(!showPassword);
-                            }}
-                          >
-                            {showPassword ? (
-                              <BiHide color="#9F9F9F" size={18} />
-                            ) : (
-                              <BiShow color="#9F9F9F" size={18} />
-                            )}
-                          </div>
-                        </div>
-                        <div className="!text-red-400 text-[12px] relative right-[29px] bottom-2">
-                          {!!passwordVerificationError &&
-                            "Incorrect password! Try again"}
+                        {/* Show/Hide password toggle icon */}
+                        <div
+                          className={`absolute inset-y-0 right-3 flex items-center cursor-pointer`}
+                          onClick={() => {
+                            setShowPassword(!showPassword);
+                          }}
+                        >
+                          {showPassword ? (
+                            <BiHide color="#9F9F9F" size={18} />
+                          ) : (
+                            <BiShow color="#9F9F9F" size={18} />
+                          )}
                         </div>
                       </div>
-                      {isVerifyPasswordLoading ? (
-                        <>
-                          <div className="loader_login relative top-[4px] left-[20px]"></div>
-                        </>
-                      ) : (
-                        <>
-                          {showNewPasswordFields !== true && (
-                            <div className="flex justify-start items-center">
-                              <button
-                                disabled={profile.currentPassword === ""}
-                                className={`ml-[32px] !bg-transparent bottom-[2px] hover:!bg-transparent flex justify-center cursor-pointer !text-[16px] items-center w-[100%] ${
-                                  passwordVerificationError
-                                    ? "!cursor-default !bottom-[12px]"
-                                    : "text-[#350ABC] cursor-pointer"
-                                }  !text-[#350ABC] !text-[16px] !font-[400] !leading-[31px] disabled:!text-gray-500 disabled:!cursor-not-allowed p-0 bg-transparent border-none`}
-                                onClick={() => {
-                                  verifyPassword(profile.currentPassword);
-                                }}
-                              >
-                                <span className="cursor-pointer">
-                                  {"Verify old password"}
-                                </span>
-                              </button>
-                              <p
-                                className="py-1 px-2 absolute top-2 right-2 hover:bg-[#d7cefc] text-[#5d0abc] rounded-[4px] text-[#161616] text-[14px] font-[400] cursor-pointer"
-                                onClick={() => {
-                                  setShowPasswordFields(false);
-                                  setPasswordVerificationError("");
-                                  handleInputChange("currentPassword", "");
-                                }}
-                              >
-                                <RxCross2 size={20} />
-                              </p>
-                            </div>
-                          )}
-                        </>
-                      )}
+                      <div className="!text-red-400 text-[12px] relative right-[29px] bottom-2">
+                        {!!passwordVerificationError &&
+                          "Incorrect password! Try again"}
+                      </div>
                     </div>
+                    {isVerifyPasswordLoading ? (
+                      <>
+                        <div className="loader_login relative top-[4px] left-[20px]"></div>
+                      </>
+                    ) : (
+                      <>
+                        {showNewPasswordFields !== true && (
+                          <div className="flex justify-start items-center">
+                            <button
+                              disabled={profile.currentPassword === ""}
+                              className={`lg:ml-[32px] !bg-transparent bottom-[2px] hover:!bg-transparent flex justify-center cursor-pointer !text-[16px] items-center w-[100%] ${
+                                passwordVerificationError
+                                  ? "!cursor-default !bottom-[12px]"
+                                  : "text-[#350ABC] cursor-pointer"
+                              }  !text-[#350ABC] !text-[16px] !font-[400] !leading-[31px] disabled:!text-gray-500 disabled:!cursor-not-allowed p-0 bg-transparent border-none`}
+                              onClick={() => {
+                                verifyPassword(profile.currentPassword);
+                              }}
+                            >
+                              <span className="cursor-pointer">
+                                {"Verify old password"}
+                              </span>
+                            </button>
+                            <p
+                              className="py-1 px-2 absolute top-2 right-2 hover:bg-[#d7cefc] text-[#5d0abc] rounded-[4px] text-[#161616] text-[14px] font-[400] cursor-pointer"
+                              onClick={() => {
+                                setShowPasswordFields(false);
+                                setPasswordVerificationError("");
+                                handleInputChange("currentPassword", "");
+                              }}
+                            >
+                              <RxCross2 size={20} />
+                            </p>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
                 {/* New Password Section */}
                 {showNewPasswordFields && (
                   <div>
-                    <label className="text-[#2C2240] text-[16px] font-[500] leading-normal">
+                    <label className="text-[#2C2240] text-[14px] lg:text-[16px] font-[500] leading-normal">
                       New Password
                     </label>
-                    <div className="relative w-[240px]">
+                    <div className="relative w-full lg:w-[240px]">
                       <input
                         style={{ ...loginInputStyles }}
                         type={showNewPassword ? "text" : "password"} // Toggle type between text and password
@@ -537,10 +535,10 @@ const Page = () => {
                 {/* Confirm Password Section */}
                 {showNewPasswordFields && (
                   <div>
-                    <label className="text-[#2C2240] text-[16px] font-[500] leading-normal">
+                    <label className="text-[#2C2240] text-[14px] lg:text-[16px] font-[500] leading-normal">
                       Confirm New Password
                     </label>
-                    <div className="relative w-[239px]">
+                    <div className="relative w-full lg:w-[239px]">
                       <input
                         style={{ ...loginInputStyles }}
                         type={showConfirmPassword ? "text" : "password"} // Toggle type between text and password
