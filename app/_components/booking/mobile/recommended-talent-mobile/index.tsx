@@ -207,6 +207,9 @@ const RecommendedTalentMobile = ({
             totalCount={allRecords.length}
             onLoadMore={handleLoadMore}
             loading={loading}
+            pageNo={null}
+            totalPages={null}
+            setPageNo={null}
           />
         </div>}
       
