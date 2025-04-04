@@ -241,7 +241,7 @@ function NavbarClienthub() {
                   <div onClick={toggleMenu} className="-mb-4">
                     <Link
                       href={`${process.env.NEXT_PUBLIC_BASE_URL}/`}
-                      className="pl-4 text-neutral-700 flex items-center gap-3 underline underline-offset-[2px] tracking-wide"
+                      className="pl-4 text-neutral-800 flex items-center gap-3 underline underline-offset-[2px] tracking-wide"
                     >
                       {/* text-[#774dfd] */}
                       <SquareArrowOutUpLeft className="h-4 w-4 " />

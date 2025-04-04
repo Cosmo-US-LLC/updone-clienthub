@@ -165,10 +165,20 @@ const EventDetails = ({ jobData, releaseData }) => {
 
           <div
             className={`flex items-center justify-between mt-3 border-t pt-3 relative ${
-              status === "completed" && "opacity-50 pointer-events-none"
+              // status === "completed" && "opacity-50 pointer-events-none"
+              true
             }`}
           >
-            <div onClick={()=>{}} className="flex justify-center items-center gap-[10px]">
+            <div
+              onClick={() => {
+                const phoneNumber =
+                  jobData?.invite?.worker?.user?.phone_number || "";
+                if (phoneNumber) {
+                  window.location.href = `tel:${phoneNumber}`;
+                }
+              }}
+              className="flex justify-center items-center gap-[10px]"
+            >
               <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center bg-[#774DFD]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -190,7 +200,9 @@ const EventDetails = ({ jobData, releaseData }) => {
                   Contact Number:
                 </p>
                 <p className="text-[#774DFD] text-[14px] font-[500]">
-                  {formatPhoneNumber(jobData?.invite?.worker?.user?.phone_number) || "N/A"}
+                  {formatPhoneNumber(
+                    jobData?.invite?.worker?.user?.phone_number
+                  ) || "N/A"}
                 </p>
               </div>
             </div>
@@ -199,7 +211,11 @@ const EventDetails = ({ jobData, releaseData }) => {
                 className="text-gray-500 cursor-pointer hover:text-gray-700"
                 title="Copy"
                 onClick={() =>
-                  copyToClipboard(formatPhoneNumber(jobData?.invite?.worker?.user?.phone_number))
+                  copyToClipboard(
+                    formatPhoneNumber(
+                      jobData?.invite?.worker?.user?.phone_number
+                    )
+                  )
                 }
               />
               {copiedText === "987-345-8735" && (
@@ -264,7 +280,9 @@ const EventDetails = ({ jobData, releaseData }) => {
                 disabled={releaseData?.release_status !== "release_requested"}
                 onClick={() => {
                   if (releaseData?.release_status === "release_requested") {
-                    router.push(`/events/detail/${jobData?.id}/payment-request`);
+                    router.push(
+                      `/events/detail/${jobData?.id}/payment-request`
+                    );
                   }
                 }}
                 className={`mx-auto z-[1] px-4 py-2 flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:pointer-events-none min-h-[42px] w-[200px] rounded-full ${

@@ -177,16 +177,16 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
               </div>
               <div className="flex justify-around border rounded-b-lg py-2 bg-white">
                 <div className="flex items-center justify-center gap-1">
-                  <p className="text-[14px] font-[400] text-gray-500">From</p>
+                  <p className="text-[14px] font-[400] text-gray-500">From&nbsp;</p>
                   <p className="text-[16px] font-[600]">
                     ${invite?.worker?.per_hours_rate}
                   </p>
                 </div>
                 <div className="w-[1px] bg-[#E9E9E9] "></div>
                 <div className="flex items-center justify-center gap-1">
-                  <p className="text-gray-500 text-[16px]  ">Total</p>
+                  <p className="text-gray-500 text-[14px]  ">Total&nbsp;</p>
                   <p className="text-gray-900 text-[16px] font-[600]">
-                    ${invite?.worker?.offered_price}
+                    ${invite?.worker?.total_price}
                   </p>
                 </div>
               </div>
