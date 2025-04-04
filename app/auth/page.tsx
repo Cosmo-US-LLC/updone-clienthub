@@ -43,6 +43,10 @@ function page() {
   useEffect(() => {
     console.log("res", storedData);
     // storeUser();
+    console.log("0", token);
+    console.log("1", storedData?.token);
+    console.log("1", storedData?.token == token);
+    console.log("1", storedData?.user?.id);
     if (storedData?.token && storedData?.token == token && storedData?.user?.id) {
       router.push("/");
     }
