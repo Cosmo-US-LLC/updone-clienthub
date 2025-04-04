@@ -189,7 +189,7 @@ const Page = ({ jobId, jobData }) => {
 
   return (
     <div className="h-dvh w-full bg-[#F6F9FC]">
-    <Link
+      <Link
         href={"/"}
         className="text-xs text-neutral-500 flex items-center gap-2 pt-4 px-4"
       >

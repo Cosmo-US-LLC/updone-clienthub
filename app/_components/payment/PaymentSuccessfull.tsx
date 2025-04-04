@@ -102,7 +102,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
           <div className="text-[#6B6B6B] text-[16px] font-[400] leading-[24px] text-left mb-4">
             {/* Congratulations, you’ve successfully hired a talented talent for
             your event.  */}
-            <ul className="list-disc list-inside">
+            <ul className="list-disc list-outside pl-6">
               <li>We have notified the Talent that they’ve been hired.</li>
               <li>You can contact the Talent directly.</li>
             </ul>
@@ -122,7 +122,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
                 Payment Successful!
               </span>
             </div>
-            <span>
+            <span className="max-lg:hidden">
               <svg
                 width="78"
                 height="78"
@@ -143,7 +143,7 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
             <button
               onClick={handleRedirect}
               disabled={!jobId}
-              className="text-[14px] font-[400] disabled:pointer-events-none disabled:opacity-70 py-[16px] flex items-center text-[#fff] px-[60px] rounded-[4px] bg-[#350ABC] transition-transform duration-150 ease-in-out transform active:scale-95 grow_ellipse"
+              className="text-[14px] font-[400] whitespace-nowrap disabled:pointer-events-none disabled:opacity-70 py-[16px] flex items-center text-[#fff] px-[60px] rounded-[4px] bg-[#350ABC] transition-transform duration-150 ease-in-out transform active:scale-95 grow_ellipse"
             >
               View Contact Details{" "}
               <span className="ml-2">

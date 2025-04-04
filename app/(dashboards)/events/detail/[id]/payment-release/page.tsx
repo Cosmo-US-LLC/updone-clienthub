@@ -14,6 +14,8 @@ import {
 } from "@/app/lib/store/features/bookingSlice";
 import { useDispatch } from "react-redux";
 import { useParams } from "next/navigation";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 
 const Page = () => {
   const params = useParams();
@@ -53,6 +55,13 @@ const Page = () => {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
+      <Link
+        href={"/events/detail/" + params?.id}
+        className="text-xs text-neutral-500 flex items-center gap-2 pt-4 px-4 lg:hidden"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back to Event Details
+      </Link>
       {isLoading ? (
         <Loader />
       ) : (

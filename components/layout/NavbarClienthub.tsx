@@ -22,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "../ui/skeleton";
-import { ChevronDown, Settings } from "lucide-react";
+import { ChevronDown, Settings, SquareArrowOutUpLeft } from "lucide-react";
 import { setEmpty as setAuthEmpty } from "@/app/lib/store/features/authSlice";
 import { setEmpty as setJobEmpty } from "@/app/lib/store/features/jobCreateSlice";
 import { setEmpty as setBookingEmpty } from "@/app/lib/store/features/bookingSlice";
@@ -169,11 +169,6 @@ function NavbarClienthub() {
                   <li onClick={toggleMenu}>
                     <Link href="/payment-methods">Payment Methods</Link>
                   </li>
-                  <li onClick={toggleMenu}>
-                    <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/`}>
-                      Go to Updone
-                    </Link>
-                  </li>
                   <li>
                     <button
                       onClick={toggleComingAccordion}
@@ -243,10 +238,19 @@ function NavbarClienthub() {
                 </ul>
 
                 <div className="mt-4 space-y-8">
+                  <div onClick={toggleMenu} className="-mb-4">
+                    <Link
+                      href={`${process.env.NEXT_PUBLIC_BASE_URL}/`}
+                      className="pl-4 flex items-center gap-3 underline underline-offset-[2px] tracking-wide"
+                    >
+                      <SquareArrowOutUpLeft className="h-4 w-4 text-[#774dfd]" />
+                      Go To Updone
+                    </Link>
+                  </div>
                   {user != false && (
                     <div className="space-y-4">
                       <div className="w-full pl-2 py-2 rounded-lg flex items-center gap-3">
-                        <Avatar>
+                        <Avatar className="shadow">
                           <AvatarImage src={user?.profile_pic} />
                           <AvatarFallback>
                             {`

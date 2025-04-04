@@ -7,8 +7,9 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import { useError } from "@/app/lib/context/ErrorProvider";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import LoginToUnlock from "@/app/_components/booking/mobile/talent/LoginToUnlock";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 function AdditionalPay({
   additionalHours,
@@ -47,7 +48,7 @@ function AdditionalPay({
 }
 
 function Page() {
-    const params = useParams();
+  const params = useParams();
   const pathname = usePathname();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -171,7 +172,6 @@ function Page() {
   //   return <LoginToUnlock isClient={true} />;
   // }
 
-  
   if (loading || !loggedIn) {
     if (!loggedIn && !loading) {
       const isUpdoneDomain = window.location.hostname.includes("updone");
@@ -189,7 +189,7 @@ function Page() {
   if (
     data?.job_status !== "completed" ||
     (data?.release_status !== "release_requested" &&
-    data?.release_status !== "release_approved")
+      data?.release_status !== "release_approved")
   ) {
     return (
       <div className="flex flex-col h-screen">
@@ -218,6 +218,13 @@ function Page() {
         <div
           className={`lg:w-[51%] lg:mt-4 lg:mx-auto flex flex-col h-[calc(100dvh-60px)] rounded-xl overflow-hidden bg-[#F3F0FF]`}
         >
+          <Link
+            href={"/events/detail/" + params?.id}
+            className="text-xs text-neutral-500 flex items-center gap-2 pt-4 px-4 lg:hidden"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Back to Event Details
+          </Link>
           <div
             style={{
               scrollbarWidth: "none", // For Firefox
