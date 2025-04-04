@@ -192,17 +192,17 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
               </div>
             </div>
           ))}
-          {jobData?.status === "open" && (
+          {/* {jobData?.status === "open" && (
             <div className="flex justify-center">
               <button
                 onClick={handleInviteClick}
                 className="flex gap-2 bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
               >
-                {/* Invite talent to job */}
                 <h2>+</h2> Invite More Talent
               </button>
             </div>
-          )}
+          )} */}
+          {/* Invite talent to job */}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center text-center mt-12">
