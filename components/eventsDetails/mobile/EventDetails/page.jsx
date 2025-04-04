@@ -165,8 +165,8 @@ const EventDetails = ({ jobData, releaseData }) => {
 
           <div
             className={`flex items-center justify-between mt-3 border-t pt-3 relative ${
-              // status === "completed" && "opacity-50 pointer-events-none"
-              true
+              status === "completed" && "opacity-50 pointer-events-none"
+              // true
             }`}
           >
             <div
