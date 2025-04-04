@@ -168,7 +168,7 @@ const EventDetails = ({ jobData, releaseData }) => {
               status === "completed" && "opacity-50 pointer-events-none"
             }`}
           >
-            <div className="flex justify-center items-center gap-[10px]">
+            <div onClick={()=>{}} className="flex justify-center items-center gap-[10px]">
               <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center bg-[#774DFD]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

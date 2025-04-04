@@ -271,8 +271,8 @@ const Offers = ({
         <DialogContent className="max-w-[80vw] rounded-2xl space-y-5">
           <DialogHeader>
             <DialogTitle className="text-2xl">Offer Breakdown</DialogTitle>
-            <DialogDescription>
-              Lobortis posuere in leo pretium lectus commodo nam convallis.
+            <DialogDescription hidden>
+              {/* Lobortis posuere in leo pretium lectus commodo nam convallis. */}
             </DialogDescription>
           </DialogHeader>
 
@@ -300,8 +300,8 @@ const Offers = ({
               onClick={() => payPaymentConfirm()}
               className="rounded-full bg-[#350abc] text-white px-4 py-2 flex gap-2 items-center"
             >
-              <ArrowRight className="w-4 h-4 text-white" />
               Hire Now
+              <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </div>
         </DialogContent>
