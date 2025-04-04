@@ -249,7 +249,7 @@ const DynamicCardTablePage = () => {
                   the way you want it. It's quick, easy, and hassle-free!
                 </p>
                 <Link
-                  href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`}
+                  href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location?client=true`}
                   className="cursor-pointer bg-[black] rounded-full py-2 px-4 w-fit mt-4 2xl:mt-8 transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 active:shadow-inner"
                 >
                   <p className="text-[16px] text-[white]">Book a Talent Now</p>
@@ -307,7 +307,7 @@ const DynamicCardTablePage = () => {
               <button
                 onClick={() =>
                   router.push(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location?client=true`
                   )
                 }
                 className="mt-[40px] bg-[#774DFD] py-[16px] text-[#F3F0FF] text-[18px] leading-[30px] flex justify-center items-center gap-2 tracking-[ -0.36px] font-[400] px-[24px] rounded-[4px]"

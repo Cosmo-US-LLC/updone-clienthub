@@ -27,9 +27,9 @@ function page() {
         body: {},
       }).then((res) => {
         console.log(res?.user);
-        dispatch(setAuth({ token, user: res?.user }));
         Cookies.set("authToken", token);
         Cookies.set("authData", JSON.stringify(res?.user));
+        dispatch(setAuth({ token, user: res?.user }));
         // router.push("/")
       });
     }

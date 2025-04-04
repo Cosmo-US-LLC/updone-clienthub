@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
 
 const Page = () => {
   const [methodsData, setMethodsData] = useState<any>(null);
@@ -62,7 +63,7 @@ const Page = () => {
 
   const deletePaymentMethod = async (id: string) => {
     try {
-        setLoadingDelete(true);
+      setLoadingDelete(true);
       const response = await apiRequest("/stripe/payment-methods", {
         method: "DELETE",
         headers: {
@@ -70,88 +71,152 @@ const Page = () => {
           ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
         },
         body: {
-            payment_method_id: id,
+          payment_method_id: id,
         },
       });
       fetchOffers();
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-        setLoadingDelete(false);
+      setLoadingDelete(false);
     }
   };
 
   return (
-    <div className="h-full max-lg:hidden flex flex-col max-lg:px-8 max-lg:py-8">
-      {isLoading ? (
-        <div className="py-20">
-          <RenderLoader />
-        </div>
-      ) : methodsData?.length == 0 ? (
-        <div className="h-full flex justify-center items-center flex-col">
-          <Image
-            width={151}
-            height={151}
-            alt=""
-            src="/images/client-portal/payment/no-payment.svg"
-          />
-          <p className="text-[#000000] text-[34px] leading-[32px] font-[300]">
-            No Payment Methods
-          </p>
-          <p className="text-neutral-600 text-md py-4">
-            Save a payment method at checkout and it will appear here.
-          </p>
-        </div>
-      ) : (
-        <>
-          <Table className="grow relative hover:bg-transparent">
-            <TableHeader className="sticky -top-[2] z-10 bg-[#f6f9fc]">
-              <TableRow>
-                <TableHead>Card</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Date Added</TableHead>
-                <TableHead>Date Expires</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="overflow-y-auto bg-white">
-              {methodsData?.map((row: any, index: any) => (
-                <TableRow key={index} className="text-[#2C2240]">
-                  {/* Card Info */}
-                  <TableCell className="flex flex-row gap-4 items-center py-4">
-                    <span>**** **** **** {row?.card?.last4}</span>
-                    <span>{getIcon(row?.card?.brand)}</span>
-                  </TableCell>
-                  {/* Amount */}
-                  <TableCell className="!py-4 capitalize">
-                    {row?.card?.brand}
-                  </TableCell>
-                  {/* Date Added */}
-                  <TableCell>
-                    {new Date(row?.created * 1000).toLocaleDateString("en-US")}
-                  </TableCell>
-                  {/* Date Expires */}
-                  <TableCell>
-                    {row?.card?.exp_month}/{row?.card?.exp_year}
-                  </TableCell>
-                  {/* Actions */}
-                  <TableCell>
-                    <Button
-                      onClick={() => deletePaymentMethod(row?.id)}
-                      disabled={loadingDelete}
-                      variant={"destructive"}
-                      className="!py-1 !h-fit !text-white hover:bg-red-600 disabled:opacity-50"
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
+    <>
+      <div className="h-full max-lg:hidden flex flex-col max-lg:px-8 max-lg:py-8">
+        {isLoading ? (
+          <div className="py-20">
+            <RenderLoader />
+          </div>
+        ) : methodsData?.length == 0 ? (
+          <div className="h-full flex justify-center items-center flex-col">
+            <Image
+              width={151}
+              height={151}
+              alt=""
+              src="/images/client-portal/payment/no-payment.svg"
+            />
+            <p className="text-[#000000] text-[34px] leading-[32px] font-[300]">
+              No Payment Methods
+            </p>
+            <p className="text-neutral-600 text-md py-4">
+              Save a payment method at checkout and it will appear here.
+            </p>
+          </div>
+        ) : (
+          <>
+            <Table className="grow relative hover:bg-transparent">
+              <TableHeader className="sticky -top-[2] z-10 bg-[#f6f9fc]">
+                <TableRow>
+                  <TableHead>Card</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Date Added</TableHead>
+                  <TableHead>Date Expires</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </>
-      )}
-    </div>
+              </TableHeader>
+              <TableBody className="overflow-y-auto bg-white">
+                {methodsData?.map((row: any, index: any) => (
+                  <TableRow key={index} className="text-[#2C2240]">
+                    {/* Card Info */}
+                    <TableCell className="flex flex-row gap-4 items-center py-4">
+                      <span>**** **** **** {row?.card?.last4}</span>
+                      <span>{getIcon(row?.card?.brand)}</span>
+                    </TableCell>
+                    {/* Amount */}
+                    <TableCell className="!py-4 capitalize">
+                      {row?.card?.brand}
+                    </TableCell>
+                    {/* Date Added */}
+                    <TableCell>
+                      {new Date(row?.created * 1000).toLocaleDateString(
+                        "en-US"
+                      )}
+                    </TableCell>
+                    {/* Date Expires */}
+                    <TableCell>
+                      {row?.card?.exp_month}/{row?.card?.exp_year}
+                    </TableCell>
+                    {/* Actions */}
+                    <TableCell>
+                      <Button
+                        onClick={() => deletePaymentMethod(row?.id)}
+                        disabled={loadingDelete}
+                        variant={"destructive"}
+                        className="!py-1 !h-fit !text-white hover:bg-red-600 disabled:opacity-50"
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
+      </div>
+      <div className="h-full lg:hidden flex flex-col max-lg:px-4 max-lg:py-4 gap-2">
+        <Link href={"/"} className="text-xs text-neutral-500 flex items-center gap-2">
+          <ChevronLeft className="h-4 w-4" /> 
+          Back to My Events
+        </Link>
+        <h2 className="text-[18px] font-[500]">Payment Methods</h2>
+        {isLoading ? (
+          <div className="py-20">
+            <RenderLoader />
+          </div>
+        ) : methodsData?.length == 0 ? (
+          <div className="h-full flex justify-center items-center flex-col">
+            <Image
+              width={151}
+              height={151}
+              alt=""
+              src="/images/client-portal/payment/no-payment.svg"
+            />
+            <p className="text-[#000000] text-[34px] leading-[32px] font-[300]">
+              No Payment Methods
+            </p>
+            <p className="text-neutral-600 text-md py-4">
+              Save a payment method at checkout and it will appear here.
+            </p>
+          </div>
+        ) : (
+          methodsData?.map((row: any, index: any) => (
+            <div
+              key={index}
+              className="w-full flex flex-col gap-2 border bg-white p-4 rounded-md shadow-md mb-4"
+            >
+              <div className="flex flex-row gap-4 items-center">
+                <span>**** **** **** {row?.card?.last4}</span>
+                <span>{getIcon(row?.card?.brand)}</span>
+              </div>
+              <div className="grid grid-cols-3 gap-4 items-center pt-2">
+                {/* <span>{row?.card?.brand}</span> */}
+                <div>
+                  <span className="text-xs text-neutral-500">Saved At:</span>
+                  <br />
+                  {new Date(row?.created * 1000).toLocaleDateString("en-US")}
+                </div>
+                <div>
+                  <span className="text-xs text-neutral-500">Expires At:</span>
+                  <br />
+                  {row?.card?.exp_month}/{row?.card?.exp_year}
+                </div>
+                <Button
+                  onClick={() => deletePaymentMethod(row?.id)}
+                  disabled={loadingDelete}
+                  variant={"destructive"}
+                  className="!py-1 !h-fit !text-white hover:bg-red-600 disabled:opacity-50"
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </>
   );
 };
 

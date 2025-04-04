@@ -1,24 +1,15 @@
+// import Loader from "@/components/Loader";
+import { LoaderCircle } from "lucide-react";
 import React from "react";
-import Loader from "../../../ui/loader";
 
-interface PaginationProps {
-  currentCount: number;
-  totalCount: number;
-  onLoadMore: () => void;
-  loading: boolean;
-  pageNo: any;
-  totalPages: any;
-  setPageNo: any;
-}
-
-const PaginationMobile: React.FC<PaginationProps> = ({
+const PaginationMobile = ({
   currentCount,
   totalCount,
+  totalPages,
+  pageNo,
+  setPageNo,
   onLoadMore,
   loading,
-  pageNo,
-  totalPages,
-  setPageNo,
 }) => {
   const getRemainingCount = () => {
     return Math.max(0, totalCount - currentCount);
@@ -27,24 +18,21 @@ const PaginationMobile: React.FC<PaginationProps> = ({
   const getButtonText = () => {
     const remaining = getRemainingCount();
     if (remaining <= 12) {
-      return `Load ${remaining} more`;
+      // ${remaining}
+      return `Load ${remaining} More`;
     }
     return "Load 12 more";
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center mt-4">
-        <Loader />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return <div className="h-[200px]"><Loader /></div>;
+  // }
 
-  if (totalCount === 0) {
+  if (totalPages < 2) {
     return null;
   }
 
-  if (currentCount >= totalCount) {
+  if (pageNo >= totalPages) {
     return (
       <div className="flex flex-col items-center pt-4 pb-14">
         <p className="text-[#350ABC] text-center font-medium bg-white px-6 py-4 rounded-md shadow-md text-[16px]">
@@ -58,9 +46,10 @@ const PaginationMobile: React.FC<PaginationProps> = ({
     <div className="flex flex-col items-end px-8 pt-4 pb-14">
       <button
         onClick={onLoadMore}
-        className="bg-white text-[#350ABC] px-6 py-4 rounded-md shadow-md hover:shadow-lg transition-shadow duration-200 text-[16px]"
+        className="bg-white text-[#350ABC] px-6 py-4 disabled:opacity-50 flex items-center rounded-md shadow-md hover:shadow-lg transition-shadow duration-200 text-[16px]"
         disabled={loading}
       >
+        {loading && <><LoaderCircle className="animate-spin w-5 h-5" />&nbsp;&nbsp;</>}
         {getButtonText()}
       </button>
     </div>

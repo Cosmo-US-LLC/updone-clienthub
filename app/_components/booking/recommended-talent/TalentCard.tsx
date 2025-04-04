@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useSelector } from "react-redux";
 import { RootState } from "../../../lib/store/store";
 import GalleryModal from "../../ui/gallery";
-import { Camera } from "lucide-react";
+import { Camera, Eye } from "lucide-react";
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import Cookies from "js-cookie";
 
@@ -84,7 +84,7 @@ const TalentCard = ({
       }`}
     >
       <div className="flex w-[100%] flex-row gap-6">
-        <>{console.log(talent)}</>
+        {/* <>{console.log(talent)}</> */}
         <div className="flex flex-col items-center relative">
           <Image
             onClick={(event) => {
@@ -114,7 +114,10 @@ const TalentCard = ({
             </span>
           </div> */}
           <div className="absolute bottom-2 right-1 bg-black/40 text-white stroke-white px-1.5 py-px rounded-lg shadow text-[10px] w-fit h-fit flex items-center gap-1">
-            {talent?.gallery?.length > 1 ? ("+"+(talent?.gallery?.length - 1)) : ""} <Camera className="w-3 h-3 stroke-black/40 fill-white" />
+            {talent?.gallery?.length > 1
+              ? "+" + (talent?.gallery?.length - 1)
+              : ""}{" "}
+            <Camera className="w-3 h-3 stroke-black/40 fill-white" />
           </div>
         </div>
         {/* Reusable Modal Component */}
@@ -164,31 +167,18 @@ const TalentCard = ({
                   ""
                 )}
               </div>
-              <div className={"col-span-2 flex items-center justify-end font-[400] whitespace-nowrap text-sm text-neutral-600 " + (isSelected ? "text-white" : "text-[#2C2240]")}>
+              <div
+                className={
+                  "max-lg:hidden col-span-2 flex items-center justify-end font-[400] whitespace-nowrap text-sm text-neutral-600 " +
+                  (isSelected ? "text-white" : "text-[#2C2240]")
+                }
+              >
                 Last seen{" "}
                 {talent?.last_active
                   ? `${timeAgo(talent?.last_active)}`
                   : "weeks ago"}
               </div>
-            </div>
-            <div className="text-center flex justify-between w-full items-center font-bold text-lg mb-1">
-              <div className="text-center text-[14px] font-normal text-[#989898] flex gap-2">
-              <Image
-                  src={`/images/gallery/${isSelected ? "location-white.svg" : "location.svg"
-                    }`}
-                  alt="location-svg"
-                  width={16}
-                  height={16}
-                />{" "}
-                <span
-                  className={`flex justify-start items-center !text-[16px] !font-[400] ${
-                    isSelected ? "text-white" : "text-[#00000080]"
-                  } cursor-pointer`}
-                >
-                  {talent?.city}
-                </span>
-              </div>
-              <div className="col-span-2 flex items-center justify-end">
+              <div className="lg:hidden col-span-2 flex items-center justify-end">
                 <div className="relative bottom-[2px]">
                   <svg
                     className="w-4 h-4 text-[#F79809] me-1"
@@ -209,12 +199,57 @@ const TalentCard = ({
                 </p>
               </div>
             </div>
+            <div className="text-center flex justify-between w-full items-center font-bold text-lg mb-1">
+              <div className="text-center text-[14px] font-normal text-[#989898] flex gap-2">
+              <Image
+                  src={`/images/gallery/${isSelected ? "location-white.svg" : "location.svg"
+                    }`}
+                  alt="location-svg"
+                  width={16}
+                  height={16}
+                />{" "}
+                <span
+                  className={`flex justify-start items-center !text-[16px] !font-[400] ${
+                    isSelected ? "text-white" : "text-[#00000080]"
+                  } cursor-pointer`}
+                >
+                  {talent?.city}
+                </span>
+              </div>
+              <div className="col-span-2 flex items-center justify-end">
+                <div className="max-lg:hidden relative bottom-[2px]">
+                  <svg
+                    className="w-4 h-4 text-[#F79809] me-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 22 20"
+                  >
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                  </svg>
+                </div>
+                <p
+                  className={`max-lg:hidden ms-1 text-[14px] font-normal text-black ${
+                    isSelected ? "text-white" : "text-[#2C2240]"
+                  }`}
+                >
+                  {parseFloat(talent?.rating).toFixed(1)}
+                </p>
+                <span
+                  className={`lg:hidden text-[16px] font-[400] leading-[28px] ${
+                    isSelected ? "text-white" : "text-[#6B6B6B]"
+                  }`}
+                >
+                  {talent?.total_jobs_count} Jobs
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-between items-center mt-2 w-full">
             <div className="flex items-center ">
               <p
-                className={`leading-[24px] ${
+                className={`max-lg:hidden leading-[24px] ${
                   isSelected ? "text-white" : "text-[#989898]"
                 } text-[14px] font-normal inline-flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-sm`}
               >
@@ -251,9 +286,21 @@ const TalentCard = ({
                 </span>
                 Last job was on {talent?.last_job}
               </p>
+              <p
+                className={`lg:hidden leading-[24px] ${
+                  isSelected ? "text-white" : "text-[#989898]"
+                } text-[14px] font-normal inline-flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-sm`}
+              >
+                <span className="mr-2 flex-shrink-0">
+                  <Eye className={`w-4 h-4 text ${isSelected ? "text-white" : "text-[#2C2240]"}`} />
+                </span>
+                Last seen {talent?.last_active
+                  ? `${timeAgo(talent?.last_active)}`
+                  : "weeks ago"}
+              </p>
             </div>
             <span
-              className={`text-[16px] font-[400] leading-[28px] ${
+              className={`max-lg:hidden text-[16px] font-[400] leading-[28px] ${
                 isSelected ? "text-white" : "text-[#6B6B6B]"
               }`}
             >

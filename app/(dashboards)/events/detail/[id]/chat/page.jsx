@@ -168,7 +168,8 @@ function page() {
           </Avatar>
           <div className="pl-1">
             <div className="text-xl leading-tight">
-              {jobData?.invite?.worker?.full_name || "N/A"} - {jobData?.invite?.id}
+              {jobData?.invite?.worker?.full_name || "N/A"}
+               {/* - {jobData?.invite?.id} */}
               <br />
             </div>
             <div className="font-normal leading-tight text-sm text-neutral-600">

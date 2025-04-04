@@ -247,9 +247,9 @@ const Offers = ({
       ) : (
         <div className="flex flex-col items-center justify-center text-center mt-12">
           <Image
-            src="/illustration-no-offers.svg"
-            width={220}
-            height={220}
+            src="/images/illustration-no-offers.png"
+            width={320}
+            height={295}
             alt="No Offers"
           />
 

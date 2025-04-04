@@ -30,7 +30,7 @@ const FindATalent = () => {
       <button
         onClick={() =>
           router.push(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/add-job?step=event-location`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location?client=true`
           )
         }
         className=" bg-[#350ABC] rounded-full py-4 px-6  text-[#F3F0FF] text-[18px] leading-[26px] flex justify-center items-center gap-2 tracking-[ -0.36px] font-[400] "

@@ -283,7 +283,7 @@ function ChatContainer({ job, selectedOffer }) {
                   sendMessage();
                 }
               }}
-              className="!h-[38px] w-full bg-[#FFEFD7] !text-[12px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl"
+              className="!h-[38px] w-full bg-[#FFEFD7] !text-[16px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl"
               placeholder="Add your comment here..."
             />
             <div onClick={sendMessage}>

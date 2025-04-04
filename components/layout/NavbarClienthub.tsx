@@ -28,7 +28,7 @@ import { setEmpty as setJobEmpty } from "@/app/lib/store/features/jobCreateSlice
 import { setEmpty as setBookingEmpty } from "@/app/lib/store/features/bookingSlice";
 import { setEmpty as setStaffEmpty } from "@/app/lib/store/features/staffSlice";
 import { FiLogOut } from "react-icons/fi";
-import { PiUserLight } from "react-icons/pi";
+import { PiHandCoins, PiUserLight } from "react-icons/pi";
 import Link from "next/link";
 import { apiRequest } from "@/app/lib/services";
 import { SidebarTrigger } from "../ui/sidebar";
@@ -44,6 +44,9 @@ import {
 } from "@/components/ui/sheet";
 import { LuLogOut } from "react-icons/lu";
 import { BsPlusLg } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
+import { MdOutlinePayment, MdOutlineReviews } from "react-icons/md";
+import { IoIosStarOutline } from "react-icons/io";
 
 function NavbarClienthub() {
   const router = useRouter();
@@ -51,6 +54,7 @@ function NavbarClienthub() {
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isComingAccordionOpen, setIsComingAccordionOpen] = useState(true);
 
   const user = storedData?.user;
   const token = storedData?.token;
@@ -59,6 +63,8 @@ function NavbarClienthub() {
     setIsOpen(!isOpen);
     console.log(!isOpen);
   };
+  const toggleComingAccordion = () =>
+    setIsComingAccordionOpen(!isComingAccordionOpen);
 
   useEffect(() => {
     const authData = Cookies.get("authData");
@@ -136,7 +142,7 @@ function NavbarClienthub() {
               <div className="grow px-2 flex flex-col justify-between">
                 <ul className="list-none space-y-6">
                   <Link
-                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`}
+                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location?client=true`}
                   >
                     <button className="bg-[#350abc] text-white rounded-full px-4 py-2 font-semibold">
                       {user && user?.role_id == 3
@@ -148,7 +154,7 @@ function NavbarClienthub() {
                   <li onClick={toggleMenu}>
                     <Link href="/">My Events</Link>
                   </li>
-                  <li onClick={toggleMenu}>
+                  {/* <li onClick={toggleMenu}>
                     <Link href="/">Payments</Link>
                   </li>
                   <li onClick={toggleMenu}>
@@ -156,12 +162,83 @@ function NavbarClienthub() {
                   </li>
                   <li onClick={toggleMenu}>
                     <Link href="/">Reviews</Link>
+                  </li> */}
+                  <li onClick={toggleMenu}>
+                    <Link href="/settings">Account Settings</Link>
                   </li>
                   <li onClick={toggleMenu}>
-                    <Link href="/">Account Settings</Link>
+                    <Link href="/payment-methods">Payment Methods</Link>
                   </li>
                   <li onClick={toggleMenu}>
-                    <Link href="/">Payment Methods</Link>
+                    <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/`}>
+                      Go to Updone
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={toggleComingAccordion}
+                      className="w-full flex  items-center justify-between bg-[#ececec] px-4 py-2 rounded-full text-left font-medium text-[#857E7E]"
+                    >
+                      <Image
+                        src={"/images/comingsoon.png"}
+                        alt="darrow"
+                        width={20}
+                        height={20}
+                        className=""
+                      />
+                      <p className="mr-4">Coming Soon</p>
+                      <Image
+                        src={"/images/coming-down.svg"}
+                        alt="darrow"
+                        width={20}
+                        height={20}
+                        className={` ml-1 transition-transform duration-500 ease-in-out ${
+                          isComingAccordionOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    <div
+                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                        isComingAccordionOpen ? "max-h-[200px]" : "max-h-0"
+                      }`}
+                    >
+                      <div className="mt-2 space-y-2 px-4">
+                        <SheetClose asChild>
+                          <div className="flex">
+                            <MdOutlinePayment
+                              className="pt-1 h-8 w-6"
+                              color="#BDBDBD"
+                            />
+                            <button className="text-[#929292] w-full p-2 ml-4 rounded-full text-left text-[14px]">
+                              Payments
+                            </button>
+                          </div>
+                        </SheetClose>
+                        <SheetClose asChild>
+                          <div className="flex">
+                            <PiHandCoins
+                              className="pt-1 h-8 w-6"
+                              color="#BDBDBD"
+                            />
+                            <button className="text-[#929292] w-full p-2 ml-4 rounded-full text-left text-[14px]">
+                              Settlements
+                            </button>
+                          </div>
+                        </SheetClose>
+                        <SheetClose asChild>
+                          <div className="flex">
+                            <IoIosStarOutline
+                              className="pt-1 h-8 w-6"
+                              color="#BDBDBD"
+                            />
+                            <button className="text-[#929292] w-full p-2 ml-4 rounded-full text-left text-[14px]">
+                              Reviews
+                            </button>
+                          </div>
+                        </SheetClose>
+                      </div>
+                    </div>
                   </li>
                 </ul>
 
@@ -243,7 +320,10 @@ function NavbarClienthub() {
             </div>
           </Link>
 
-          <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`} aria-label="Add an Event">
+          <Link
+            href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location?client=true`}
+            aria-label="Add an Event"
+          >
             <button
               aria-label="Add Event"
               title="Add Event"
@@ -266,7 +346,7 @@ function NavbarClienthub() {
             <div>Go To Updone</div>
           </Link>
           <Link
-            href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location`}
+            href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location?client=true`}
             className={`${
               // !scrollBackground && pathName === "/"
               // `!ml-[22px] bg-white hover:bg-[#EBE6FF] rounded-full  text-black  !normal-case px-[20px] py-[12px] text-[14px] font-[600] leading-[150%] transition-colors duration-300 delay-150 `

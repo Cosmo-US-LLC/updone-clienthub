@@ -70,9 +70,9 @@ const EventDetails = ({ jobData, releaseData }) => {
           status === "completed" && "opacity-50 pointer-events-none"
         }`}
       >
-        <h2 className="text-[16px] font-[300] text-[#161616] leading-[0.7]">
+        {/* <h2 className="text-[16px] font-[300] text-[#161616] leading-[0.7]">
           Event Details
-        </h2>
+        </h2> */}
         <span
           className={`flex items-center text-[14px] font-medium px-3 py-1 rounded-full capitalize ${
             status === "assigned"
@@ -270,7 +270,7 @@ const EventDetails = ({ jobData, releaseData }) => {
                 className={`mx-auto z-[1] px-4 py-2 flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:pointer-events-none min-h-[42px] w-[200px] rounded-full ${
                   releaseData?.release_status === "release_requested"
                     ? "bg-[#350ABC]"
-                    : "bg-[#F3F0FF]"
+                    : "bg-[#350ABC] opacity-50"
                 } `}
               >
                 <p

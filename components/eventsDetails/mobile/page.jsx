@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { apiRequest } from "@/app/lib/services";
+import { ChevronLeft } from "lucide-react";
 
 const EventDetails = dynamic(() => import("./EventDetails/page"), {
   ssr: false,
@@ -121,24 +122,21 @@ const Page = ({ jobId, jobData }) => {
       job_id: Number(jobId),
     };
     try {
-      const newData = await apiRequest(
-        `/client/payment-request`,
-        {
-          method: "POST",
-          body: body,
-          headers: {
-            ...(storedData && {
-              Authorization: `Bearer ${storedData.token}`,
-            }),
-          },
-        }
-      );
+      const newData = await apiRequest(`/client/payment-request`, {
+        method: "POST",
+        body: body,
+        headers: {
+          ...(storedData && {
+            Authorization: `Bearer ${storedData.token}`,
+          }),
+        },
+      });
       setReleaseData(newData);
     } catch (error) {
       console.error("following is error: ", error);
     }
   };
-  
+
   useEffect(() => {
     if (jobData?.id) {
       GetOffers();
@@ -190,28 +188,37 @@ const Page = ({ jobId, jobData }) => {
   const [activeTab, setActiveTab] = useState(tabs[0].name);
 
   return (
-    <div className="flex flex-col items-center px-4 py-4 gap-4 h-dvh w-full bg-[#F6F9FC]">
-      <div className="flex items-center justify-between bg-[#FFF] rounded-full p-1 w-full shadow-sm">
-        {tabs.map((tab, index) => (
-          <button
-            key={index}
-            onClick={() => setActiveTab(tab.name)}
-            className={`flex items-center gap-2 px-4 py-[6px] text-[14px] font-[400] text-center rounded-full transition-all whitespace-nowrap ${
-              activeTab === tab.name
-                ? "bg-[#EBE6FF] text-[#774DFD] font-[500] border border-[#774DFD]"
-                : "text-[#2C2240] hover:text-purple-600"
-            }`}
-          >
-            {activeTab === tab.name && <span>{tab.icon}</span>}
-            {tab.name}&nbsp;
-            {/* {index == 1 && <div className="ml-1 w-4 h-4 rounded-full bg-red-500 text-xs text-white text-center">{offersData?.length}</div>} */}
-            {index == 1 && <>({offersData?.length})</>}
-          </button>
-        ))}
-      </div>
+    <div className="h-dvh w-full bg-[#F6F9FC]">
+    <Link
+        href={"/"}
+        className="text-xs text-neutral-500 flex items-center gap-2 pt-4 px-4"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back to My Events
+      </Link>
+      <div className="flex flex-col items-center px-4 pb-4 pt-2 gap-4">
+        <div className="flex items-center justify-between bg-[#FFF] rounded-full p-1 w-full shadow-sm">
+          {tabs.map((tab, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveTab(tab.name)}
+              className={`flex items-center gap-2 px-4 py-[6px] text-[14px] font-[400] text-center rounded-full transition-all whitespace-nowrap ${
+                activeTab === tab.name
+                  ? "bg-[#EBE6FF] text-[#774DFD] font-[500] border border-[#774DFD]"
+                  : "text-[#2C2240] hover:text-purple-600"
+              }`}
+            >
+              {activeTab === tab.name && <span>{tab.icon}</span>}
+              {tab.name}&nbsp;
+              {/* {index == 1 && <div className="ml-1 w-4 h-4 rounded-full bg-red-500 text-xs text-white text-center">{offersData?.length}</div>} */}
+              {index == 1 && <>({offersData?.length})</>}
+            </button>
+          ))}
+        </div>
 
-      <div className="w-full">
-        {tabs.find((tab) => tab.name === activeTab)?.component}
+        <div className="w-full">
+          {tabs.find((tab) => tab.name === activeTab)?.component}
+        </div>
       </div>
     </div>
   );

@@ -17,9 +17,62 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import Loading from "@/app/loading";
 import { apiRequest } from "@/app/lib/services";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+// import InviteMoreTalents from "./InviteMoreTalents";
+// import { apiRequest } from "@/app/lib/services";
+// import { selectAuth } from "@/app/lib/store/features/authSlice";
+// import { useAppSelector } from "@/app/lib/store/hooks";
+import { Loader } from "@/app/_components/ui/dashboard-loader";
+import InviteMoreTalents from "@/app/_components/booking/job-detail/components/InviteMoreTalents";
+import InviteTalentMobile from "@/app/_components/booking/job-detail/components/InviteTalentMobile";
 
 const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
+  const [inviteMore, setInviteMore] = useState(false);
+  const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  const handleInviteClick = () => {
+    setInviteMore(true);
+  };
+
+  const handleInviteSelected = () => {
+    // console.log(selectedTalentsLocal);
+    inviteMoreTalentApi();
+  };
+
+  const inviteMoreTalentApi = async () => {
+    setLoading(true);
+    try {
+      const body = {
+        job_id: parseInt(jobData?.id),
+        invited_workers: selectedTalentsLocal?.map((talent) => {
+          return talent.id;
+        }),
+      };
+      const newData = await apiRequest("/job/inviteMoreWorkers", {
+        method: "POST",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+          ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
+        },
+      });
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    } finally {
+      setLoading(false);
+      setInviteMore(false);
+      setSelectedTalentsLocal([]);
+      window.location.reload();
+    }
+  };
   return (
     <div className="pb-5">
       <h1 className="text-[16px] font-[500] text-[#161616] mb-2">Invites</h1>
@@ -141,8 +194,12 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
           ))}
           {jobData?.status === "open" && (
             <div className="flex justify-center">
-              <button className="bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6">
-                Invite talent to job
+              <button
+                onClick={handleInviteClick}
+                className="flex gap-2 bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
+              >
+                {/* Invite talent to job */}
+                <h2>+</h2> Invite More Talent
               </button>
             </div>
           )}
@@ -163,11 +220,43 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
             Invite talent to your job, we&apos;ll notify them right away!
           </p>
 
-          <button className="bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6">
+          <button
+            onClick={handleInviteClick}
+            className="bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
+          >
             Invite talent to job
           </button>
         </div>
       )}
+
+      <Dialog open={inviteMore} onOpenChange={setInviteMore}>
+        {/* <DialogTrigger>Open</DialogTrigger> */}
+        <DialogContent className="w-[100vw] max-w-5xl h-[100dvh] z-[299] overflow-y-auto px-2">
+          <DialogHeader>
+            <DialogTitle>Invite More Talents</DialogTitle>
+            <DialogDescription hidden></DialogDescription>
+          </DialogHeader>
+          {loading ? (
+            <>
+              <Loader />
+            </>
+          ) : (
+            <InviteTalentMobile
+              jobId={jobData?.id}
+              selectedTalentsLocal={selectedTalentsLocal}
+              setSelectedTalentsLocal={setSelectedTalentsLocal}
+              // fetchTalentsData={fetchTalentsData}
+              handleInviteSelected={handleInviteSelected}
+              data={jobData}
+              setData={null}
+              // loading={loading}
+              // setLoading={setLoading}
+              // loadingInit={loadingInit}
+              // pageSize={selectedCount}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

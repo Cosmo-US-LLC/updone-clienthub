@@ -150,7 +150,7 @@ const Page = ({ eventData, isLoading }: any) => {
           eventData?.map((event: any, id: any) => (
             <div
               key={id}
-              className="bg-white w-full rounded-[12px] border-[2px] border-[#EBE6FF]"
+              className="bg-white w-full rounded-[12px] border-[2px] border-[#EBE6FF] shadow-md"
               onClick={() => router.push(`/events/detail/${event?.id}`)}
             >
               <div className=" px-3 py-4">
