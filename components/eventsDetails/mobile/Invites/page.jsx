@@ -217,15 +217,15 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
             No Invites
           </h2>
           <p className="text-gray-500 text-sm mt-2 px-6">
-            Invite talent to your job, we&apos;ll notify them right away!
+            Invite talent to your job on Clienthub desktop, we&apos;ll notify them right away!
           </p>
 
-          <button
+          {/* <button
             onClick={handleInviteClick}
             className="bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
           >
             Invite talent to job
-          </button>
+          </button> */}
         </div>
       )}
 

@@ -45,8 +45,8 @@ function page() {
     // storeUser();
     console.log("0", token);
     console.log("1", storedData?.token);
-    console.log("1", storedData?.token == token);
-    console.log("1", storedData?.user?.id);
+    console.log("2", storedData?.token == token);
+    console.log("3", storedData?.user?.id);
     if (storedData?.token && storedData?.token == token && storedData?.user?.id) {
       router.push("/");
     }
