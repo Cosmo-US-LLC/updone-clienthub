@@ -223,7 +223,7 @@ function Page() {
             className="text-xs text-neutral-500 flex items-center gap-2 pt-4 px-4 lg:hidden"
           >
             <ChevronLeft className="h-4 w-4" />
-            Back to Event Details
+            Back
           </Link>
           <div
             style={{

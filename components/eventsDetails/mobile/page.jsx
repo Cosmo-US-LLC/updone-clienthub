@@ -194,7 +194,7 @@ const Page = ({ jobId, jobData }) => {
         className="text-xs text-neutral-500 flex items-center gap-2 pt-4 px-4"
       >
         <ChevronLeft className="h-4 w-4" />
-        Back to My Events
+        Back
       </Link>
       <div className="flex flex-col items-center px-4 pb-4 pt-2 gap-4">
         <div className="flex items-center justify-between bg-[#FFF] rounded-full p-1 w-full shadow-sm">

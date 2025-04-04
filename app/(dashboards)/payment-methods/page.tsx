@@ -159,7 +159,7 @@ const Page = () => {
       <div className="h-full lg:hidden flex flex-col max-lg:px-4 max-lg:py-4 gap-2">
         <Link href={"/"} className="text-xs text-neutral-500 flex items-center gap-2">
           <ChevronLeft className="h-4 w-4" /> 
-          Back to My Events
+          Back
         </Link>
         <h2 className="text-[18px] font-[500]">Payment Methods</h2>
         {isLoading ? (
@@ -174,10 +174,10 @@ const Page = () => {
               alt=""
               src="/images/client-portal/payment/no-payment.svg"
             />
-            <p className="text-[#000000] text-[34px] leading-[32px] font-[300]">
+            <p className="text-[#000000] text-[34px] leading-[32px] font-[300]  max-lg:text-center">
               No Payment Methods
             </p>
-            <p className="text-neutral-600 text-md py-4">
+            <p className="text-neutral-600 text-md py-4 max-lg:text-center">
               Save a payment method at checkout and it will appear here.
             </p>
           </div>

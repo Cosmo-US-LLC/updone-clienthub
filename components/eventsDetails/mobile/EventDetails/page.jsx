@@ -276,7 +276,7 @@ const EventDetails = ({ jobData, releaseData }) => {
                 <p
                   className={`text-[14px] font-[400] ${
                     releaseData?.release_status === "release_approved"
-                      ? "text-[black]"
+                      ? "text-[white]"
                       : "text-[white]"
                   } `}
                 >
