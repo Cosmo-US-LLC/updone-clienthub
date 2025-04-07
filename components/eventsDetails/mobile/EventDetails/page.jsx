@@ -40,22 +40,22 @@ const EventDetails = ({ jobData, releaseData }) => {
 
   const formatLocation = (location) => {
     // Check if "Los Angeles, California" is part of the location
-    let formattedLocation = location.replace(
+    let formattedLocation = location ? location?.replace(
       "Los Angeles, California",
       "LA, California"
-    );
+    ) : "";
 
     // Remove "United States" if it exists
-    formattedLocation = formattedLocation.replace(", United States", "");
+    formattedLocation = formattedLocation ? formattedLocation?.replace(", United States", "") : "";
 
     // Split the location into the first part and the remaining location
-    const firstCommaIndex = formattedLocation.indexOf(",");
-    const firstPart = formattedLocation.substring(0, firstCommaIndex); // "1 World Way"
-    const secondPart = formattedLocation.substring(firstCommaIndex + 1).trim(); // "LA, California 90045"
+    const firstCommaIndex = formattedLocation?.indexOf(",");
+    const firstPart = formattedLocation?.substring(0, firstCommaIndex); // "1 World Way"
+    const secondPart = formattedLocation?.substring(firstCommaIndex + 1)?.trim(); // "LA, California 90045"
 
     return {
-      firstPart: firstPart.trim(),
-      secondPart: secondPart.trim(),
+      firstPart: firstPart?.trim(),
+      secondPart: secondPart?.trim(),
     };
   };
 
@@ -434,11 +434,11 @@ const EventDetails = ({ jobData, releaseData }) => {
             {jobData?.event_location && (
               <>
                 <div className="text-gray-900 text-[16px] font-[600]">
-                  {formatLocation(jobData?.event_location).firstPart}
+                  {formatLocation(jobData?.event_location)?.firstPart}
                 </div>
 
                 <div className="text-gray-600 text-[14px]">
-                  {formatLocation(jobData?.event_location).secondPart}
+                  {formatLocation(jobData?.event_location)?.secondPart}
                 </div>
               </>
             )}
