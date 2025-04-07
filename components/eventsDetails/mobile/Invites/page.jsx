@@ -33,10 +33,11 @@ import { Loader } from "@/app/_components/ui/dashboard-loader";
 import InviteMoreTalents from "@/app/_components/booking/job-detail/components/InviteMoreTalents";
 import InviteTalentMobile from "@/app/_components/booking/job-detail/components/InviteTalentMobile";
 
-const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
-  const [inviteMore, setInviteMore] = useState(false);
+const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore, setInviteMore }) => {
+  // const [inviteMore, setInviteMore] = useState(false);
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { auth: storedData } = useAppSelector(selectAuth);
 
   const handleInviteClick = () => {
     setInviteMore(true);
@@ -70,9 +71,15 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
       setLoading(false);
       setInviteMore(false);
       setSelectedTalentsLocal([]);
-      window.location.reload();
+      GetInvites();
+      // window.location.reload();
     }
   };
+
+  useEffect(() => {
+    console.log(selectedTalentsLocal)
+  }, [selectedTalentsLocal]);
+
   return (
     <div className="pb-5">
       <h1 className="text-[16px] font-[500] text-[#161616] mb-2">Invites</h1>
@@ -192,7 +199,7 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
               </div>
             </div>
           ))}
-          {/* {jobData?.status === "open" && (
+          {jobData?.status === "open" && (
             <div className="flex justify-center">
               <button
                 onClick={handleInviteClick}
@@ -201,7 +208,7 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
                 <h2>+</h2> Invite More Talent
               </button>
             </div>
-          )} */}
+          )}
           {/* Invite talent to job */}
         </div>
       ) : (
@@ -220,12 +227,12 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
             Invite talent to your job on Clienthub desktop, we&apos;ll notify them right away!
           </p>
 
-          {/* <button
+          <button
             onClick={handleInviteClick}
             className="bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
           >
             Invite talent to job
-          </button> */}
+          </button>
         </div>
       )}
 
@@ -249,6 +256,7 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
               handleInviteSelected={handleInviteSelected}
               data={jobData}
               setData={null}
+              selected={invitesData}
               // loading={loading}
               // setLoading={setLoading}
               // loadingInit={loadingInit}
@@ -257,6 +265,59 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading }) => {
           )}
         </DialogContent>
       </Dialog>
+      {(inviteMore && !loading) && (
+        <div className="z-[990] fixed bottom-2 left-0 w-full px-3 pr-4">
+          <div
+            // style={{ touchAction: "none" }}
+            className="pointer-events-auto flex w-full mx-auto p-3 flex-col items-start gap-2 rounded-lg border border-[#F7D9AB] bg-[#FFEFD7] shadow-[rgba(137,137,137,0.06)_-8px_0px_26px_0px] self-center"
+          >
+            <div className="flex flex-row items-center gap-2">
+              <div className=" px-3">
+                <div className="flex flex-row items-center gap-2">
+                  {selectedTalentsLocal.length === 0 ? (
+                    <p className="text-[18px] font-medium leading-[32px] text-[#2C2240]  ">
+                      No talents selected yet.
+                    </p>
+                  ) : selectedTalentsLocal.length === 1 ? (
+                    <p className="text-[18px] font-medium leading-[32px] text-[#2C2240]  ">
+                      You've selected 1 talent.
+                    </p>
+                  ) : (
+                    <p className="text-[18px] font-medium leading-[32px] text-[#2C2240] ">
+                      You've selected {selectedTalentsLocal.length} talents.
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex -space-x-2">
+                  {selectedTalentsLocal.slice(0, 5).map((talent, index) => (
+                    <img
+                      key={index}
+                      src={talent?.profile_pic || "/images/user.svg"}
+                      alt="Selected Talent"
+                      className="w-[28px] h-[28px] rounded-full object-cover bg-neutral-200"
+                    />
+                  ))}
+
+                  {selectedTalentsLocal.length > 5 && (
+                    <div className="w-[30px] h-[30px] rounded-full bg-gray-300 flex items-center justify-center text-white text-sm font-medium border-2 border-white">
+                      +{selectedTalentsLocal.length - 5}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <button
+              className="flex h-[48px] px-[32px] py-[16px] justify-center items-center gap-[12px] flex-1 rounded-[4px] border border-[#774DFD] bg-[#350ABC] text-white min-w-[300px] w-full disabled:opacity-60 disabled:pointer-events-none"
+              // onTouchEnd={handleOpenModal}
+              disabled={selectedTalentsLocal.length === 0 || loading}
+              onClick={handleInviteSelected}
+            >
+              Invite {selectedTalentsLocal.length} Talent{selectedTalentsLocal.length > 1 ? "s" : ""}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

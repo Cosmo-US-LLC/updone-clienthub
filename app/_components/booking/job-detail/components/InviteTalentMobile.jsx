@@ -20,6 +20,7 @@ function InviteTalentMobile({
   handleInviteSelected,
   data,
   setData,
+  selected,
   // loading,
   // setLoading,
   // loadingInit,
@@ -29,18 +30,19 @@ function InviteTalentMobile({
   const dispatch = useDispatch();
   const params = useParams();
   const [pageNo, setPageNo] = useState(1);
-  const [pageSize, setPageSize] = useState(12); 
+  const [pageSize, setPageSize] = useState(12);
   const [skeletonCount, setSkeletonCount] = useState(0); // State to track skeleton loaders
-  
+
   const [loading, setLoading] = useState(true);
   const [loadingInit, setLoadingInit] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCount, setSelectedCount] = useState(12);
-  
+
   const { auth: storedData } = useAppSelector(selectAuth);
   // const [selectedTalentsLocal, setSelectedTalentsLocal] = useState(
   //   Cookies.get("event_talents") ? JSON.parse(Cookies.get("event_talents")) : []
   // );
+  const [recommended, setRecommended] = useState([]);
 
   const [jobApiData, setJobApiData] = useState(null);
   const [isOptionSelected, setIsOptionSelected] = useState(false);
@@ -79,16 +81,20 @@ function InviteTalentMobile({
       });
 
       if (add) {
-        dispatch(setJobData({
-          ...newData,
-          records: [...data?.records, ...(newData?.records || [])],
-        }));
+        // dispatch(setJobData({
+        //   ...newData,
+        //   records: [...data?.records, ...(newData?.records || [])],
+        // }));
+        setRecommended({
+          ...recommended,
+          records: [...recommended?.records, ...(newData?.records || [])],
+        });
       } else {
-        dispatch(setJobData(apiResponse));
+        // dispatch(setJobData(apiResponse));
+        setRecommended(newData);
       }
       setJobApiData(apiResponse);
       setLoading(false);
-      console.log(params?.id, newData, apiResponse);
       return;
     } catch (err) {
       console.error("Error 3", err);
@@ -96,7 +102,7 @@ function InviteTalentMobile({
     } finally {
       setLoading(false);
       setLoadingInit(false);
-      dispatch(setJobId(params?.id));
+      // dispatch(setJobId(params?.id));
     }
   };
 
@@ -121,7 +127,7 @@ function InviteTalentMobile({
   const handleLoadMore = () => {
     const talentsToAdd = Math.min(
       pageSize,
-      data?.pagination?.total_records - data?.records?.length
+      recommended?.pagination?.total_records - recommended?.records?.length
     );
     setSkeletonCount(talentsToAdd); // Set the number of skeleton loaders
     fetchTalentsData(true, pageNo + 1);
@@ -135,11 +141,8 @@ function InviteTalentMobile({
   }, [loading]);
 
   return (
-    <div
-      className="pb-40"
-      style={{ scrollbarWidth: "none" }}
-    >
-      {jobId}--
+    <div className="pb-20" style={{ scrollbarWidth: "none" }}>
+      {/* {jobId}-- */}
       {loadingInit ? (
         Array(pageSize)
           .fill(null)
@@ -174,17 +177,23 @@ function InviteTalentMobile({
           ))
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {data?.records?.map((talent, index) => (
+          {recommended?.records?.map((talent, index) => (
             <div key={talent.id || index}>
+              {/* {console.log(
+                selected.some((selecteds) => selecteds?.worker?.id == talent.id)
+              )} */}
               <TalentCard
                 talent={talent}
                 jobApiData={jobApiData}
                 isSelected={
                   selectedTalentsLocal.some(
-                    (selected) => selected.id === talent.id
-                  ) || talent?.alreadyInvited
+                    (selecteds) => selecteds.id === talent.id
+                  ) ||
+                  talent?.alreadyInvited ||
+                  selected.some((selecteds) => selecteds?.worker?.id == talent.id)
                 }
                 onToggleSelect={() =>
+                  !selected.some((selecteds) => selecteds?.worker?.id == talent.id) &&
                   !talent?.alreadyInvited &&
                   setSelectedTalentsLocal((prev) =>
                     prev.some((item) => item.id === talent.id)
@@ -236,11 +245,11 @@ function InviteTalentMobile({
             ))}
 
           <PaginationMobile
-            currentCount={data?.records?.length || 0}
-            totalCount={data?.pagination?.total_records || 0}
+            currentCount={recommended?.records?.length || 0}
+            totalCount={recommended?.pagination?.total_records || 0}
             onLoadMore={handleLoadMore}
             pageNo={pageNo}
-            totalPages={data?.pagination?.total_pages}
+            totalPages={recommended?.pagination?.total_pages}
             setPageNo={setPageNo}
             loading={loading}
           />

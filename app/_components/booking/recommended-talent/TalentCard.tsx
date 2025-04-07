@@ -100,7 +100,7 @@ const TalentCard = ({
                 : "/images/testiminial/testi3.jpg"
             }
             quality={100}
-            objectFit="fill"
+            // objectFit="fill"
             width={120}
             height={120}
             alt=""
@@ -328,6 +328,7 @@ const TalentCard = ({
                 isSelected ? "text-white" : "text-black"
               } font-[500] text-[20px]`}
             >
+              {/* <>{console.log(jobApiData)}</> */}
               $
               {calculateTotal(
                 talent?.per_hours_rate,

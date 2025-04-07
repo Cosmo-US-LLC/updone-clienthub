@@ -119,8 +119,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
           handleError
         );
 
-        if (response?.offers) {
-          console.log(response);
+        if (response?.offers && response?.offers != undefined) {
           setOffers(response?.offers);
           if (
             jobDetailData?.status === "assigned" ||
@@ -134,7 +133,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             });
           }
         } else {
-          console.error("Unexpected data format:", response);
+          console.error("Unexpected data format 0:", response);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -247,22 +246,22 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
 
   const formatLocation = (location: string) => {
     // Check if "Los Angeles, California" is part of the location
-    let formattedLocation = location.replace(
+    let formattedLocation = location?.replace(
       "Los Angeles, California",
       "LA, California"
     );
 
     // Remove "United States" if it exists
-    formattedLocation = formattedLocation.replace(", United States", "");
+    formattedLocation = formattedLocation?.replace(", United States", "");
 
     // Split the location into the first part and the remaining location
-    const firstCommaIndex = formattedLocation.indexOf(",");
-    const firstPart = formattedLocation.substring(0, firstCommaIndex); // "1 World Way"
-    const secondPart = formattedLocation.substring(firstCommaIndex + 1).trim(); // "LA, California 90045"
+    const firstCommaIndex = formattedLocation?.indexOf(",");
+    const firstPart = formattedLocation?.substring(0, firstCommaIndex); // "1 World Way"
+    const secondPart = formattedLocation?.substring(firstCommaIndex + 1)?.trim(); // "LA, California 90045"
 
     return {
-      firstPart: firstPart.trim(),
-      secondPart: secondPart.trim(),
+      firstPart: firstPart?.trim(),
+      secondPart: secondPart?.trim(),
     };
   };
 

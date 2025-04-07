@@ -13,11 +13,14 @@ import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { apiRequest } from "@/app/lib/services";
 import { ChevronLeft } from "lucide-react";
 
-const EventDetails = dynamic(() => import("./EventDetails/page"), {
-  ssr: false,
-});
-const Offers = dynamic(() => import("./Offers/page"), { ssr: false });
-const Invites = dynamic(() => import("./Invites/page"), { ssr: false });
+// const EventDetails = dynamic(() => import("./EventDetails/page"), {
+//   ssr: false,
+// });
+// const Offers = dynamic(() => import("./Offers/page"), { ssr: false });
+// const Invites = dynamic(() => import("./Invites/page"), { ssr: false });
+import EventDetails from "./EventDetails/page";
+import Offers from "./Offers/page";
+import Invites from "./Invites/page";
 
 const Page = ({ jobId, jobData }) => {
   const { auth: storedData } = useAppSelector(selectAuth);
@@ -39,6 +42,7 @@ const Page = ({ jobId, jobData }) => {
   const offerSort = "latest";
   const [offersData, setOffersData] = useState([]);
   const [offersLoading, setOffersLoading] = useState(true);
+
   const GetOffers = async () => {
     setOffersLoading(true);
     try {
@@ -56,7 +60,7 @@ const Page = ({ jobId, jobData }) => {
         },
       });
 
-      if (response?.offers) {
+      if (response?.offers && response?.offers != undefined) {
         // console.log(response?.offers);
         setOffersData(response?.offers);
         if (jobData?.status === "assigned" || jobData?.status === "completed") {
@@ -68,7 +72,7 @@ const Page = ({ jobId, jobData }) => {
           });
         }
       } else {
-        console.error("Unexpected data format:", response);
+        console.error("Unexpected data format 1:", response);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -77,7 +81,8 @@ const Page = ({ jobId, jobData }) => {
     }
   };
 
-  // Invites Tab Data
+  // Invites Tab 
+  const [inviteMore, setInviteMore] = useState(false);
   const [invitesData, setInvitesData] = useState([]);
   const [invitesLoading, setInvitesLoading] = useState(true);
   const [selectedInvite, setSelectedInvite] = useState(true);
@@ -106,7 +111,7 @@ const Page = ({ jobId, jobData }) => {
           });
         }
       } else {
-        console.error("Unexpected data format:", response);
+        console.error("Unexpected data format 2:", response);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -151,6 +156,12 @@ const Page = ({ jobId, jobData }) => {
     }
   }, [jobData]);
 
+  const inviteMoreTalents = () => {
+    setActiveTab("Invites");
+    setSelectedOffer(null);
+    setInviteMore(true);
+  }
+
   const tabs = [
     {
       name: "Event Details",
@@ -168,6 +179,7 @@ const Page = ({ jobId, jobData }) => {
           GetOffers={GetOffers}
           offersData={offersData}
           offersLoading={offersLoading}
+          setInviteMore={inviteMoreTalents}
         />
       ),
     },
@@ -180,6 +192,8 @@ const Page = ({ jobId, jobData }) => {
           GetInvites={GetInvites}
           invitesData={invitesData}
           invitesLoading={invitesLoading}
+          inviteMore={inviteMore}
+          setInviteMore={setInviteMore}
         />
       ),
     },
