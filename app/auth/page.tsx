@@ -53,10 +53,11 @@ const AuthRedirectPage = () => {
     if (!token || !storedData?.token || !storedData?.user) return;
 
     try {
-      const decodedToken = jwtDecode(token);
-      const isSameUser = storedData.user.id === decodedToken.sub;
+      // const decodedToken = jwtDecode(token);
+      // const isSameUser = storedData.user.id === decodedToken.sub;
 
-      if (storedData.token === token && isSameUser) {
+      console.log(storedData.user.id, storedData.token === token)
+      if (storedData.token === token && storedData.user.id) {
         router.push("/");
       }
     } catch (err) {
