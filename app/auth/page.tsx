@@ -8,6 +8,7 @@ import { selectAuth, setAuth } from "../lib/store/features/authSlice";
 import Cookies from "js-cookie";
 import { useAppSelector } from "../lib/store/hooks";
 import RenderLoader from "../_components/ui/loader";
+import { jwtDecode } from 'jwt-decode';
 
 function page() {
   const router = useRouter();
@@ -29,7 +30,7 @@ function page() {
         console.log(res?.user);
         Cookies.set("authToken", token);
         Cookies.set("authData", JSON.stringify(res?.user));
-        dispatch(setAuth({ token, user: res?.user }));
+        dispatch(setAuth({ token, user: res?.user ? res?.user : storedData?.user }));
         // router.push("/")
       });
     }
@@ -43,11 +44,13 @@ function page() {
   useEffect(() => {
     console.log("res", storedData);
     // storeUser();
-    console.log("0", token);
-    console.log("1", storedData?.token);
-    console.log("2", storedData?.token == token);
-    console.log("3", storedData?.user?.id);
-    if (storedData?.token && storedData?.token == token && storedData?.user?.id) {
+    // console.log("0", token);
+    // console.log("1", storedData?.token);
+    // console.log("2", storedData?.token == token);
+    // console.log("3", storedData?.user?.id);
+    const decodedToken = jwtDecode(token || "");
+    console.log("Decoded Token:", decodedToken, storedData);
+    if (storedData?.token && storedData?.token == token && (storedData?.user?.id == decodedToken?.sub)) {
       router.push("/");
     }
   }, [storedData]);

@@ -20,6 +20,8 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatPhoneNumber } from "@/lib/utils";
+import VerificationIcon from "@/app/_components/ui/shield-mobile";
+import TalentImage from "@/app/_components/booking/job-detail/components/TalentImage";
 
 const EventDetails = ({ jobData, releaseData }) => {
   const router = useRouter();
@@ -60,6 +62,29 @@ const EventDetails = ({ jobData, releaseData }) => {
   useEffect(() => {
     setStatus(jobData?.status);
   }, [jobData]);
+
+  function timeAgo(dateTimeString) {
+    const inputDate = new Date(dateTimeString);
+    const now = new Date();
+    const diffMs = now - inputDate;
+
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      return `${hours} hours ago`;
+    } else if (days < 7) {
+      return `${days} days ago`;
+    } else if (days < 14) {
+      return `1 week ago`;
+    } else {
+      const weeks = Math.floor(days / 7);
+      return `${weeks} weeks ago`;
+    }
+  }
 
   return (
     <div
@@ -103,9 +128,12 @@ const EventDetails = ({ jobData, releaseData }) => {
           <div
             className={`flex items-center gap-3 ${
               status === "completed" && "opacity-50 pointer-events-none"
+              // true
             }`}
           >
-            <Avatar className="w-[62px] h-[62px]">
+            {console.log(jobData?.invite?.worker)}
+            <TalentImage talent={jobData?.invite?.worker} size={1} />
+            {/* <Avatar className="w-[62px] h-[62px]">
               <AvatarImage
                 src={jobData?.invite?.worker?.profile_pic}
                 className="object-cover"
@@ -117,49 +145,57 @@ const EventDetails = ({ jobData, releaseData }) => {
                 {jobData?.invite?.worker?.full_name?.split(" ")?.length > 1 &&
                   jobData?.invite?.worker?.full_name?.split(" ")[1][0]}
               </AvatarFallback>
-            </Avatar>
-            <div className="flex items-center gap-2">
-              <p className="text-gray-900 text-[16px] font-[600]">
-                {jobData?.invite?.worker?.full_name || "N/A"}
-              </p>
-              <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
-                {event?.event_assigned_to?.id_is_verified &&
-                event?.event_assigned_to?.contact_is_verified ? (
-                  <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger className="hover:bg-transparent">
-                          <div className=" text-white pr-4 pl-2  rounded">
-                            <VerificationIcon
+            </Avatar> */}
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="text-gray-900 text-[16px] font-[600]">
+                  {jobData?.invite?.worker?.full_name || "N/A"}
+                </p>
+                <div className="text-[#28a745] flex justify-center items-center cursor-pointer pb-1">
+                  {jobData?.invite?.worker?.id_is_verified &&
+                  jobData?.invite?.worker?.contact_is_verified ? (
+                    <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger className="hover:bg-transparent">
+                            <div className=" text-white rounded">
+                              <VerificationIconMobile
+                                id_is_verified={
+                                  jobData?.invite?.worker?.id_is_verified
+                                }
+                                contact_is_verified={
+                                  jobData?.invite?.worker?.contact_is_verified
+                                }
+                                height={23}
+                                width={23}
+                              />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="z-40">
+                            <VerificationStatus
                               id_is_verified={
-                                event?.event_assigned_to?.id_is_verified
+                                jobData?.invite?.worker?.id_is_verified
                               }
                               contact_is_verified={
-                                event?.event_assigned_to?.contact_is_verified
+                                jobData?.invite?.worker?.contact_is_verified
                               }
-                              height={23}
-                              width={23}
                             />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                          <VerificationStatus
-                            id_is_verified={
-                              event?.event_assigned_to?.id_is_verified
-                            }
-                            contact_is_verified={
-                              event?.event_assigned_to?.contact_is_verified
-                            }
-                          />
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                ) : (
-                  ""
-                )}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                {/* <FaCheck className="text-green-500 text-md" title="Verified" /> */}
               </div>
-              {/* <FaCheck className="text-green-500 text-md" title="Verified" /> */}
+              <div className="text-sm text-neutral-600">
+                Last seen{" "}
+                {jobData?.invite?.worker?.last_active
+                  ? `${timeAgo(jobData?.invite?.worker?.last_active)}`
+                  : "weeks ago"}
+              </div>
             </div>
           </div>
 

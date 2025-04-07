@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-function TalentImage({ talent }: any) {
+function TalentImage({ talent, size = 0 }: any) {
   const [showModal, setShowModal] = useState(false);
   const galleryImages =
     talent?.gallery?.length > 0
@@ -12,22 +12,12 @@ function TalentImage({ talent }: any) {
       : [talent.profile_pic];
 
   // console.log(talent, galleryImages);
+  const sizes = ["h-[52px] w-[52px]", "w-[62px] h-[62px]"]
 
   return (
     <div className="relative">
-      {/* <Image
-        width={100}
-        height={100}
-        className="h-[52px] w-[52px] object-cover rounded-[50%] border-2 border-[#F3F0FF] cursor-pointer"
-        src={talent?.profile_pic}
-        alt="Talent Profile Picture"
-        onClick={(event) => {
-          event.stopPropagation();
-          setShowModal(true);
-        }}
-      /> */}
       <Avatar
-        className="h-[52px] w-[52px] object-cover rounded-[50%] border-2 border-[#F3F0FF] cursor-pointer"
+        className={`${sizes[size]} object-cover rounded-full ${size == 0 && 'border-2 border-[#F3F0FF]'} cursor-pointer`}
         onClick={(event) => {
           event.stopPropagation();
           setShowModal(true);

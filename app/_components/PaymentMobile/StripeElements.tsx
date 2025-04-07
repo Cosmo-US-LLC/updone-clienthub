@@ -121,13 +121,13 @@ export default function StripeCheckoutForm({
                 <span className="sr-only">Loading...</span>
               </div>
             ) : paymentData?.tip_amount && paymentData?.initial_payment ? (
-              `Pay $${Math.round(
+              `1 Pay $${Math.round(
                 paymentData.tip_amount + paymentData.initial_payment
               )}`
             ) : paymentData?.tip_amount ? (
-              `Pay $${Math.round(paymentData.tip_amount)}`
+              `2 Pay $${Math.round(paymentData.tip_amount)}`
             ) : paymentData?.initial_payment ? (
-              `Pay $${Math.round(paymentData.initial_payment)}`
+              `3 Pay $${Math.round(paymentData.initial_payment)}`
             ) : (
               "Pay now"
             )}
