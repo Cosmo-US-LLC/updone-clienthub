@@ -1,66 +1,70 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Loader } from "../_components/ui/dashboard-loader";
-import { apiRequest } from "../lib/services";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { selectAuth, setAuth } from "../lib/store/features/authSlice";
-import Cookies from "js-cookie";
-import { useAppSelector } from "../lib/store/hooks";
-import RenderLoader from "../_components/ui/loader";
-import { jwtDecode } from 'jwt-decode';
 
-function page() {
+import { useEffect, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../lib/store/hooks";
+import { selectAuth, setAuth } from "../lib/store/features/authSlice";
+import { apiRequest } from "../lib/services";
+import Cookies from "js-cookie";
+import RenderLoader from "../_components/ui/loader";
+import { jwtDecode } from "jwt-decode";
+
+const AuthRedirectPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const { auth: storedData } = useAppSelector(selectAuth);
 
-  async function storeUser() {
-    if (token) {
-      dispatch(setAuth({ token, user: null }));
-      await apiRequest(`/profile`, {
+  const fetchAndStoreUser = useCallback(async () => {
+    if (!token) return;
+
+    try {
+      const response = await apiRequest(`/profile`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: {},
-      }).then((res) => {
-        console.log(res?.user);
-        Cookies.set("authToken", token);
-        Cookies.set("authData", JSON.stringify(res?.user));
-        dispatch(setAuth({ token, user: res?.user ? res?.user : storedData?.user }));
-        // router.push("/")
       });
+
+      if (response?.user) {
+        dispatch(setAuth({ token, user: response.user }));
+        Cookies.set("authToken", token);
+        Cookies.set("authData", JSON.stringify(response.user));
+      } else {
+        console.warn("User fetch failed or empty response");
+        dispatch(setAuth({ token, user: null }));
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      dispatch(setAuth({ token, user: null }));
     }
-  }
+  }, [token, dispatch]);
 
   useEffect(() => {
-    console.log("res", token);
-    storeUser();
-  }, []);
+    if (token) {
+      fetchAndStoreUser();
+    }
+  }, [token, fetchAndStoreUser]);
 
   useEffect(() => {
-    console.log("res", storedData);
-    // storeUser();
-    // console.log("0", token);
-    // console.log("1", storedData?.token);
-    // console.log("2", storedData?.token == token);
-    // console.log("3", storedData?.user?.id);
-    const decodedToken = jwtDecode(token || "");
-    console.log("Decoded Token:", decodedToken, storedData);
-    if (storedData?.token && storedData?.token == token && (storedData?.user?.id == decodedToken?.sub)) {
-      router.push("/");
+    if (!token || !storedData?.token || !storedData?.user) return;
+
+    try {
+      const decodedToken = jwtDecode(token);
+      const isSameUser = storedData.user.id === decodedToken.sub;
+
+      if (storedData.token === token && isSameUser) {
+        router.push("/");
+      }
+    } catch (err) {
+      console.error("Invalid token:", err);
     }
-  }, [storedData]);
+  }, [storedData, token, router]);
 
-  return (
-    <div>
-      {/* {token?.split(".")[0]} */}
-      <RenderLoader />
-    </div>
-  );
-}
+  return <RenderLoader />;
+};
 
-export default page;
+export default AuthRedirectPage;

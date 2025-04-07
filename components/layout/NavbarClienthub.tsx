@@ -69,8 +69,8 @@ function NavbarClienthub() {
   useEffect(() => {
     const authData = Cookies.get("authData");
     const authToken = Cookies.get("authToken");
-    if (authData) {
-      dispatch(setAuth({ token: authToken, user: JSON.parse(authData) }));
+    if (JSON.parse(authData || "")) {
+      dispatch(setAuth({ token: authToken, user: JSON.parse(authData || "") }));
     } else {
       // alert("Clearing auth from navbar client hub")
       dispatch(clearAuth());
