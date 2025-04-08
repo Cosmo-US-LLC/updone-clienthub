@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { formatPhoneNumber } from "@/lib/utils";
 import VerificationIcon from "@/app/_components/ui/shield-mobile";
 import TalentImage from "@/app/_components/booking/job-detail/components/TalentImage";
+import { formatWorkingTimes } from "@/app/lib/helpers/formatDateTime";
 
 const EventDetails = ({ jobData, releaseData }) => {
   const router = useRouter();
@@ -40,18 +41,21 @@ const EventDetails = ({ jobData, releaseData }) => {
 
   const formatLocation = (location) => {
     // Check if "Los Angeles, California" is part of the location
-    let formattedLocation = location ? location?.replace(
-      "Los Angeles, California",
-      "LA, California"
-    ) : "";
+    let formattedLocation = location
+      ? location?.replace("Los Angeles, California", "LA, California")
+      : "";
 
     // Remove "United States" if it exists
-    formattedLocation = formattedLocation ? formattedLocation?.replace(", United States", "") : "";
+    formattedLocation = formattedLocation
+      ? formattedLocation?.replace(", United States", "")
+      : "";
 
     // Split the location into the first part and the remaining location
     const firstCommaIndex = formattedLocation?.indexOf(",");
     const firstPart = formattedLocation?.substring(0, firstCommaIndex); // "1 World Way"
-    const secondPart = formattedLocation?.substring(firstCommaIndex + 1)?.trim(); // "LA, California 90045"
+    const secondPart = formattedLocation
+      ?.substring(firstCommaIndex + 1)
+      ?.trim(); // "LA, California 90045"
 
     return {
       firstPart: firstPart?.trim(),
@@ -405,7 +409,7 @@ const EventDetails = ({ jobData, releaseData }) => {
             <LiaGlassCheersSolid className="text-[#585EFF] text-xl" />
           </div>
           <div>
-            <p className="text-gray-900 text-[16px] font-[600]">
+            <p className="text-gray-900 text-[14px] font-[600]">
               Requested Service:
             </p>
             <p className="text-gray-600 text-[14px]">
@@ -419,10 +423,8 @@ const EventDetails = ({ jobData, releaseData }) => {
             <BsCalendarEvent className="text-[#C46914]  text-xl" />
           </div>
           <div>
-            <p className="text-gray-900 text-[16px] font-[600]">
-              Friday, 20 September, 2024
-            </p>
-            <p className="text-gray-600 text-[14px]">11:00 AM - 03:00 PM</p>
+            {jobData?.working_times &&
+              formatWorkingTimes(jobData?.working_times)}
           </div>
         </div>
 
@@ -433,7 +435,7 @@ const EventDetails = ({ jobData, releaseData }) => {
           <div>
             {jobData?.event_location && (
               <>
-                <div className="text-gray-900 text-[16px] font-[600]">
+                <div className="text-gray-900 text-[14px] font-[600]">
                   {formatLocation(jobData?.event_location)?.firstPart}
                 </div>
 
