@@ -34,7 +34,7 @@ const Congratulations = ({ setDrawerOpen, drawerOpen }: any) => {
                         />
                     </div>
                     <div className="text-left">
-                        <p className="text-[black] text-[14px] font-[400] leading-[24px] mb-2">Please check your email and visit your <b>ClientHub</b> on desktop to:</p>
+                        <p className="text-[black] text-[14px] font-[400] leading-[24px] mb-2">Please check your email and visit your<b>&nbsp;ClientHub&nbsp;</b>on desktop to:</p>
                         {
                             actions.map((action, index) => {
                                 return (
