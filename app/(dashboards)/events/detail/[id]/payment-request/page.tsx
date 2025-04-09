@@ -95,9 +95,21 @@ function Page() {
           let percentage = 0;
           let tipAmt = newData?.tip_amount;
           let totalAmt = newData?.initial_payment;
-          percentage = parseInt(((tipAmt / totalAmt) * 100).toFixed());
-          console.log("Percentage", percentage);
-          setSelectedTipPercentage(percentage);
+          if (tipAmt && totalAmt) {
+            percentage = ((tipAmt / totalAmt) * 100);
+            const allowedPercentages = [16, 18, 20, 22];
+            // Find the closest allowed percentage
+            const closest = allowedPercentages.reduce((prev, curr) =>
+              Math.abs(curr - percentage) < Math.abs(prev - percentage) ? curr : prev
+            );
+            setSelectedTipPercentage(closest);
+          } else {
+            setSelectedTipPercentage(null); // fallback if inputs are invalid
+          }
+          
+          // percentage = parseInt(((tipAmt / totalAmt) * 100).toFixed());
+          // console.log("Percentage", percentage, tipAmt, ((tipAmt / totalAmt) * 100));
+          // setSelectedTipPercentage(percentage);
         }
 
       } catch (error) {
