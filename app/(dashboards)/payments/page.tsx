@@ -29,6 +29,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
@@ -220,32 +226,54 @@ const headers = [
 
 const Page = () => {
   const [transactionsData, setTransactionsData] = useState<any>([]);
+  const [transactionsGroup, setTransactionsGroup] = useState<any>([]);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchOffers = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiRequest("/stripe/transactions", {
+        method: "POST",
+        headers: {
+          revalidate: true,
+          ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
+        },
+        // body: {
+        //     page_number: 1,
+        //     page_size: 10
+        // }
+      });
+      setTransactionsData(response?.length > 0 ? response : []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const fetchOfferGroups = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiRequest("/stripe/transaction-groups", {
+        method: "POST",
+        headers: {
+          revalidate: true,
+          ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
+        },
+        // body: {
+        //     page_number: 1,
+        //     page_size: 10
+        // }
+      });
+      setTransactionsGroup(response?.length > 0 ? response : []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchOffers = async () => {
-      try {
-        setIsLoading(true);
-        const response = await apiRequest("/stripe/transactions", {
-          method: "POST",
-          headers: {
-            revalidate: true,
-            ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
-          },
-          // body: {
-          //     page_number: 1,
-          //     page_size: 10
-          // }
-        });
-        setTransactionsData(response?.length > 0 ? response : []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+    fetchOfferGroups();
     fetchOffers();
   }, [storedData]);
 
@@ -433,7 +461,7 @@ const Page = () => {
           <div className="py-20">
             <RenderLoader />
           </div>
-        ) : transactionsData?.length == 0 ? (
+        ) : transactionsGroup?.length == 0 ? (
           <div className="h-full flex justify-center items-center flex-col gap-5">
             <Image
               width={151}
@@ -447,22 +475,23 @@ const Page = () => {
             </p>
           </div>
         ) : (
-          transactionsData?.map((row: any, index: any) => (
+          transactionsGroup?.map((row: any, index: any) => (
             <div
               key={index}
               className="shadow-md border p-3 px-4 rounded-xl mb-1 "
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="h-[10px] text-xs text-neutral-500 text-right">
-                  #{row?.payment_id}
+                  #{row?.event_id}
                 </span>
-                <span
+                {/* <span
                   className={`rounded-full px-2 py-px text-xs capitalize ${
                     paymentTypeStyle[row?.payment_type]
                   }`}
                 >
                   {row?.payment_type?.replace("_", " ")}
-                </span>
+                </span> */}
+                <span className="text-sm text-neutral-600">{row?.date}</span>
               </div>
               <Link
                 href={`events/detail/${row?.event_id}`}
@@ -471,7 +500,7 @@ const Page = () => {
                 {row?.event_title}
               </Link>
 
-              <div className="flex justify-between mt-1">
+              {/* <div className="flex justify-between mt-1">
                 <span className="text-sm text-neutral-600">{row?.date}</span>
                 <div>
                   <span className="text-sm pr-1">Amount:</span>
@@ -479,7 +508,43 @@ const Page = () => {
                     ${row?.amount}
                   </span>
                 </div>
-              </div>
+              </div> */}
+              <Accordion type="single" collapsible>
+                <AccordionItem value="one" className="my-2 mb-3 border-transparent bg-[#350abc]/5 rounded-md !pb-0">
+                  <AccordionTrigger className="py-1 bg-[#350abc]/5 rounded-md px-2">
+                    <div className="grow flex justify-between items-center px-2">
+                      <span className="text-sm font-normal pr-1">Total Amount:</span>
+                      <span className="text-[16px] font-medium w-[46px]">
+                        ${row?.initial_amount + row?.settlement_amount + row?.tip_amount}
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-2">
+                    <div className="px-4 pr-6 pt-2 grid grid-cols-7">
+                      <div className="col-span-6 flex flex-col gap-1">
+                        <span className="text-sm text-neutral-600">Initial Amount:</span>
+                        {row?.settlement_amount ? (
+                          <span className="text-sm text-neutral-600">Settlement Amount:</span>
+                        ) : ""}
+                        {row?.tip_amount ? (
+                          <span className="text-sm text-neutral-600">Tip Amount:</span>
+                        ) : ""}
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[16px]">{row?.initial_amount ? `$${row?.initial_amount}` : ''}</span>
+                        {row?.settlement_amount ? (
+                          <span className="text-[16px]">{row?.settlement_amount ? `$${row?.settlement_amount}` : ''}</span>
+                        ) : ""}
+                        {row?.tip_amount ? (
+                          <span className="text-[16px]">{row?.tip_amount ? `$${row?.tip_amount}` : ''}</span>
+                        ) : ""}
+                      </div>
+                      {/* <div className="flex flex-col gap-1">
+                      </div> */}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
               <div className="flex items-center justify-center gap-1 mt-1">
                 <Avatar className="w-[42px] h-[42px]">
