@@ -32,6 +32,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import VerificationIconMobile from "@/app/_components/ui/shield";
+import { ChevronLeft } from "lucide-react";
 
 // const CardTable = ({
 //   headers,
@@ -334,86 +336,251 @@ const Page = () => {
     fetchOffers();
   }, [storedData]);
 
-  return (
-    <div
-      className="h-full max-lg:hidden flex flex-col max-lg:px-8 max-lg:py-8"
-      // className={`${
-      //   isLoading && "!overflow-hidden"
-      // } container max-w-full h-full overflow-y-auto mx-auto py-6 flex flex-col justify-center items-center min-h-[calc(100vh-220px)]`}
-    >
-      {isLoading ? (
-        <RenderLoader />
-      ) : transactionsData?.length == 0 ? (
-        <div className="w-full max-w-[1350px] mx-auto flex justify-center items-start h-full relative">
-          <NoDataFound
-            // isSettlement
-            title="Manage Settlements for Extra Hours."
-            // description={""}
-            description={"Sometimes, events go beyond the planned schedule. This section will allow you to review and approve any additional payments for talents who worked extra hours. Once you have any pending settlements, they will appear here."}
-            image="/images/client-portal/payment/settlements image.webp"
-          />
-        </div>
-      ) : (
-        <>
-          <Table className="grow relative hover:bg-transparent">
-            <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
-              <TableRow>
-                <TableHead className="w-[130px]">Settlement ID</TableHead>
-                <TableHead>Event Title</TableHead>
-                <TableHead>Talent Name</TableHead>
-                <TableHead>Requested Service</TableHead>
-                <TableHead>Additional Hours</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Event Date</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="overflow-y-auto bg-white">
-              {transactionsData?.map((row, index) => (
-                <TableRow key={index} className="text-[#2C2240]">
-                  {/* Settlement ID */}
-                  <TableCell>#{row?.payment_id}</TableCell>
-                  {/* Event Title */}
-                  <TableCell>
-                    <Link
-                      href={`/events/detail/${row?.job_id}`}
-                      className="flex flex-row items-center gap-2 text-[#350ABC]"
-                    >
-                      {row?.event_title}
-                      <Image
-                        alt="external-link"
-                        height={15}
-                        width={15}
-                        src={"/external-link.svg"}
-                      />
-                    </Link>
-                  </TableCell>
-                  {/* Talent Name */}
-                  <TableCell>
-                    <div className="flex flex-row items-center h-[80px] relative">
-                      <Avatar className="w-[50px] h-[50px]">
-                        <AvatarImage
-                          src={row?.talent_profile_picture}
-                          className="object-cover"
-                        />
-                        <AvatarFallback>
-                          {row?.talent_name[0]}
-                          {row?.talent_name?.split(" ")?.length > 1 &&
-                            row?.talent_name?.split(" ")[1][0]}
-                        </AvatarFallback>
-                      </Avatar>
+  const paymentTypeStyle: any = {
+    accepted: "text-green-500 bg-green-50 border border-green-500",
+    settlement: "text-red-500 bg-red-50 border border-red-500",
+    pending: "text-blue-500 bg-blue-50 border border-blue-500",
+  };
 
-                      <span className="ml-2 text-[#2C2240] text-[14px] font-[400]">
-                        {row?.talent_name}
-                      </span>
-                      {(row?.id_is_verified && row?.contact_is_verified) ? (
-                      <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
+  return (
+    <>
+      <div
+        className="h-full max-lg:hidden flex flex-col max-lg:px-8 max-lg:py-8"
+        // className={`${
+        //   isLoading && "!overflow-hidden"
+        // } container max-w-full h-full overflow-y-auto mx-auto py-6 flex flex-col justify-center items-center min-h-[calc(100vh-220px)]`}
+      >
+        {isLoading ? (
+          <RenderLoader />
+        ) : transactionsData?.length == 0 ? (
+          <div className="w-full max-w-[1350px] mx-auto flex justify-center items-start h-full relative">
+            <NoDataFound
+              // isSettlement
+              title="Manage Settlements for Extra Hours."
+              // description={""}
+              description={
+                "Sometimes, events go beyond the planned schedule. This section will allow you to review and approve any additional payments for talents who worked extra hours. Once you have any pending settlements, they will appear here."
+              }
+              image="/images/client-portal/payment/settlements image.webp"
+            />
+          </div>
+        ) : (
+          <>
+            <Table className="grow relative hover:bg-transparent">
+              <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
+                <TableRow>
+                  <TableHead className="w-[130px]">Settlement ID</TableHead>
+                  <TableHead>Event Title</TableHead>
+                  <TableHead>Talent Name</TableHead>
+                  <TableHead>Requested Service</TableHead>
+                  <TableHead>Additional Hours</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Event Date</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="overflow-y-auto bg-white">
+                {transactionsData?.map((row, index) => (
+                  <TableRow key={index} className="text-[#2C2240]">
+                    {/* Settlement ID */}
+                    <TableCell>#{row?.payment_id}</TableCell>
+                    {/* Event Title */}
+                    <TableCell>
+                      <Link
+                        href={`/events/detail/${row?.job_id}`}
+                        className="flex flex-row items-center gap-2 text-[#350ABC]"
+                      >
+                        {row?.event_title}
+                        <Image
+                          alt="external-link"
+                          height={15}
+                          width={15}
+                          src={"/external-link.svg"}
+                        />
+                      </Link>
+                    </TableCell>
+                    {/* Talent Name */}
+                    <TableCell>
+                      <div className="flex flex-row items-center h-[80px] relative">
+                        <Avatar className="w-[50px] h-[50px]">
+                          <AvatarImage
+                            src={row?.talent_profile_picture}
+                            className="object-cover"
+                          />
+                          <AvatarFallback>
+                            {row?.talent_name[0]}
+                            {row?.talent_name?.split(" ")?.length > 1 &&
+                              row?.talent_name?.split(" ")[1][0]}
+                          </AvatarFallback>
+                        </Avatar>
+
+                        <span className="ml-2 text-[#2C2240] text-[14px] font-[400]">
+                          {row?.talent_name}
+                        </span>
+                        {row?.id_is_verified && row?.contact_is_verified ? (
+                          <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger className="hover:bg-transparent">
+                                  <div className=" text-white pr-4 pl-2  rounded">
+                                    <VerificationIcon
+                                      id_is_verified={row?.id_is_verified}
+                                      contact_is_verified={
+                                        row?.contact_is_verified
+                                      }
+                                      height={23}
+                                      width={23}
+                                    />
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent side="bottom">
+                                  <VerificationStatus
+                                    id_is_verified={row?.id_is_verified}
+                                    contact_is_verified={
+                                      row?.contact_is_verified
+                                    }
+                                  />
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </TableCell>
+                    {/* Requested Service */}
+                    <TableCell>{row?.service}</TableCell>
+                    {/* Additional Hours */}
+                    <TableCell>{row?.extra_hours}h</TableCell>
+                    {/* Amount */}
+                    <TableCell>${row?.additional_payment}</TableCell>
+                    {/* Status */}
+                    <TableCell>
+                      <div
+                        className={`${getstatusBackgroundColor(
+                          row?.status
+                        )} py-2 px-4 rounded-[32px] w-fit capitalize`}
+                      >
+                        {row?.status}
+                      </div>
+                    </TableCell>
+                    {/* Event Date */}
+                    <TableCell>{row?.event_date}</TableCell>
+                    {/* Actions */}
+                    <TableCell>
+                      {row?.status !== "accepted" &&
+                      row?.status !== "rejected" ? (
+                        <div className=" flex flex-row items-center gap-2">
+                          <Link
+                            href={`/events/detail/${row?.job_id}/payment-request`}
+                            className={`cursor-pointer border border-1 border-[#0C9000] rounded-[4px] bg-[#EAFDE7] p-2`}
+                          >
+                            <p className="text-[#0C9000] font-[400] text-[14px] leading-[21px]">
+                              Pay Now
+                            </p>
+                          </Link>
+                        </div>
+                      ) : (
+                        <p>-</p>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
+      </div>
+
+      <div className="h-full lg:hidden flex flex-col max-lg:px-4 max-lg:py-4 gap-2">
+        <Link
+          href={"/"}
+          className="text-xs text-neutral-500 flex items-center gap-2"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Back
+        </Link>
+        <h2 className="text-[18px] font-[500]">Settlements</h2>
+        {isLoading ? (
+          <RenderLoader />
+        ) : transactionsData?.length == 0 ? (
+          <div className="w-full max-w-[1350px] mx-auto flex justify-center items-start h-full relative">
+            <NoDataFound
+              // isSettlement
+              title="Manage Settlements for Extra Hours."
+              // description={""}
+              description={
+                "Sometimes, events go beyond the planned schedule. This section will allow you to review and approve any additional payments for talents who worked extra hours. Once you have any pending settlements, they will appear here."
+              }
+              image="/images/client-portal/payment/settlements image.webp"
+            />
+          </div>
+        ) : (
+          transactionsData?.map((row: any, index: any) => (
+            <div
+              key={index}
+              className="shadow-md border p-3 px-4 rounded-xl mb-1"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="h-[15px] text-xs text-neutral-500 text-right">
+                  #{row?.payment_id}
+                </span>
+                <span
+                  className={`rounded-full px-2 py-px text-xs capitalize ${
+                    paymentTypeStyle[row?.status]
+                  }`}
+                >
+                  {row?.status}
+                </span>
+              </div>
+              <Link
+                href={`events/detail/${row?.event_id}`}
+                className="text-[18px] text-[#350ABC]"
+              >
+                {row?.event_title}
+              </Link>
+
+              <div className="flex justify-between mt-1">
+                <span className="text-sm text-neutral-600">
+                  {row?.event_date}
+                </span>
+                <div>
+                  <span className="text-neutral-700 text-sm pr-1">
+                    Additional Hours:
+                  </span>
+                  <span className="text-[16px] font-medium">
+                    {row?.extra_hours}h
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center gap-1 mt-1">
+                <Avatar className="w-[42px] h-[42px]">
+                  <AvatarImage
+                    src={row?.talent_profile_picture}
+                    className="object-cover"
+                    width={100}
+                    height={100}
+                  />
+                  <AvatarFallback>
+                    {row?.talent_name[0]}
+                    {row?.talent_name?.split(" ")?.length > 1 &&
+                      row?.talent_name?.split(" ")[1][0]}
+                  </AvatarFallback>
+                </Avatar>
+
+                <div className="flex justify-between items-center w-full px-2 ">
+                  <span className="font-[500] text-[16px] text-black flex items-center gap-1 ">
+                    {row?.talent_name}
+                    {row?.id_is_verified && row?.contact_is_verified ? (
+                      <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger className="hover:bg-transparent">
-                              <div className=" text-white pr-4 pl-2  rounded">
-                                <VerificationIcon
+                              <div className=" text-white rounded">
+                                <VerificationIconMobile
                                   id_is_verified={row?.id_is_verified}
                                   contact_is_verified={row?.contact_is_verified}
                                   height={23}
@@ -421,7 +588,7 @@ const Page = () => {
                                 />
                               </div>
                             </TooltipTrigger>
-                            <TooltipContent side="bottom">
+                            <TooltipContent side="bottom" className="z-40">
                               <VerificationStatus
                                 id_is_verified={row?.id_is_verified}
                                 contact_is_verified={row?.contact_is_verified}
@@ -430,52 +597,51 @@ const Page = () => {
                           </Tooltip>
                         </TooltipProvider>
                       </div>
-                      ) : ''}
-                    </div>
-                  </TableCell>
-                  {/* Requested Service */}
-                  <TableCell>{row?.service}</TableCell>
-                  {/* Additional Hours */}
-                  <TableCell>{row?.extra_hours}h</TableCell>
-                  {/* Amount */}
-                  <TableCell>${row?.additional_payment}</TableCell>
-                  {/* Status */}
-                  <TableCell>
-                    <div
-                      className={`${getstatusBackgroundColor(
-                        row?.status
-                      )} py-2 px-4 rounded-[32px] w-fit capitalize`}
-                    >
-                      {row?.status}
-                    </div>
-                  </TableCell>
-                  {/* Event Date */}
-                  <TableCell>{row?.event_date}</TableCell>
-                  {/* Actions */}
-                  <TableCell>
-                    {row?.status !== "accepted" &&
-                    row?.status !== "rejected" ? (
-                      <div className=" flex flex-row items-center gap-2">
-                        <Link
-                          href={`/events/detail/${row?.job_id}/payment-request`}
-                          className={`cursor-pointer border border-1 border-[#0C9000] rounded-[4px] bg-[#EAFDE7] p-2`}
-                        >
-                          <p className="text-[#0C9000] font-[400] text-[14px] leading-[21px]">
-                            Pay Now
-                          </p>
-                        </Link>
-                      </div>
                     ) : (
-                      <p>-</p>
+                      ""
                     )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </>
-      )}
-    </div>
+                  </span>
+                  <span className="text-[#4C4B4B] font-[400] text-[14px]">
+                    {row?.service}
+                  </span>
+                </div>
+              </div>
+
+              <hr className="mt-3" />
+
+              <div className="flex justify-between items-center mt-2">
+                <div>
+                  <span className="text-neutral-700 text-sm pr-1">Amount:</span>
+                  <span className="text-[18px] font-medium">
+                    ${row?.additional_payment}
+                  </span>
+                </div>
+                {row?.status == "pending" ? (
+                  <div className=" flex flex-row items-center gap-2">
+                    <Link
+                      href={`/events/detail/${row?.job_id}/payment-request`}
+                      className={`cursor-pointer flex items-center gap-1 rounded-lg px-2 py-1 text-white bg-[#350abc]`}
+                    >
+                        Pay Now
+                    </Link>
+                  </div>
+                ) : row?.status == "accepted" ? (
+                  <div
+                    // className={`cursor-pointer flex items-center gap-1 rounded-lg px-2 py-1 text-white bg-[#350abc]`}
+                    className={`cursor-pointer flex items-center gap-1 rounded-lg px-2 py-1 text-white bg-[#774dfd] opacity-80`}
+                  >
+                    Paid
+                    <svg xmlns="http://www.w3.org/2000/svg" className="mb-0.5" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </>
   );
 };
 
