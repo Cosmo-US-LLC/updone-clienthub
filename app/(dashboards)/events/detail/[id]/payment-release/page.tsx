@@ -54,9 +54,9 @@ const Page = () => {
   }, [data]);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-full bg-white flex flex-col">
       <Link
-        href={"/events/detail/" + params?.id}
+        href={"/events/detail/" + params?.id + "/payment-request"}
         className="text-xs text-neutral-500 flex items-center gap-2 pt-4 px-4 lg:hidden"
       >
         <ChevronLeft className="h-4 w-4" />

@@ -120,15 +120,19 @@ export default function StripeCheckoutForm({
                 </svg>
                 <span className="sr-only">Loading...</span>
               </div>
-            ) : paymentData?.tip_amount && paymentData?.initial_payment ? (
+            // ) : paymentData?.tip_amount && paymentData?.initial_payment ? (
+            ) : paymentData?.tip_amount && paymentData?.additional_amount_requested ? (
               `Pay $${Math.round(
                 // paymentData.tip_amount
-                paymentData.tip_amount + paymentData.initial_payment
+                paymentData.tip_amount + paymentData?.additional_amount_requested
+                // paymentData.tip_amount + paymentData.initial_payment
               )}`
             ) : paymentData?.tip_amount ? (
               `Pay $${Math.round(paymentData.tip_amount)}`
-            ) : paymentData?.initial_payment ? (
-              `Pay $${Math.round(paymentData.initial_payment)}`
+            // ) : paymentData?.initial_payment ? (
+            //   `Pay $${Math.round(paymentData.initial_payment)}`
+            ) : paymentData?.additional_amount_requested ? (
+              `Pay $${Math.round(paymentData.additional_amount_requested)}`
             ) : (
               "Pay now"
             )}

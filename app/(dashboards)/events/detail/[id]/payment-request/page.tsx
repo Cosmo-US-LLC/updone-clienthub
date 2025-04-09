@@ -89,6 +89,17 @@ function Page() {
           handleError
         );
         setData(newData);
+
+        // setting tip percentage
+        if (newData?.tip_amount) {
+          let percentage = 0;
+          let tipAmt = newData?.tip_amount;
+          let totalAmt = newData?.initial_payment;
+          percentage = parseInt(((tipAmt / totalAmt) * 100).toFixed());
+          console.log("Percentage", percentage);
+          setSelectedTipPercentage(percentage);
+        }
+
       } catch (error) {
         setError("Failed to load payment data.");
       } finally {
