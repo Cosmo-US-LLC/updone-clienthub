@@ -312,7 +312,7 @@ const Offers = ({
       <Sheet open={chatModal} onOpenChange={setChatModal}>
         {/* <SheetTrigger>Open</SheetTrigger> */}
         <SheetContent className="z-[190] w-full flex flex-col">
-          <SheetHeader>
+          <SheetHeader className="fixed top-4 pb-2 z-[195] left-0 w-full px-4 bg-white shadow-sm">
             {/* <div className="flex justify-end">
             </div> */}
             <SheetTitle className="flex items-center text-left gap-3">
@@ -324,11 +324,6 @@ const Offers = ({
                   setChatModal(false);
                 }}
               />
-              {/* <img
-                src={selectedOffer?.worker?.profile_pic}
-                alt={selectedOffer?.worker?.full_name}
-                className="w-12 h-12 rounded-full border object-cover"
-              /> */}
               <Avatar className="w-12 h-12 rounded-full border">
                 <AvatarImage
                   src={selectedOffer?.worker?.profile_pic}
@@ -357,7 +352,7 @@ const Offers = ({
             </SheetTitle>
             <SheetDescription hidden></SheetDescription>
           </SheetHeader>
-          <div className="grow">
+          <div className="grow pt-11">
             {chatModal && (
               <ChatContainer job={jobData} selectedOffer={selectedOffer} />
             )}

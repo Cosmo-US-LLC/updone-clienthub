@@ -155,7 +155,7 @@ function ChatContainer({ job, selectedOffer }) {
 
   return (
     <div className="h-full relative">
-      <div className={`relative flex-1 overflow-y-auto overflow-visible max-h-[calc(100vh-160px)] time-scroll rounded-xl  p-2`}>
+      <div className={`relative flex-1 overflow-y-auto overflow-visible max-h-[calc(100vh-140px)] time-scroll py-2`}>
         {chatLoading ? <Loading /> : Object.entries(groupedMessages).map(([date, msgs]) => (
           <div key={date}>
             {/* Date Timestamp */}
@@ -257,7 +257,7 @@ function ChatContainer({ job, selectedOffer }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="fixed bottom-0 left-0 p-6 w-full ">
+      <div className="fixed bottom-0 border-t left-0 px-4 pb-4 pt-2 w-full ">
         {/* Message Input */}
         {job?.status === "completed" ? (
           <div className="flex flex-row items-center justify-center gap-2 p-4 absolute bottom-0">
@@ -284,7 +284,7 @@ function ChatContainer({ job, selectedOffer }) {
                   sendMessage();
                 }
               }}
-              className="!h-[38px] w-full bg-[#FFEFD7] !text-[16px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl"
+              className="!h-[48px] w-full bg-[#FFEFD7] !text-[16px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl"
               placeholder="Add your comment here..."
             />
             <div onClick={sendMessage}>
