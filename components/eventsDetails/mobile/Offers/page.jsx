@@ -311,7 +311,7 @@ const Offers = ({
       {/* Chat Sheet */}
       <Sheet open={chatModal} onOpenChange={setChatModal}>
         {/* <SheetTrigger>Open</SheetTrigger> */}
-        <SheetContent className="z-[190] w-full flex flex-col h-[100dvh]">
+        <SheetContent className="z-[190] w-full flex flex-col h-[100svh]">
           <SheetHeader className="fixed top-4 pb-2 z-[195] left-0 w-full px-4 bg-white shadow-sm">
             {/* <div className="flex justify-end">
             </div> */}
