@@ -275,6 +275,7 @@ function ChatContainer({ job, selectedOffer }) {
         ) : (
           <div className="grow flex items-center space-x-2">
             <input
+              autoFocus
               type="text"
               value={messageBody}
               onChange={(e) => setMessageBody(e.target.value)}

@@ -377,9 +377,14 @@ const EventDetails = ({ jobData, releaseData }) => {
             <div className="w-full flex justify-center pt-4">
               <Link
                 href={`/events/detail/${jobData?.id}/chat`}
-                className="flex gap-1 items-center px-4 py-2 rounded-full bg-[#350abc] text-white text-sm"
+                className="relative flex gap-1 items-center px-4 py-2 rounded-full bg-[#350abc] text-white text-sm"
               >
                 Chat Now <ArrowRight className="w-4 h-4" />
+                {jobData?.unread_message_count > 0 && (
+                  <span className="absolute -top-2 -right-1 z-10 bg-red-500 text-white text-xs font-bold w-fit min-w-5 text-center px-1.5 py-0.5 rounded-full">
+                    {jobData?.unread_message_count}
+                  </span>
+                )}
               </Link>
             </div>
           )}

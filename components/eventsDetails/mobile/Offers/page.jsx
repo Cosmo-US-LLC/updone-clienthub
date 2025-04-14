@@ -227,9 +227,9 @@ const Offers = ({
                       Let's Talk
                     </button>
                     {/* <FaFileInvoiceDollar className="text-gray-500 text-lg" /> */}
-                    {offer?.notification > 0 && (
-                      <span className="absolute -top-2 -right-1 z-10 bg-[#774DFD] text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                        {offer?.notification}
+                    {offer?.unread_message_count > 0 && (
+                      <span className="absolute -top-2 -right-1 z-10 w-fit bg-[#774DFD] text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                        {offer?.unread_message_count}
                       </span>
                     )}
                   </div>
@@ -358,7 +358,9 @@ const Offers = ({
             <SheetDescription hidden></SheetDescription>
           </SheetHeader>
           <div className="grow">
-            <ChatContainer job={jobData} selectedOffer={selectedOffer} />
+            {chatModal && (
+              <ChatContainer job={jobData} selectedOffer={selectedOffer} />
+            )}
           </div>
         </SheetContent>
       </Sheet>
