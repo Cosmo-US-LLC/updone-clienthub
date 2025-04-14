@@ -506,16 +506,31 @@ const Page = () => {
         {isLoading ? (
           <RenderLoader />
         ) : transactionsData?.length == 0 ? (
-          <div className="w-full max-w-[1350px] mx-auto flex justify-center items-start h-full relative">
-            <NoDataFound
-              // isSettlement
-              title="Manage Settlements for Extra Hours."
-              // description={""}
-              description={
-                "Sometimes, events go beyond the planned schedule. This section will allow you to review and approve any additional payments for talents who worked extra hours. Once you have any pending settlements, they will appear here."
-              }
-              image="/images/client-portal/payment/settlements image.webp"
+          // <div className="w-full max-w-[1350px] mx-auto flex justify-center items-start h-full relative">
+          //   <NoDataFound
+          //     // isSettlement
+          //     title="Manage Settlements for Extra Hours."
+          //     // description={""}
+          //     description={
+          //       "Sometimes, events go beyond the planned schedule. This section will allow you to review and approve any additional payments for talents who worked extra hours. Once you have any pending settlements, they will appear here."
+          //     }
+          //     image="/images/client-portal/payment/settlements image.webp"
+          //   />
+          // </div>
+          <div className="h-full min-h-[70vh] flex justify-center items-center flex-col gap-5">
+            <Image
+              width={180}
+              height={180}
+              alt=""
+              className="w-56 h-56"
+              src="/images/client-portal/payment/settlements image.webp"
             />
+            <p className="text-[#000000] text-[30px] leading-[36px] font-[300]">
+              Manage Settlements for Extra Hours.
+            </p>
+            <p className="text-[#000000]/50 text-[16px] font-[400]">
+            Sometimes, events go beyond the planned schedule. This section will allow you to review and approve any additional payments for talents who worked extra hours. Once you have any pending settlements, they will appear here.
+            </p>
           </div>
         ) : (
           transactionsData?.map((row: any, index: any) => (
@@ -622,7 +637,7 @@ const Page = () => {
                       href={`/events/detail/${row?.job_id}/payment-request`}
                       className={`cursor-pointer flex items-center gap-1 rounded-lg px-2 py-1 text-white bg-[#350abc]`}
                     >
-                        Pay Now
+                      Pay Now
                     </Link>
                   </div>
                 ) : row?.status == "accepted" ? (
@@ -631,7 +646,16 @@ const Page = () => {
                     className={`cursor-pointer flex items-center gap-1 rounded-lg px-2 py-1 text-white bg-[#774dfd] opacity-80`}
                   >
                     Paid
-                    <svg xmlns="http://www.w3.org/2000/svg" className="mb-0.5" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="mb-0.5"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                    >
+                      <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"></path>
+                    </svg>
                   </div>
                 ) : (
                   ""

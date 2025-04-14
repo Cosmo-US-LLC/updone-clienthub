@@ -295,7 +295,9 @@ const Page = () => {
       {openTab === 0 ? (
         <EventPayments
           isLoading={isLoadingGroup}
+          // transactionsData={[]}
           transactionsData={transactionsData}
+          // transactionsGroup={[]}
           transactionsGroup={transactionsGroup}
         />
       ) : (
