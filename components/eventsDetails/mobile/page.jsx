@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MdOutlineEventNote, MdLocalOffer, MdGroup } from "react-icons/md";
 import { PiCurrencyDollar } from "react-icons/pi";
@@ -29,14 +29,19 @@ const Page = ({ jobId, jobData }) => {
   // console.log("event details", jobData);
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [selectedOffer, setSelectedOffer] = useState(null);
+  const defaultTab = searchParams?.get("tab") || "Event Details"
 
   useEffect(() => {
-    if (pathname === "/eventsDetails/mobile") {
-      router.replace("/eventsDetails/mobile/EventDetails");
-      setActiveTab("Event Details");
-    }
-  }, [pathname]);
+    setActiveTab(defaultTab);
+  }, []);
+  // useEffect(() => {
+  //   if (pathname === "/eventsDetails/mobile") {
+  //     router.replace("/eventsDetails/mobile/EventDetails");
+  //     setActiveTab("Event Details");
+  //   }
+  // }, [pathname]);
 
   // Offers Tab Data
   const offerSort = "latest";

@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { apiRequest } from "@/app/lib/services";
 import { useError } from "@/app/lib/context/ErrorProvider";
@@ -18,6 +19,7 @@ function ChatContainer({ job, offerId }) {
   const [isChatBodyVisible, setIsChatBodyVisible] = useState(true);
   const [chatLoading, setChatLoading] = useState(true);
   const { handleError } = useError();
+  const [feildError, setFeildError] = useState(false);
   // const offerId = selectedOffer?.id;
 
   useEffect(() => {
@@ -28,7 +30,7 @@ function ChatContainer({ job, offerId }) {
 
   useEffect(() => {
     const getMessages = async () => {
-        setChatLoading(true);
+      setChatLoading(true);
       const newData = await apiRequest(
         "/chat/getAll",
         {
@@ -48,14 +50,14 @@ function ChatContainer({ job, offerId }) {
         // setJobId(newData?.job_id);
         // setIsAssignedToMe(newData?.assigned_to_me);
       }
-      setChatLoading(false)
-    //   setMessagesRefreshed(!messagesRefreshed);
+      setChatLoading(false);
+      //   setMessagesRefreshed(!messagesRefreshed);
     };
     if (offerId) {
-      console.log(offerId)
+      console.log(offerId);
       getMessages();
     } else {
-      console.log("Failure ", offerId)
+      console.log("Failure ", offerId);
     }
   }, [offerId, storedData, handleError]);
 
@@ -153,88 +155,97 @@ function ChatContainer({ job, offerId }) {
     }
   }
 
+  if (chatLoading) {
+    return (<Loading />);
+  }
+
   return (
     <div className="h-full relative">
-      <div className={`relative flex-1 overflow-y-auto overflow-visible max-h-[calc(100vh-140px)] time-scroll py-2`}>
-        {chatLoading ? <Loading /> : Object.entries(groupedMessages).map(([date, msgs]) => (
-          <div key={date}>
-            {/* Date Timestamp */}
-            <p className="text-[#72777A] text-[12px] font-[500] leading-[16px] text-center mb-4">
-              {date}
-            </p>
+      <div
+        className={`relative flex-1 overflow-y-auto overflow-visible max-h-[calc(100vh-140px)] time-scroll py-2`}
+      >
+        {chatLoading ? (
+          <Loading />
+        ) : (
+          Object.entries(groupedMessages).map(([date, msgs]) => (
+            <div key={date}>
+              {/* Date Timestamp */}
+              <p className="text-[#72777A] text-[12px] font-[500] leading-[16px] text-center mb-4">
+                {date}
+              </p>
 
-            {/* Messages */}
-            {msgs.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex mb-2 ${
-                  msg?.sender_user_id === storedData?.user?.id
-                    ? "justify-end" // Sender's messages on the right
-                    : "justify-start" // Receiver's messages on the left
-                }`}
-              >
-                {msg?.sender_user_id === storedData?.user?.id ? (
-                  // Sender's div
-                  <div
-                    className={`max-w-[90%] py-3 px-4 bg-[#774DFD] text-white rounded-t-[24px] rounded-bl-[24px]`}
-                    style={{
-                      wordBreak: "break-word",
-                      overflowWrap: "break-word",
-                      position: "relative",
-                    }}
-                  >
-                    <div className="flex flex-col">
-                      <p className="text-[14px] font-[400] leading-[28px]">
-                        {msg.message_body}
-                      </p>
-                    </div>
-                    {/* Elliptical Tail for Sender */}
+              {/* Messages */}
+              {msgs.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex mb-2 ${
+                    msg?.sender_user_id === storedData?.user?.id
+                      ? "justify-end" // Sender's messages on the right
+                      : "justify-start" // Receiver's messages on the left
+                  }`}
+                >
+                  {msg?.sender_user_id === storedData?.user?.id ? (
+                    // Sender's div
                     <div
+                      className={`max-w-[90%] py-3 px-4 bg-[#774DFD] text-white rounded-t-[24px] rounded-bl-[24px]`}
                       style={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: "-5px",
-                        width: "20px",
-                        height: "10px",
-                        background: "#774DFD",
-                        borderBottomLeftRadius: "15px",
-                        transform: "rotate(180deg)",
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                        position: "relative",
                       }}
-                    ></div>
-                  </div>
-                ) : (
-                  // Receiver's div
-                  <div
-                    className={`max-w-[90%] py-3 px-4 bg-[white] text-black border border-1 border-[#EBE6FF] rounded-br-[24px] rounded-t-[24px]`}
-                    style={{
-                      wordBreak: "break-word",
-                      overflowWrap: "break-word",
-                      position: "relative",
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: "-5px",
-                        width: "20px",
-                        height: "10px",
-                        background: "white",
-                        borderBottomRightRadius: "15px",
-                        transform: "rotate(-180deg)",
-                      }}
-                    ></div>
-                    <div className="flex flex-col">
-                      <p className="text-[14px] font-[400] leading-[28px]">
-                        {msg.message_body}
-                      </p>
+                    >
+                      <div className="flex flex-col">
+                        <p className="text-[14px] font-[400] leading-[28px]">
+                          {msg.message_body}
+                        </p>
+                      </div>
+                      {/* Elliptical Tail for Sender */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          right: "-5px",
+                          width: "20px",
+                          height: "10px",
+                          background: "#774DFD",
+                          borderBottomLeftRadius: "15px",
+                          transform: "rotate(180deg)",
+                        }}
+                      ></div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  ) : (
+                    // Receiver's div
+                    <div
+                      className={`max-w-[90%] py-3 px-4 bg-[white] text-black border border-1 border-[#EBE6FF] rounded-br-[24px] rounded-t-[24px]`}
+                      style={{
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                        position: "relative",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: "-5px",
+                          width: "20px",
+                          height: "10px",
+                          background: "white",
+                          borderBottomRightRadius: "15px",
+                          transform: "rotate(-180deg)",
+                        }}
+                      ></div>
+                      <div className="flex flex-col">
+                        <p className="text-[14px] font-[400] leading-[28px]">
+                          {msg.message_body}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
 
-            {/* <div className="flex justify-center items-center h-full w-full">
+              {/* <div className="flex justify-center items-center h-full w-full">
                 {job?.status !== "assigned" && job?.status !== "completed" && (
                     <div
                     className={`absolute bottom-0 border border-[white] text-[white] bg-[#774DFD] h-[42px] w-[114px] flex items-center justify-center rounded-full cursor-pointer`}
@@ -251,8 +262,9 @@ function ChatContainer({ job, offerId }) {
                     </div>
                 )}
             </div> */}
-          </div>
-        ))}
+            </div>
+          ))
+        )}
         {/* Ref for Auto-Scroll */}
         <div ref={messagesEndRef} />
       </div>
@@ -278,14 +290,25 @@ function ChatContainer({ job, offerId }) {
               autoFocus
               type="text"
               value={messageBody}
-              onChange={(e) => setMessageBody(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 1500) {
+                  setMessageBody(e.target.value);
+                  setFeildError(false);
+                } else {
+                  setFeildError(true);
+                  setTimeout(() => {
+                    setFeildError(false);
+                  }, 2000);
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   sendMessage();
                 }
               }}
-              className="!h-[48px] w-full bg-[#FFEFD7] !text-[16px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl"
+              className={`!h-[48px] w-full bg-[#FFEFD7] !text-[16px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl transition-all duration-150 ${feildError ? "border-red-500 bg-red-100 shadow-md shadow-red-200" : ""}`}
               placeholder="Add your comment here..."
+              max={1500}
             />
             <div onClick={sendMessage}>
               <Image

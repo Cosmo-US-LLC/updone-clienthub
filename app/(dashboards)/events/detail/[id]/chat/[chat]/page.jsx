@@ -22,6 +22,8 @@ import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { selectStaff } from "@/app/lib/store/features/staffSlice";
 import { selectOfferDetailData } from "@/app/lib/store/features/bookingSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
+import setOfferDetailData from "@/app/lib/store/features/bookingSlice";
+import {setOfferDetailsEmpty} from "@/app/lib/store/features/bookingSlice";
 
 function page() {
   const params = useParams();
@@ -30,6 +32,11 @@ function page() {
   const { auth: storedData } = useAppSelector(selectAuth);
   const { jobData } = useAppSelector(selectStaff);
   const offerDetailData = useAppSelector(selectOfferDetailData);
+  const [chatLoad, setChatLoad] = React.useState(false);
+
+  React.useEffect(() => {
+    setChatLoad(true);
+  }, []);
 
   function timeAgo(dateTimeString) {
     const inputDate = new Date(dateTimeString);
@@ -56,6 +63,10 @@ function page() {
     }
   }
 
+  if (!chatLoad) {
+    return <Loading />;
+  }
+
   return (
     <div className="absolute z-[190] w-full flex flex-col top-0 left-0 bg-white h-[100dvh]">
           {/* Talent Name Header */}
@@ -63,12 +74,14 @@ function page() {
             <div className="flex items-center text-left gap-3">
               {console.log(offerDetailData)}
               <ChevronLeft
-                className=""
+                className="cursor-pointer"
                 onClick={() => {
+                    dispatch(setOfferDetailsEmpty());
                 //   setSelectedOffer(null);
                 //   setChatModal(false);
+                // dispatch(setOfferDetailData(null));
                 router.push(
-                  `/events/detail/${params.id}`
+                  `/events/detail/${params.id}?tab=Offers`
                 );
                 }}
               />

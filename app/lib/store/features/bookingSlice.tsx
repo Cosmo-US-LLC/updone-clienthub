@@ -47,6 +47,9 @@ export const bookingSlice = createSlice({
         offerDetailData: null,
       };
     },
+    setOfferDetailsEmpty: (state) => {
+      state.offerDetailData = null
+    },
     setBookingActive: (state) => {
       state.bookingActive = true;
       state.bookingInActive = false;
@@ -83,6 +86,7 @@ export const {
   setOffersId,
   setSelectedServiceNameFromHomeClear,
   setOfferDetailData,
+  setOfferDetailsEmpty,
   setBookingActive,
   setBookingInactive,
   setSelectedServiceName,

@@ -47,7 +47,7 @@ const PaymentPay = ({
           onClick={() => {
             const currentJobId = data?.job?.id;
             const baseUrl = window.location.origin;
-            const redirectUrl = `${baseUrl}/events/detail/${currentJobId}`;
+            const redirectUrl = `${baseUrl}/events/detail/${currentJobId}?tab=Offers`;
             window.location.href = redirectUrl;
           }}
         >
