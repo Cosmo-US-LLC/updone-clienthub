@@ -70,7 +70,7 @@ function page() {
   return (
     <div className="absolute z-[190] w-full flex flex-col top-0 left-0 bg-white h-[100dvh]">
       {/* Talent Name Header */}
-      <div className="absolute top-0 py-2 z-[195] left-0 w-full px-4 bg-white shadow-sm">
+      <div className="fixed top-0 py-2 z-[195] left-0 w-full px-4 bg-white shadow-sm">
         <div className="flex items-center text-left gap-3">
           {console.log(offerDetailData)}
           <ChevronLeft

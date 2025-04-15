@@ -106,7 +106,8 @@ const EventDetails = ({ jobData, releaseData }) => {
           className={`flex items-center text-[14px] font-medium px-3 py-1 rounded-full capitalize ${
             status === "assigned"
               ? "text-[#0C9000] bg-green-100 border-[1px] border-[#0C9000]"
-              : "text-[#0076E6] bg-[#E7F4FD] border-[1px] border-[#0076E6]"
+              : status === "open" ? "text-[#0076E6] bg-[#E7F4FD] border-[1px] border-[#0076E6]"
+              : "text-red-600 bg-red-100 border-[1px] border-red-600"
           }`}
         >
           <FaCheck className="text-[14px] mr-1" /> {status}
@@ -371,7 +372,7 @@ const EventDetails = ({ jobData, releaseData }) => {
                 )}
             </div>
           )}
-          {console.log(releaseData)}
+          {/* {console.log(releaseData)} */}
 
           {status == "assigned" && (
             <div className="w-full flex justify-center pt-4">
