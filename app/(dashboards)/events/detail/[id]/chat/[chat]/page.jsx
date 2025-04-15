@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect } from 'react'
+"use client";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import {
   Tooltip,
@@ -23,7 +23,7 @@ import { selectStaff } from "@/app/lib/store/features/staffSlice";
 import { selectOfferDetailData } from "@/app/lib/store/features/bookingSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import setOfferDetailData from "@/app/lib/store/features/bookingSlice";
-import {setOfferDetailsEmpty} from "@/app/lib/store/features/bookingSlice";
+import { setOfferDetailsEmpty } from "@/app/lib/store/features/bookingSlice";
 
 function page() {
   const params = useParams();
@@ -69,54 +69,52 @@ function page() {
 
   return (
     <div className="absolute z-[190] w-full flex flex-col top-0 left-0 bg-white h-[100dvh]">
-          {/* Talent Name Header */}
-          <div className="fixed top-0 py-2 z-[195] left-0 w-full px-4 bg-white shadow-sm">
-            <div className="flex items-center text-left gap-3">
-              {console.log(offerDetailData)}
-              <ChevronLeft
-                className="cursor-pointer"
-                onClick={() => {
-                    dispatch(setOfferDetailsEmpty());
-                //   setSelectedOffer(null);
-                //   setChatModal(false);
-                // dispatch(setOfferDetailData(null));
-                router.push(
-                  `/events/detail/${params.id}?tab=Offers`
-                );
-                }}
-              />
-              <Avatar className="w-12 h-12 rounded-full border">
-                <AvatarImage
-                  src={offerDetailData?.worker?.profile_pic}
-                  className="object-cover"
-                  width={100}
-                  height={100}
-                />
-                <AvatarFallback>
-                  {offerDetailData?.worker?.full_name[0]}
-                  {offerDetailData?.worker?.full_name?.split(" ")?.length > 1 &&
-                    offerDetailData?.worker?.full_name?.split(" ")[1][0]}
-                </AvatarFallback>
-              </Avatar>
-              <div className="pl-1">
-                <div className="text-xl leading-tight">
-                  {offerDetailData?.worker?.full_name}
-                  <br />
-                </div>
-                <div className="font-normal leading-tight text-sm text-neutral-600">
-                  Last seen{" "}
-                  {offerDetailData?.worker?.user?.last_active
-                    ? `${timeAgo(offerDetailData?.worker?.user?.last_active)}`
-                    : "weeks ago"}
-                </div>
-              </div>
+      {/* Talent Name Header */}
+      <div className="absolute top-0 py-2 z-[195] left-0 w-full px-4 bg-white shadow-sm">
+        <div className="flex items-center text-left gap-3">
+          {console.log(offerDetailData)}
+          <ChevronLeft
+            className="cursor-pointer"
+            onClick={() => {
+              dispatch(setOfferDetailsEmpty());
+              //   setSelectedOffer(null);
+              //   setChatModal(false);
+              // dispatch(setOfferDetailData(null));
+              router.push(`/events/detail/${params.id}?tab=Offers`);
+            }}
+          />
+          <Avatar className="w-12 h-12 rounded-full border">
+            <AvatarImage
+              src={offerDetailData?.worker?.profile_pic}
+              className="object-cover"
+              width={100}
+              height={100}
+            />
+            <AvatarFallback>
+              {offerDetailData?.worker?.full_name[0]}
+              {offerDetailData?.worker?.full_name?.split(" ")?.length > 1 &&
+                offerDetailData?.worker?.full_name?.split(" ")[1][0]}
+            </AvatarFallback>
+          </Avatar>
+          <div className="pl-1">
+            <div className="text-xl leading-tight">
+              {offerDetailData?.worker?.full_name}
+              <br />
+            </div>
+            <div className="font-normal leading-tight text-sm text-neutral-600">
+              Last seen{" "}
+              {offerDetailData?.worker?.user?.last_active
+                ? `${timeAgo(offerDetailData?.worker?.user?.last_active)}`
+                : "weeks ago"}
             </div>
           </div>
-          <div className="grow pt-16 px-4 bg-white">
-            <ChatContainer job={jobData} offerId={params?.chat} />
-          </div>
         </div>
-  )
+      </div>
+      <div className="grow pt-16 px-4 bg-white">
+        <ChatContainer job={jobData} offerId={params?.chat} />
+      </div>
+    </div>
+  );
 }
 
-export default page
+export default page;
