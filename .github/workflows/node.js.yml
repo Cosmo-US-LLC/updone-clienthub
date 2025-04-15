@@ -84,9 +84,12 @@ jobs:
         ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} '
           # Verify Node.js version
           # node --version 2>&1
+          
+          echo "Setting up environment for Node.js..." &&
+          export NVM_DIR="$HOME/.nvm" &&
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&
+          nvm use node &&
 
-          pwd 2>&1 &&
-          echo "Current directory: $(pwd)" 2>&1 &&
           cd updone/updone-clienthub &&
           echo "Pulling latest code..." 2>&1 &&
           git stash
