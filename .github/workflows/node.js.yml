@@ -83,9 +83,11 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} '
           # Verify Node.js version
-          node --version 2>&1
+          # node --version 2>&1
 
-          cd /updone/updone-clienthub &&
+          pwd 2>&1 &&
+          echo "Current directory: $(pwd)" 2>&1 &&
+          cd updone/updone-clienthub &&
           echo "Pulling latest code..." 2>&1 &&
           git stash
           git pull 2>&1 &&
