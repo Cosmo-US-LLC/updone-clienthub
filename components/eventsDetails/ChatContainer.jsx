@@ -160,9 +160,9 @@ function ChatContainer({ job, offerId }) {
   }
 
   return (
-    <div className="h-full relative">
+    <>
       <div
-        className={`relative flex-1 py-20`}
+        className={`flex-1 overflow-y-auto px-4 bg-white`}
       >
         {chatLoading ? (
           <Loading />
@@ -269,7 +269,7 @@ function ChatContainer({ job, offerId }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="fixed bg-white bottom-0 border-t left-0 px-4 pb-4 pt-2 w-full ">
+      <div className="px-4 pb-4 pt-2 border-t bg-white">
         {/* Message Input */}
         {job?.status === "completed" ? (
           <div className="flex flex-row items-center justify-center gap-2 p-4 absolute bottom-0">
@@ -322,7 +322,7 @@ function ChatContainer({ job, offerId }) {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 

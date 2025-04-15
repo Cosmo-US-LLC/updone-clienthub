@@ -68,18 +68,15 @@ function page() {
   }
 
   return (
-    <div className="w-full flex flex-col top-0 left-0 bg-white h-full">
-      {/* Talent Name Header */}
-      <div className="fixed top-0 py-2 z-[195] left-0 w-full px-4 bg-white shadow-sm">
+    <div className="absolute top-0 left-0 z-[190] w-full h-[100dvh] flex flex-col bg-white">
+      {/* <div className="fixed top-0 py-2 z-[195] left-0 w-full px-4 bg-white shadow-sm"> */}
+      <div className="py-2 px-4 shadow-sm z-[10] bg-white">
         <div className="flex items-center text-left gap-3">
           {console.log(offerDetailData)}
           <ChevronLeft
             className="cursor-pointer"
             onClick={() => {
               dispatch(setOfferDetailsEmpty());
-              //   setSelectedOffer(null);
-              //   setChatModal(false);
-              // dispatch(setOfferDetailData(null));
               router.push(`/events/detail/${params.id}?tab=Offers`);
             }}
           />
@@ -110,9 +107,9 @@ function page() {
           </div>
         </div>
       </div>
-      <div className="grow pt-16 px-4 bg-white">
+      {/* <div className="grow pt-16 px-4 bg-white">
+      </div> */}
         <ChatContainer job={jobData} offerId={params?.chat} />
-      </div>
     </div>
   );
 }
