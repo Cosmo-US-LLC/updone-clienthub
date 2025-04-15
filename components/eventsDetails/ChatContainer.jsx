@@ -257,7 +257,7 @@ function ChatContainer({ job, selectedOffer }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="fixed bottom-0 border-t left-0 px-4 pb-4 pt-2 w-full ">
+      <div className="fixed bg-white bottom-0 border-t left-0 px-4 pb-4 pt-2 w-full ">
         {/* Message Input */}
         {job?.status === "completed" ? (
           <div className="flex flex-row items-center justify-center gap-2 p-4 absolute bottom-0">
