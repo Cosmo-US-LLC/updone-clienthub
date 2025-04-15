@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "@/app/loading";
 
-function ChatContainer({ job, selectedOffer }) {
+function ChatContainer({ job, offerId }) {
   const { auth: storedData } = useAppSelector(selectAuth);
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
@@ -18,13 +18,13 @@ function ChatContainer({ job, selectedOffer }) {
   const [isChatBodyVisible, setIsChatBodyVisible] = useState(true);
   const [chatLoading, setChatLoading] = useState(true);
   const { handleError } = useError();
-  const offerId = selectedOffer?.id;
+  // const offerId = selectedOffer?.id;
 
   useEffect(() => {
-    if (selectedOffer !== null) {
+    if (offerId) {
       setIsChatBodyVisible(true);
     }
-  }, [selectedOffer]);
+  }, [offerId]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -55,7 +55,7 @@ function ChatContainer({ job, selectedOffer }) {
       console.log(offerId)
       getMessages();
     } else {
-      console.log("Failure ", offerId, selectedOffer?.id)
+      console.log("Failure ", offerId)
     }
   }, [offerId, storedData, handleError]);
 

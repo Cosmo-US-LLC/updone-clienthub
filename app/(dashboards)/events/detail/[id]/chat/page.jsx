@@ -182,7 +182,7 @@ function page() {
         </div>
       </div>
       <div className="grow">
-        <ChatContainer job={jobData} selectedOffer={selectedOffer} />
+        <ChatContainer job={jobData} offerId={selectedOffer?.id} />
       </div>
     </div>
   );
