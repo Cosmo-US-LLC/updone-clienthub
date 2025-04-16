@@ -162,7 +162,7 @@ function ChatContainer({ job, offerId }) {
   return (
     <>
       <div
-        className={`flex-1 overflow-y-auto px-4 bg-white`}
+        className={`grow overflow-y-auto px-4 bg-white`}
       >
         {chatLoading ? (
           <Loading />
