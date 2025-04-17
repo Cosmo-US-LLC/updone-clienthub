@@ -166,7 +166,7 @@ const Page = () => {
           <div className="py-20">
             <RenderLoader />
           </div>
-        ) : methodsData?.length !== 0 ? (
+        ) : methodsData?.length == 0 ? (
           <div className="h-full min-h-[70vh] flex justify-center items-center flex-col gap-3">
             <Image
               width={151}
