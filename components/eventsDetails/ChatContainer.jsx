@@ -162,7 +162,7 @@ function ChatContainer({ job, offerId }) {
   return (
     <>
       <div
-        className={`grow overflow-y-auto px-4 bg-white`}
+        className={` px-4 bg-white`}
       >
         {chatLoading ? (
           <Loading />
@@ -269,7 +269,7 @@ function ChatContainer({ job, offerId }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="px-4 pb-4 pt-2 border-t bg-white">
+      <div className="sticky bottom-0 left-0 right-0 px-4 pb-4 pt-2 border-t bg-white">
         {/* Message Input */}
         {job?.status === "completed" ? (
           <div className="flex flex-row items-center justify-center gap-2 p-4 absolute bottom-0">
