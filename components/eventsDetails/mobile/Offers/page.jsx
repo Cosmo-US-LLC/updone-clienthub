@@ -246,9 +246,11 @@ const Offers = ({
             No offers yet, check back in couple of hours or invite more talent!
           </p>
 
-          <button onClick={()=>{setInviteMore()}} className="bg-purple-600 text-white text-sm font-medium px-6 py-3 rounded-full mt-6">
-            Invite talent to job
-          </button>
+          {jobData?.status == "open" && (
+            <button onClick={()=>{setInviteMore()}} className="bg-purple-600 text-white text-sm font-medium px-6 py-3 rounded-full mt-6">
+              Invite talent to job
+            </button>
+          )}
         </div>
       )}
 
