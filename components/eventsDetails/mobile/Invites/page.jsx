@@ -25,6 +25,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Cookies from "js-cookie";
+import { useParams } from "next/navigation";
 // import InviteMoreTalents from "./InviteMoreTalents";
 // import { apiRequest } from "@/app/lib/services";
 // import { selectAuth } from "@/app/lib/store/features/authSlice";
@@ -32,12 +34,34 @@ import {
 import { Loader } from "@/app/_components/ui/dashboard-loader";
 import InviteMoreTalents from "@/app/_components/booking/job-detail/components/InviteMoreTalents";
 import InviteTalentMobile from "@/app/_components/booking/job-detail/components/InviteTalentMobile";
+import GalleryContent from "@/app/_components/ui/gallery/GalleryContent";
 
-const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore, setInviteMore }) => {
+const Invites = ({
+  jobData,
+  GetInvites,
+  invitesData,
+  invitesLoading,
+  inviteMore,
+  setInviteMore,
+}) => {
   // const [inviteMore, setInviteMore] = useState(false);
+  const params = useParams();
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
   const [loading, setLoading] = useState(false);
   const { auth: storedData } = useAppSelector(selectAuth);
+  const [showGallery, setShowGallery] = useState(false);
+  const [galleryTalent, setGalleryTalent] = useState(null);
+  const [recommended, setRecommended] = useState([]);
+  const [loadingInit, setLoadingInit] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCount, setSelectedCount] = useState(12);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
+  const [skeletonCount, setSkeletonCount] = useState(0);
+  const [loadingMobile, setLoadingMobile] = useState(true);
+
+  const [jobApiData, setJobApiData] = useState(null);
+  console.log("galleryTalent", galleryTalent);
 
   const handleInviteClick = () => {
     setInviteMore(true);
@@ -47,6 +71,99 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
     // console.log(selectedTalentsLocal);
     inviteMoreTalentApi();
   };
+
+  const fetchTalentsData = async (add = false, page = 1) => {
+    setLoadingMobile(true);
+    let body = {
+      city_id: 1,
+      // city_id: parseInt(Cookies.get("event_city")) || 1,
+      service_id: parseInt(Cookies.get("event_service_id")) || 1,
+      page_number: add ? page : currentPage,
+      page_size: selectedCount || 12,
+      order: "ASC",
+    };
+    try {
+      const newData = await apiRequest("/job/recommended-workers/public", {
+        method: "POST",
+        body: body,
+        headers: {
+          ...(storedData && {
+            Authorization: `Bearer ${storedData.token}`,
+          }),
+        },
+      });
+      const apiResponse = await apiRequest("/job/details/public", {
+        method: "POST",
+        body: {
+          job_id: params?.id,
+        },
+      });
+
+      if (add) {
+        // dispatch(setJobData({
+        //   ...newData,
+        //   records: [...data?.records, ...(newData?.records || [])],
+        // }));
+        setRecommended({
+          ...recommended,
+          records: [...recommended?.records, ...(newData?.records || [])],
+        });
+      } else {
+        // dispatch(setJobData(apiResponse));
+        setRecommended(newData);
+      }
+      setJobApiData(apiResponse);
+      setLoadingMobile(false);
+      return;
+    } catch (err) {
+      console.error("Error 3", err);
+      // setError("Something went wrong!");
+    } finally {
+      setLoadingMobile(false);
+      setLoadingInit(false);
+      // dispatch(setJobId(params?.id));
+    }
+  };
+
+  const fetchJobDetails = async () => {
+    try {
+      const apiResponse = await apiRequest("/job/details/public", {
+        method: "POST",
+        body: {
+          job_id: params?.id,
+        },
+      });
+      if (apiResponse) {
+        setJobApiData(apiResponse);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobDetails();
+  }, []);
+
+  useEffect(() => {
+    fetchTalentsData();
+  }, [currentPage, selectedCount]);
+
+  const handleLoadMore = () => {
+    const talentsToAdd = Math.min(
+      pageSize,
+      recommended?.pagination?.total_records - recommended?.records?.length
+    );
+    setSkeletonCount(talentsToAdd); // Set the number of skeleton loaders
+    fetchTalentsData(true, pageNo + 1);
+    setPageNo(pageNo + 1);
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      setSkeletonCount(0); // Reset the skeleton count when loading is complete
+    }
+  }, [loading]);
 
   const inviteMoreTalentApi = async () => {
     setLoading(true);
@@ -77,8 +194,17 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
   };
 
   useEffect(() => {
-    console.log(selectedTalentsLocal)
+    console.log(selectedTalentsLocal);
   }, [selectedTalentsLocal]);
+
+  const toggleGalleryOn = (talent) => {
+    setGalleryTalent(talent);
+    setShowGallery(true);
+  };
+  const toggleGalleryOff = (talent) => {
+    // setGalleryTalent(talent);
+    setShowGallery(false);
+  };
 
   return (
     <div className="pb-5">
@@ -184,7 +310,9 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
               </div>
               <div className="flex justify-around border rounded-b-lg py-2 bg-white">
                 <div className="flex items-center justify-center gap-1">
-                  <p className="text-[14px] font-[400] text-gray-500">From&nbsp;</p>
+                  <p className="text-[14px] font-[400] text-gray-500">
+                    From&nbsp;
+                  </p>
                   <p className="text-[16px] font-[600]">
                     ${invite?.worker?.per_hours_rate}
                   </p>
@@ -224,7 +352,8 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
             No Invites
           </h2>
           <p className="text-gray-500 text-sm mt-2 px-6">
-            Invite talent to your job on Clienthub desktop, we&apos;ll notify them right away!
+            Invite talent to your job on Clienthub desktop, we&apos;ll notify
+            them right away!
           </p>
 
           <button
@@ -238,12 +367,48 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
 
       <Dialog open={inviteMore} onOpenChange={setInviteMore}>
         {/* <DialogTrigger>Open</DialogTrigger> */}
-        <DialogContent className="w-[100vw] max-w-5xl h-[100dvh] z-[299] overflow-y-auto px-2">
+        <DialogContent
+          hideCloseButton={showGallery}
+          className="w-[100vw] max-w-5xl h-[100dvh] z-[299] overflow-y-auto px-2"
+        >
           <DialogHeader>
-            <DialogTitle>Invite More Talents</DialogTitle>
+            <DialogTitle hidden={showGallery == true}>
+              Invite More Talents
+            </DialogTitle>
+            <>{console.log(jobData)}</>
             <DialogDescription hidden></DialogDescription>
           </DialogHeader>
-          {loading ? (
+          {showGallery == true ? (
+            <GalleryContent
+              images={
+                galleryTalent?.gallery?.length > 0
+                  ? galleryTalent?.gallery
+                  : [galleryTalent?.profile_pic]
+              }
+              talent={galleryTalent}
+              jobApiData={jobApiData}
+              onClose={toggleGalleryOff}
+              isSelected={
+                selectedTalentsLocal.some(
+                  (selected) => selected.id === galleryTalent.id
+                ) || galleryTalent?.alreadyInvited
+              }
+              onToggleSelect={() =>
+                !galleryTalent?.alreadyInvited &&
+                setSelectedTalentsLocal((prev) =>
+                  prev.some((item) => item.id === galleryTalent.id)
+                    ? prev.filter((item) => item.id !== galleryTalent.id)
+                    : [
+                        ...prev,
+                        {
+                          id: galleryTalent.id,
+                          profile_pic: galleryTalent?.profile_pic,
+                        },
+                      ]
+                )
+              }
+            />
+          ) : loading ? (
             <>
               <Loader />
             </>
@@ -252,11 +417,31 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
               jobId={jobData?.id}
               selectedTalentsLocal={selectedTalentsLocal}
               setSelectedTalentsLocal={setSelectedTalentsLocal}
-              // fetchTalentsData={fetchTalentsData}
+              fetchTalentsData={fetchTalentsData}
               handleInviteSelected={handleInviteSelected}
+              setGalleryTalent={toggleGalleryOn}
               data={jobData}
               setData={null}
               selected={invitesData}
+              recommended={recommended}
+              setRecommended={setRecommended}
+              loadingInit={loadingInit}
+              setLoadingInit={setLoadingInit}
+              jobApiData={jobApiData}
+              setJobApiData={setJobApiData}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              setSelectedCount={setSelectedCount}
+              selectedCount={selectedCount}
+              pageNo={pageNo}
+              setPageNo={setPageNo}
+              pageSize={pageSize}
+              setPageSize={setPageSize}
+              skeletonCount={skeletonCount}
+              setSkeletonCount={setSkeletonCount}
+              handleLoadMore={handleLoadMore}
+              loading={loadingMobile}
+              setLoading={setLoadingMobile}
               // loading={loading}
               // setLoading={setLoading}
               // loadingInit={loadingInit}
@@ -265,7 +450,7 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
           )}
         </DialogContent>
       </Dialog>
-      {(inviteMore && !loading) && (
+      {inviteMore && !loading && !showGallery && (
         <div className="z-[990] fixed bottom-2 left-0 w-full px-3 pr-4">
           <div
             // style={{ touchAction: "none" }}
@@ -313,7 +498,8 @@ const Invites = ({ jobData, GetInvites, invitesData, invitesLoading, inviteMore,
               disabled={selectedTalentsLocal.length === 0 || loading}
               onClick={handleInviteSelected}
             >
-              Invite {selectedTalentsLocal.length} Talent{selectedTalentsLocal.length > 1 ? "s" : ""}
+              Invite {selectedTalentsLocal.length} Talent
+              {selectedTalentsLocal.length > 1 ? "s" : ""}
             </button>
           </div>
         </div>

@@ -16,35 +16,44 @@ function InviteTalentMobile({
   jobId,
   selectedTalentsLocal,
   setSelectedTalentsLocal,
-  // fetchTalentsData,
+  fetchTalentsData,
+  setGalleryTalent,
   handleInviteSelected,
   data,
   setData,
   selected,
-  // loading,
-  // setLoading,
-  // loadingInit,
+  recommended,
+  setSelected,
+  setRecommended,
+  jobApiData,
+  selectedCount,
+  setJobApiData,
+  setSelectedCount,
+  currentPage,
+  setCurrentPage,
+  loadingInit,
   // allRecords,
   // pageSize,
+  loading, 
+  setLoading
 }) {
   const dispatch = useDispatch();
   const params = useParams();
   const [pageNo, setPageNo] = useState(1);
   const [pageSize, setPageSize] = useState(12);
-  const [skeletonCount, setSkeletonCount] = useState(0); // State to track skeleton loaders
+  const [skeletonCount, setSkeletonCount] = useState(0); 
 
-  const [loading, setLoading] = useState(true);
-  const [loadingInit, setLoadingInit] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCount, setSelectedCount] = useState(12);
+  // const [loading, setLoading] = useState(true);
+  // const [loadingInit, setLoadingInit] = useState(true);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [selectedCount, setSelectedCount] = useState(12);
 
   const { auth: storedData } = useAppSelector(selectAuth);
   // const [selectedTalentsLocal, setSelectedTalentsLocal] = useState(
   //   Cookies.get("event_talents") ? JSON.parse(Cookies.get("event_talents")) : []
   // );
-  const [recommended, setRecommended] = useState([]);
+  // const [recommended, setRecommended] = useState([]);
 
-  const [jobApiData, setJobApiData] = useState(null);
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
   const skeletonCards = Array(selectedCount || 8).fill(null);
@@ -54,61 +63,61 @@ function InviteTalentMobile({
   // }, [selectedTalentsLocal])
 
   // Cookies.get("event_city")
-  const fetchTalentsData = async (add = false, page = 1) => {
-    setLoading(true);
-    let body = {
-      city_id: parseInt(Cookies.get("event_city")) || 1,
-      service_id: parseInt(Cookies.get("event_service_id")) || 1,
-      page_number: add ? page : currentPage,
-      page_size: selectedCount || 12,
-      order: "ASC",
-    };
-    try {
-      const newData = await apiRequest("/job/recommended-workers/public", {
-        method: "POST",
-        body: body,
-        headers: {
-          ...(storedData && {
-            Authorization: `Bearer ${storedData.token}`,
-          }),
-        },
-      });
-      const apiResponse = await apiRequest("/job/details/public", {
-        method: "POST",
-        body: {
-          job_id: params?.id,
-        },
-      });
+  // const fetchTalentsData = async (add = false, page = 1) => {
+  //   setLoading(true);
+  //   let body = {
+  //     city_id: parseInt(Cookies.get("event_city")) || 1,
+  //     service_id: parseInt(Cookies.get("event_service_id")) || 1,
+  //     page_number: add ? page : currentPage,
+  //     page_size: selectedCount || 12,
+  //     order: "ASC",
+  //   };
+  //   try {
+  //     const newData = await apiRequest("/job/recommended-workers/public", {
+  //       method: "POST",
+  //       body: body,
+  //       headers: {
+  //         ...(storedData && {
+  //           Authorization: `Bearer ${storedData.token}`,
+  //         }),
+  //       },
+  //     });
+  //     const apiResponse = await apiRequest("/job/details/public", {
+  //       method: "POST",
+  //       body: {
+  //         job_id: params?.id,
+  //       },
+  //     });
 
-      if (add) {
-        // dispatch(setJobData({
-        //   ...newData,
-        //   records: [...data?.records, ...(newData?.records || [])],
-        // }));
-        setRecommended({
-          ...recommended,
-          records: [...recommended?.records, ...(newData?.records || [])],
-        });
-      } else {
-        // dispatch(setJobData(apiResponse));
-        setRecommended(newData);
-      }
-      setJobApiData(apiResponse);
-      setLoading(false);
-      return;
-    } catch (err) {
-      console.error("Error 3", err);
-      // setError("Something went wrong!");
-    } finally {
-      setLoading(false);
-      setLoadingInit(false);
-      // dispatch(setJobId(params?.id));
-    }
-  };
+  //     if (add) {
+  //       // dispatch(setJobData({
+  //       //   ...newData,
+  //       //   records: [...data?.records, ...(newData?.records || [])],
+  //       // }));
+  //       setRecommended({
+  //         ...recommended,
+  //         records: [...recommended?.records, ...(newData?.records || [])],
+  //       });
+  //     } else {
+  //       // dispatch(setJobData(apiResponse));
+  //       setRecommended(newData);
+  //     }
+  //     setJobApiData(apiResponse);
+  //     setLoading(false);
+  //     return;
+  //   } catch (err) {
+  //     console.error("Error 3", err);
+  //     // setError("Something went wrong!");
+  //   } finally {
+  //     setLoading(false);
+  //     setLoadingInit(false);
+  //     // dispatch(setJobId(params?.id));
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchTalentsData();
-  }, [currentPage, selectedCount]);
+  // useEffect(() => {
+  //   fetchTalentsData();
+  // }, [currentPage, selectedCount]);
 
   const handlePageChange = (page) => {
     document
@@ -125,13 +134,17 @@ function InviteTalentMobile({
   };
 
   const handleLoadMore = () => {
-    const talentsToAdd = Math.min(
-      pageSize,
-      recommended?.pagination?.total_records - recommended?.records?.length
-    );
-    setSkeletonCount(talentsToAdd); // Set the number of skeleton loaders
-    fetchTalentsData(true, pageNo + 1);
-    setPageNo(pageNo + 1);
+    const remainingTalents = recommended?.pagination?.total_records - recommended?.records?.length;
+    console.log("remainingTalents", remainingTalents);
+  
+    if (remainingTalents <= 0) return; // No more records, stop loading
+  
+    const talentsToAdd = Math.min(pageSize, remainingTalents);
+    setSkeletonCount(talentsToAdd);
+  
+    const nextPage = pageNo + 1;
+    setPageNo(nextPage);
+    fetchTalentsData(true, nextPage);
   };
 
   useEffect(() => {
@@ -207,6 +220,7 @@ function InviteTalentMobile({
                         ]
                   )
                 }
+                setGalleryTalent={setGalleryTalent}
               />
             </div>
           ))}
