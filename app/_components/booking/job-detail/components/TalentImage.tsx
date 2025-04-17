@@ -32,13 +32,13 @@ function TalentImage({ talent, size = 0 }: any) {
             : `${talent?.full_name[0]}${talent?.full_name[1]}`}
         </AvatarFallback>
       </Avatar>
-      {galleryImages?.length > 0 && (
+      {/* {galleryImages?.length > 0 && (
         <GalleryModal
           show={showModal}
           onClose={() => setShowModal(false)}
           images={galleryImages}
         />
-      )}
+      )} */}
     </div>
   );
 }

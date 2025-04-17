@@ -16,82 +16,22 @@ const services: any = {
 };
 
 function InviteMoreTalents({
-  jobId,
-  jobData,
   selectedTalentsLocal,
   setSelectedTalentsLocal,
   handleInviteSelected,
   setInviteMore,
+  setGalleryTalent,
+  jobApiData,
+  currentPage,
+  setCurrentPage,
+  selectedCount,
+  setSelectedCount,
+  data,
+  setData
 }: any) {
-  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCount, setSelectedCount] = useState(12);
-  const [jobApiData, setJobApiData] = useState<any>(null);
   const skeletonCards = Array(selectedCount || 8).fill(null);
-
   const { auth: storedData } = useAppSelector(selectAuth);
-
-  const fetchData = async () => {
-    setLoading(true);
-    let body: any = {
-      city_id: 1,
-      service_id: services[jobData?.service_name] || 1,
-      page_number: currentPage,
-      page_size: selectedCount || 12,
-      order: "ASC",
-    };
-    if (jobId) {
-      body.job_id = parseInt(jobId);
-    }
-
-    try {
-      const newData = await apiRequest("/job/recommended-workers/public", {
-        method: "POST",
-        body: body,
-        headers: {
-          ...(storedData && {
-            Authorization: `Bearer ${storedData.token}`,
-          }),
-        },
-      });
-      const apiResponse = await apiRequest("/job/details/public", {
-        method: "POST",
-        body: {
-          job_id: jobId,
-        },
-      });
-      setJobApiData(apiResponse);
-      setData(newData);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
-  const fetchJobDetails = async () => {
-    try {
-      const apiResponse = await apiRequest("/job/details/public", {
-        method: "POST",
-        body: {
-          job_id: jobId,
-        },
-      });
-      if (apiResponse) {
-        setJobApiData(apiResponse);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [currentPage, selectedCount]);
-
-  useEffect(() => {
-    fetchJobDetails();
-  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
@@ -162,6 +102,7 @@ function InviteMoreTalents({
                           ]
                     )
                   }
+                  setGalleryTalent={setGalleryTalent}
                 />
               </div>
             ))}
