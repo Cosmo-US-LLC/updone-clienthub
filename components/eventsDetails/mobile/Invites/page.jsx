@@ -327,7 +327,7 @@ const Invites = ({
               </div>
             </div>
           ))}
-          {jobData?.status === "open" && (
+          {jobData?.status == "open" && (
             <div className="flex justify-center">
               <button
                 onClick={handleInviteClick}
@@ -351,17 +351,29 @@ const Invites = ({
           <h2 className="text-lg font-semibold text-gray-900 mt-4">
             No Invites
           </h2>
-          <p className="text-gray-500 text-sm mt-2 px-6">
-            Invite talent to your job on Clienthub desktop, we&apos;ll notify
-            them right away!
-          </p>
 
-          <button
-            onClick={handleInviteClick}
-            className="bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
-          >
-            Invite talent to job
-          </button>
+          {jobData?.status != "open" && (
+            <>
+              <p className="text-gray-500 text-sm mt-2 px-6">
+                You did not invite any talents for your event!
+              </p>
+            </>
+          )}
+          {jobData?.status == "open" && (
+            <>
+              <p className="text-gray-500 text-sm mt-2 px-6">
+                Invite talent to your job on Clienthub desktop, we&apos;ll
+                notify them right away!
+              </p>
+
+              <button
+                onClick={handleInviteClick}
+                className="bg-[#350abc] text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
+              >
+                Invite talent to job
+              </button>
+            </>
+          )}
         </div>
       )}
 

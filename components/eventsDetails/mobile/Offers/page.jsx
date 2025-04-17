@@ -213,7 +213,7 @@ const Offers = ({
                     </button>
                     {/* <FaFileInvoiceDollar className="text-gray-500 text-lg" /> */}
                     {offer?.unread_message_count > 0 && (
-                      <span className="absolute -top-2 -right-1 z-10 w-fit bg-red-500 text-white text-xs font-bold min-w-5 px-1.5 py-0.5 rounded-full">
+                      <span className="absolute -top-2 -right-1 z-10 w-fit bg-[#c70101] text-white text-xs text-center font-semibold min-w-5 px-1.5 py-0.5 rounded-full">
                         {offer?.unread_message_count}
                       </span>
                     )}
