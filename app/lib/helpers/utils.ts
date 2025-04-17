@@ -102,7 +102,7 @@ export function calculateTotal(hourRate: number, amount: number) {
 
 // Utility function to capitalize the first letter of each breadcrumb name
 const capitalizeSegment = (segment: string): string => {
-  return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
+  return segment.charAt(0).toUpperCase() + segment.slice(1)?.replace(/-/g, " ");
 };
 // Helper function to validate and prepare the data for API request
 export const prepareUpdatedData = (

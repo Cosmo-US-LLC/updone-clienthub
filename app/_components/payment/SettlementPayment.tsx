@@ -173,7 +173,7 @@ const SettlementPayment = ({ data, offerId, clientSecret, loadingIntent }: any) 
                 (day % 10 === 3 && day !== 13 ? 'rd' : 'th')));
 
         // Format the date with day and then month and year separated by a comma
-        const formattedDate = `${dayWithSuffix} ${dateObj.toLocaleDateString('en-US', options).replace(/(\w+)\s(\d{4})/, '$1, $2')}`;
+        const formattedDate = `${dayWithSuffix} ${dateObj.toLocaleDateString('en-US', options)?.replace(/(\w+)\s(\d{4})/, '$1, $2')}`;
 
         // Create Date objects for start time and end time using the job date
         const startTime = new Date(`${job.date}T${job.start_time}`);
