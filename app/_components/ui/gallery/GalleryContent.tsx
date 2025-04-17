@@ -497,7 +497,7 @@ function GalleryContent({
                 )}
               </div>
             </div>
-            {talent?.alreadyInvited && (
+
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -528,7 +528,7 @@ function GalleryContent({
               )}
               {talent.alreadyInvited ? "Already invited" : "Select Talent"}
             </button>
-            )}
+            
           </div>
         </div>
       </div>
