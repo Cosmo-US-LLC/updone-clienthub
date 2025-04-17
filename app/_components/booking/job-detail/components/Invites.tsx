@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import InviteCard from "@/app/_components/staff/components/invite-cards";
 import {
@@ -17,6 +17,16 @@ import { apiRequest } from "@/app/lib/services";
 import { selectAuth } from "@/app/lib/store/features/authSlice";
 import { useAppSelector } from "@/app/lib/store/hooks";
 import { Loader } from "@/app/_components/ui/dashboard-loader";
+import GalleryContent from "@/app/_components/ui/gallery/GalleryContent";
+
+const services: any = {
+  Bartender: 1,
+  Waiter: 2,
+  "Cocktail Server": 3,
+  Barback: 6,
+  "Promo Model": 4,
+  "Event Helper": 4,
+};
 
 const Invites = ({ data, jobId, jobData, isInModal }: any) => {
   const router = useRouter();
@@ -24,8 +34,77 @@ const Invites = ({ data, jobId, jobData, isInModal }: any) => {
   const [inviteMore, setInviteMore] = useState(false);
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [jobApiData, setJobApiData] = useState<any>(null);
+
+  const [showGallery, setShowGallery] = useState(false);
+  const [galleryTalent, setGalleryTalent] = useState<any>(null);
+  console.log("galleryTalent", galleryTalent);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCount, setSelectedCount] = useState(12);
+  const [data1, setData] = useState<any>(null);
 
   const { auth: storedData } = useAppSelector(selectAuth);
+
+  const fetchData = async () => {
+    setLoading(true);
+    let body: any = {
+      city_id: 1,
+      service_id: services[jobData?.service_name] || 1,
+      page_number: currentPage,
+      page_size: selectedCount || 12,
+      order: "ASC",
+    };
+    if (jobId) {
+      body.job_id = parseInt(jobId);
+    }
+
+    try {
+      const newData = await apiRequest("/job/recommended-workers/public", {
+        method: "POST",
+        body: body,
+        headers: {
+          ...(storedData && {
+            Authorization: `Bearer ${storedData.token}`,
+          }),
+        },
+      });
+      const apiResponse = await apiRequest("/job/details/public", {
+        method: "POST",
+        body: {
+          job_id: jobId,
+        },
+      });
+      setJobApiData(apiResponse);
+      setData(newData);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
+  const fetchJobDetails = async () => {
+    try {
+      const apiResponse = await apiRequest("/job/details/public", {
+        method: "POST",
+        body: {
+          job_id: jobId,
+        },
+      });
+      if (apiResponse) {
+        setJobApiData(apiResponse);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, selectedCount]);
+
+  useEffect(() => {
+    fetchJobDetails();
+  }, []);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -72,6 +151,15 @@ const Invites = ({ data, jobId, jobData, isInModal }: any) => {
     }
   };
 
+  const toggleGalleryOn = (talent: any) => {
+    setGalleryTalent(talent);
+    setShowGallery(true);
+  };
+  const toggleGalleryOff = (talent: any) => {
+    // setGalleryTalent(talent);
+    setShowGallery(false);
+  };
+
   return (
     <>
       <div
@@ -82,7 +170,10 @@ const Invites = ({ data, jobId, jobData, isInModal }: any) => {
         }`}
       >
         {data?.map((staff: any, index: number) => (
-          <div key={staff.id} className={"w-[304px] relative " + (!isInModal ? "mt-8" : "pb-2")}>
+          <div
+            key={staff.id}
+            className={"w-[304px] relative " + (!isInModal ? "mt-8" : "pb-2")}
+          >
             <InviteCard
               isInvited={staff?.worker?.has_offered}
               index={index}
@@ -155,24 +246,67 @@ const Invites = ({ data, jobId, jobData, isInModal }: any) => {
       )}
 
       <Dialog open={inviteMore} onOpenChange={setInviteMore}>
-        {/* <DialogTrigger>Open</DialogTrigger> */}
-        <DialogContent className="w-[70vw] max-w-5xl max-h-[80svh] overflow-y-auto">
+        <DialogContent
+        hideCloseButton={showGallery}
+          className={`w-[90vw] xl:w-[70vw] max-w-5xl max-h-[80vh] overflow-y-auto ${
+            showGallery ? "!rounded-xl w-[70vw] xl:w-[55vw] !p-0 gap-0 border-0 bg-transparent" : ""
+          }`}
+        >
           <DialogHeader>
-            <DialogTitle>Invite More Talents</DialogTitle>
+            <DialogTitle hidden={showGallery == true}>
+              Invite More Talents
+            </DialogTitle>
             <DialogDescription hidden></DialogDescription>
+            <>{console.log(jobData)}</>
           </DialogHeader>
-          {loading ? (
+          {showGallery == true ? (
+            <GalleryContent
+              images={
+                galleryTalent?.gallery?.length > 0
+                  ? galleryTalent?.gallery
+                  : [galleryTalent?.profile_pic]
+              }
+              talent={galleryTalent}
+              jobApiData={jobApiData}
+              onClose={toggleGalleryOff}
+              isSelected={
+                selectedTalentsLocal.some(
+                  (selected: any) => selected.id === galleryTalent.id
+                ) || galleryTalent?.alreadyInvited
+              }
+              onToggleSelect={() =>
+                !galleryTalent?.alreadyInvited &&
+                setSelectedTalentsLocal((prev:any) =>
+                  prev.some((item: any) => item.id === galleryTalent.id)
+                    ? prev.filter((item: any) => item.id !== galleryTalent.id)
+                    : [
+                      ...prev,
+                      {
+                        id: galleryTalent.id,
+                        profile_pic: galleryTalent?.profile_pic,
+                      },
+                    ]
+                )
+              }
+            />
+          ) : loading ? (
             <>
               <Loader />
             </>
           ) : (
             <InviteMoreTalents
-              jobId={jobId}
-              jobData={jobData}
               selectedTalentsLocal={selectedTalentsLocal}
               setSelectedTalentsLocal={setSelectedTalentsLocal}
               handleInviteSelected={handleInviteSelected}
               setInviteMore={setInviteMore}
+              setGalleryTalent={toggleGalleryOn}
+              jobApiData={jobApiData}
+              data={data1}
+              setData={setData}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              selectedCount={selectedCount}
+              setSelectedCount={setSelectedCount}
             />
           )}
         </DialogContent>
