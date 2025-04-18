@@ -257,7 +257,9 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
     // Split the location into the first part and the remaining location
     const firstCommaIndex = formattedLocation?.indexOf(",");
     const firstPart = formattedLocation?.substring(0, firstCommaIndex); // "1 World Way"
-    const secondPart = formattedLocation?.substring(firstCommaIndex + 1)?.trim(); // "LA, California 90045"
+    const secondPart = formattedLocation
+      ?.substring(firstCommaIndex + 1)
+      ?.trim(); // "LA, California 90045"
 
     return {
       firstPart: firstPart?.trim(),
@@ -302,7 +304,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             </div>
           </div>
         ) : (
-          <div className={`!bg-[#FFF] flex-col ${
+          <div
+            className={`!bg-[#FFF] flex-col ${
               !storedData?.token
                 ? "rounded-tl-[29px] rounded-[12px]"
                 : "rounded-[12px]"
@@ -483,7 +486,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
           (jobDetailData?.status === "assigned" ||
             jobDetailData?.status === "completed") && (
             <div className="overflow-y-auto pb-5">
-              <TalentInfo jobDetailData={jobDetailData} />
+              <TalentInfo jobDetailData={jobDetailData} jobId={jobId} />
               <div className="flex flex-row items-center justify-center w-full cursor-pointer">
                 <div
                   className="mt-4 min-h-[10px] h-full p-4 rounded-full bg-[white] shadow-lg"
