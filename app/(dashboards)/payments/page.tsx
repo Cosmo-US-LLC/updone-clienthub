@@ -228,8 +228,8 @@ const headers = [
 
 const Page = () => {
   const [openTab, setOpenTab] = useState<any>(0);
-  const [escrowAmt, setEscrowAmt] = useState<any>(0);
-  const [escrowLoading, setEscrowLoading] = useState<any>(true);
+  // const [escrowAmt, setEscrowAmt] = useState<any>(0);
+  // const [escrowLoading, setEscrowLoading] = useState<any>(true);
   const [transactionsData, setTransactionsData] = useState<any>([]);
   const [transactionsGroup, setTransactionsGroup] = useState<any>([]);
   const { auth: storedData } = useAppSelector(selectAuth);
@@ -237,22 +237,22 @@ const Page = () => {
   const [isLoadingGroup, setIsLoadingGroup] = useState(true);
 
   const fetchEscrow = async () => {
-    try {
-      setEscrowLoading(true);
-      const response = await apiRequest("/stripe/escrow-amount", {
-        method: "POST",
-        headers: {
-          revalidate: true,
-          ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
-        },
-      });
-      console.log(response?.escrow_amount);
-      setEscrowAmt(response?.escrow_amount);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setEscrowLoading(false);
-    }
+    // try {
+    //   setEscrowLoading(true);
+    //   const response = await apiRequest("/stripe/escrow-amount", {
+    //     method: "POST",
+    //     headers: {
+    //       revalidate: true,
+    //       ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
+    //     },
+    //   });
+    //   console.log(response?.escrow_amount);
+    //   setEscrowAmt(response?.escrow_amount);
+    // } catch (error) {
+    //   console.error("Error fetching data:", error);
+    // } finally {
+    //   setEscrowLoading(false);
+    // }
   };
   const fetchOffers = async () => {
     try {
@@ -341,11 +341,9 @@ const Page = () => {
         </div>
 
         <div>
-          {escrowLoading ? (
+          {/* {escrowLoading ? (
             <div className="flex flex-row items-center gap-2 bg-white rounded-xl shadow-md px-4 py-2">
               <h4 className="text-[14px] font-[400]">Amount in Escrow:</h4>
-              {/* <p className="text-[#350ABC] text-[14px] font-[600]">
-              </p> */}
               <span className="h-5 w-8 bg-neutral-200 animate-pulse rounded"></span>
             </div>
           ) : (
@@ -372,7 +370,7 @@ const Page = () => {
                 </Tooltip>
               </TooltipProvider>
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
