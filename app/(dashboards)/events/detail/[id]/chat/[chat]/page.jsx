@@ -67,10 +67,12 @@ function page() {
     return <Loading />;
   }
 
+
+
   return (
     <>
-    
-      <div className="fixed top-0 w-full z-[195] py-2 px-4 shadow-sm bg-white">
+
+      <div  className="fixed top-0 w-full z-[195] py-2 px-4 shadow-sm bg-white">
         <div className="flex items-center text-left gap-3">
           {console.log(offerDetailData)}
           <ChevronLeft
@@ -109,6 +111,7 @@ function page() {
       </div>
       
         <ChatContainer job={jobData} offerId={params?.chat} />
+        
         </>
   );
 }
