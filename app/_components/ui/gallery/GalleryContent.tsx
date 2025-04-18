@@ -17,6 +17,9 @@ import {
 } from "@/components/ui/tooltip";
 import { VerificationStatus } from "../verified-status-check-tooltip";
 import VerificationIconMobile from "../shield";
+import { useDispatch } from "react-redux";
+import { setOffersId } from "@/app/lib/store/features/bookingSlice";
+import { useRouter } from "next/navigation";
 
 function GalleryContent({
   images,
@@ -24,10 +27,19 @@ function GalleryContent({
   isSelected,
   onToggleSelect,
   jobApiData,
-  onClose
+  onClose,
+  showButton = true,
+  addButton = false,
+  inviteId,
 }: any) {
-  console.log("jobApiData", jobApiData);
-  console.log("talent", talent);
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const payPayment = (invite_id: any) => {
+    dispatch(setOffersId(invite_id));
+    router.push(`/events/payment/${invite_id}`);
+  };
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -76,7 +88,7 @@ function GalleryContent({
   }
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white rounded-xl">
         <div className="w-full md:w-[59%] bg-black rounded-none sm:rounded-tl-xl overflow-hidden">
           <div className="relative w-full bg-black pt-0 sm:pt-3 overflow-hidden rounded-none sm:rounded-xl min-h-[300px]">
             {loading && (
@@ -99,7 +111,7 @@ function GalleryContent({
                   handlePrev();
                   e.stopPropagation();
                 }}
-                className="absolute left-2 xl:left-4 top-1/2 p-2 -translate-y-1/2 bg-[#e6e0fa] text-[#350ABC] rounded-full hover:bg-gray-100"
+                className="absolute left-2 xl:left-4 top-1/2 -translate-y-1/2 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +133,7 @@ function GalleryContent({
                   handleNext();
                   e.stopPropagation();
                 }}
-                className="absolute right-2 xl:right-4 top-1/2 p-2 -translate-y-1/2  bg-[#e6e0fa] text-[#350ABC] rounded-full shadow-md hover:bg-gray-100"
+                className="absolute right-2 xl:right-4 top-1/2 -translate-y-1/2 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -156,6 +168,28 @@ function GalleryContent({
                 />
               ))}
             </div>
+            <button
+              onClick={(e) => {
+                onClose();
+                e.stopPropagation();
+              }}
+              className="absolute top-2 right-2 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner sm:hidden block"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 md:h-6 md:w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
 
           <div className="hidden sm:flex justify-center gap-2 flex-wrap p-2">
@@ -201,7 +235,7 @@ function GalleryContent({
                         <div className=" text-white rounded w-[30px]">
                           <VerificationIconMobile
                             id_is_verified={talent.id_is_verified}
-                            contact_is_verified={talent.contact_is_verified}
+                            contact_is_verified={talent?.contact_is_verified}
                             height={30}
                             width={30}
                           />
@@ -210,7 +244,7 @@ function GalleryContent({
                       <TooltipContent side="bottom" className="z-40">
                         <VerificationStatus
                           id_is_verified={talent.id_is_verified}
-                          contact_is_verified={talent.contact_is_verified}
+                          contact_is_verified={talent?.contact_is_verified}
                         />
                       </TooltipContent>
                     </Tooltip>
@@ -221,8 +255,8 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[15px] text-gray-700 mt-1">
                 Last seen{" "}
-                {talent?.last_active
-                  ? timeAgo(talent.last_active)
+                {talent?.user?.last_active
+                  ? timeAgo(talent?.user?.last_active)
                   : "weeks ago"}
               </div>
             </div>
@@ -497,38 +531,57 @@ function GalleryContent({
                 )}
               </div>
             </div>
+            {showButton && !addButton && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleSelect();
+                  onClose();
+                }}
+                disabled={talent?.alreadyInvited}
+                className={`h-10 w-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4 ${
+                  talent?.alreadyInvited
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {(isSelected || talent?.alreadyInvited) && (
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="#2C2240"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+                {talent.alreadyInvited ? "Already invited" : "Select Talent"}
+              </button>
+            )}
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleSelect();
-                onClose();
-              }}
-              disabled={talent?.alreadyInvited}
-              className={`h-10 w-full flex items-center justify-center gap-2 border transition bg-[#e6e0fa] text-[#350ABC]  mb-4 ${
-                talent?.alreadyInvited
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              {(isSelected || talent?.alreadyInvited) && (
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="#2C2240"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              )}
-              {talent.alreadyInvited ? "Already invited" : "Select Talent"}
-            </button>
-            
+            {!showButton && addButton && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleSelect();
+                  onClose();
+                  payPayment(inviteId);
+                }}
+                className="h-10 w-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4"
+              >
+                Hire me for ${calculateTotal(
+                    talent?.per_hours_rate,
+                    jobApiData
+                      ? jobApiData.total_hours
+                      : Cookies.get("event_hours")?.split(" ")[0]
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -538,7 +591,7 @@ function GalleryContent({
           onClose();
           e.stopPropagation();
         }}
-        className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-[#e6e0fa] text-[#350ABC] rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none"
+        className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner hidden sm:block"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

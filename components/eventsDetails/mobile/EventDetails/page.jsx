@@ -23,6 +23,13 @@ import { formatPhoneNumber } from "@/lib/utils";
 import VerificationIcon from "@/app/_components/ui/shield-mobile";
 import TalentImage from "@/app/_components/booking/job-detail/components/TalentImage";
 import { formatWorkingTimes } from "@/app/lib/helpers/formatDateTime";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import GalleryContent from "@/app/_components/ui/gallery/GalleryContent";
 
 const EventDetails = ({ jobData, releaseData }) => {
   const router = useRouter();
@@ -106,7 +113,8 @@ const EventDetails = ({ jobData, releaseData }) => {
           className={`flex items-center text-[14px] font-medium px-3 py-1 rounded-full capitalize ${
             status === "assigned"
               ? "text-[#0C9000] bg-green-100 border-[1px] border-[#0C9000]"
-              : status === "open" ? "text-[#0076E6] bg-[#E7F4FD] border-[1px] border-[#0076E6]"
+              : status === "open"
+              ? "text-[#0076E6] bg-[#E7F4FD] border-[1px] border-[#0076E6]"
               : "text-red-600 bg-red-100 border-[1px] border-red-600"
           }`}
         >
@@ -136,8 +144,7 @@ const EventDetails = ({ jobData, releaseData }) => {
               // true
             }`}
           >
-            {console.log(jobData?.invite?.worker)}
-            <TalentImage talent={jobData?.invite?.worker} size={1} />
+            <TalentImage talent={jobData} size={1} />
             {/* <Avatar className="w-[62px] h-[62px]">
               <AvatarImage
                 src={jobData?.invite?.worker?.profile_pic}
@@ -268,9 +275,9 @@ const EventDetails = ({ jobData, releaseData }) => {
           </div>
 
           <div
-            className={`flex items-center justify-between mt-3 border-t pt-3 relative ${
-              status === "completed" && "opacity-50 pointer-events-none"
-            }`}
+          className={`flex items-center justify-between mt-3 border-t pt-3 relative ${
+            status === "completed" && "opacity-50 pointer-events-none"
+          }`}
           >
             <div className="flex justify-center items-center gap-[10px]">
               <Image
