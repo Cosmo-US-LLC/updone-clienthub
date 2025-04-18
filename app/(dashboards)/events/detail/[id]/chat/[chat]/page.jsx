@@ -67,10 +67,12 @@ function page() {
     return <Loading />;
   }
 
+
+
   return (
-    <div className="relative z-[190] w-full h-[100dvh] flex flex-col bg-white">
-      {/* <div className="fixed top-0 py-2 z-[195] left-0 w-full px-4 bg-white shadow-sm"> */}
-      <div className="py-2 px-4 shadow-sm z-[10] bg-white">
+    <>
+
+      <div  className="fixed top-0 w-full z-[195] py-2 px-4 shadow-sm bg-white">
         <div className="flex items-center text-left gap-3">
           {console.log(offerDetailData)}
           <ChevronLeft
@@ -107,10 +109,10 @@ function page() {
           </div>
         </div>
       </div>
-      {/* <div className="grow pt-16 px-4 bg-white">
-      </div> */}
+      
         <ChatContainer job={jobData} offerId={params?.chat} />
-    </div>
+        
+        </>
   );
 }
 

@@ -110,9 +110,9 @@ const AddLocationSecondScreen = ({
 
   const handleSuggestionClick = (suggestion: MapboxFeature) => {
     const address = suggestion.place_name
-      .replace(/,\s*(united states|usa)$/i, "")
-      .replace(/,\s*california/i, "")
-      .replace(/,\s*ca/i, "");
+      ?.replace(/,\s*(united states|usa)$/i, "")
+      ?.replace(/,\s*california/i, "")
+      ?.replace(/,\s*ca/i, "");
 
     setCustomSearchValue(address);
     setSelectedAddress(address);
@@ -254,9 +254,9 @@ const AddLocationSecondScreen = ({
                 className="absolute z-50 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
                 {suggestions.map((suggestion, index) => {
                   const cleanedAddress = suggestion.place_name
-                    .replace(/,\s*(united states|usa)$/i, "")
-                    .replace(/,\s*california/i, "")
-                    .replace(/,\s*ca/i, "");
+                    ?.replace(/,\s*(united states|usa)$/i, "")
+                    ?.replace(/,\s*california/i, "")
+                    ?.replace(/,\s*ca/i, "");
 
                   return (
                     <div

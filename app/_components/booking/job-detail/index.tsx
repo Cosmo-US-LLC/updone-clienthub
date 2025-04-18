@@ -246,13 +246,19 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
 
   const formatLocation = (location: string) => {
     // Check if "Los Angeles, California" is part of the location
-    let formattedLocation = location?.replace(
-      "Los Angeles, California",
-      "LA, California"
-    );
+    let formattedLocation = location;
+
+    if (formattedLocation && formattedLocation?.includes("Los Angeles, California")) {
+      formattedLocation = formattedLocation?.replace(
+        "Los Angeles, California",
+        "LA, California"
+      );
+    }
 
     // Remove "United States" if it exists
+    if (formattedLocation && formattedLocation?.includes(", United States")) {
     formattedLocation = formattedLocation?.replace(", United States", "");
+    }
 
     // Split the location into the first part and the remaining location
     const firstCommaIndex = formattedLocation?.indexOf(",");

@@ -319,7 +319,7 @@ function Page() {
                         $
                         {((initialPayment * percentage) / 100)
                           .toFixed()
-                          .replace(/(\d+\.\d{2})/, (match) => {
+                          ?.replace(/(\d+\.\d{2})/, (match) => {
                             const [whole, fraction] = match.split(".");
                             return fraction[1] >= "5"
                               ? (parseFloat(whole) + 1).toFixed(2)

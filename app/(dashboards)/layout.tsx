@@ -12,7 +12,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
     <SidebarProvider>
       <div className="max-md:hidden"></div>
       <AppSidebar />
-      <div className="flex flex-col max-h-[100vh] w-[100%]">
+      <div className="flex flex-col min-h-screen w-[100%]">
         <NavbarClienthub />
         <div className="md:hidden">{children}</div>
         <div className="hidden md:flex px-4 py-4 h-[calc(100vh-65px)] w-[100%] bg-[#F6F9FC] relative">

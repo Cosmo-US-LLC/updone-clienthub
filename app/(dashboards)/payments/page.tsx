@@ -36,7 +36,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Info } from "lucide-react";
 import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import EventPayments from "@/components/payments/EventPayments";
@@ -228,12 +228,32 @@ const headers = [
 
 const Page = () => {
   const [openTab, setOpenTab] = useState<any>(0);
+  const [escrowAmt, setEscrowAmt] = useState<any>(0);
+  const [escrowLoading, setEscrowLoading] = useState<any>(true);
   const [transactionsData, setTransactionsData] = useState<any>([]);
   const [transactionsGroup, setTransactionsGroup] = useState<any>([]);
   const { auth: storedData } = useAppSelector(selectAuth);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingGroup, setIsLoadingGroup] = useState(true);
 
+  const fetchEscrow = async () => {
+    try {
+      setEscrowLoading(true);
+      const response = await apiRequest("/stripe/escrow-amount", {
+        method: "POST",
+        headers: {
+          revalidate: true,
+          ...(storedData && { Authorization: `Bearer ${storedData.token}` }),
+        },
+      });
+      console.log(response?.escrow_amount);
+      setEscrowAmt(response?.escrow_amount);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setEscrowLoading(false);
+    }
+  };
   const fetchOffers = async () => {
     try {
       setIsLoading(true);
@@ -269,6 +289,7 @@ const Page = () => {
     }
   };
   useEffect(() => {
+    fetchEscrow();
     fetchOfferGroups();
     fetchOffers();
   }, [storedData]);
@@ -281,15 +302,78 @@ const Page = () => {
 
   return (
     <>
-      <div className="h-[50px] max-lg:hidden flex justify-start items-center gap-1 mb-2">
-        <button onClick={() => setOpenTab(0)} className={`px-2 py-1 ${openTab == 0 ? 'border-b-[#350abc]' : 'border-b-transparent'} border-b-2 hover:bg-transparent hover:text-black hover:border-b-[#350abc] flex items-center gap-1`}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path></svg>
-          Payments
-        </button>
-        <button onClick={() => setOpenTab(1)} className={`px-2 py-1 ${openTab == 1 ? 'border-b-[#350abc]' : 'border-b-transparent'} border-b-2 hover:bg-transparent hover:text-black hover:border-b-[#350abc] flex items-center gap-1`}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M136,80v43.47l36.12,21.67a8,8,0,0,1-8.24,13.72l-40-24A8,8,0,0,1,120,128V80a8,8,0,0,1,16,0Zm-8-48A95.44,95.44,0,0,0,60.08,60.15C52.81,67.51,46.35,74.59,40,82V64a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H72a8,8,0,0,0,0-16H49c7.15-8.42,14.27-16.35,22.39-24.57a80,80,0,1,1,1.66,114.75,8,8,0,1,0-11,11.64A96,96,0,1,0,128,32Z"></path></svg>
-          History
-        </button>
+      <div className="h-[50px] max-lg:hidden flex justify-between items-center gap-1 mb-2">
+        <div className="h-[50px] max-lg:hidden flex justify-start items-center gap-1 mb-2">
+          <button
+            onClick={() => setOpenTab(0)}
+            className={`px-2 py-1 ${
+              openTab == 0 ? "border-b-[#350abc]" : "border-b-transparent"
+            } border-b-2 hover:bg-transparent hover:text-black hover:border-b-[#350abc] flex items-center gap-1`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              fill="#000000"
+              viewBox="0 0 256 256"
+            >
+              <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
+            </svg>
+            Payments
+          </button>
+          <button
+            onClick={() => setOpenTab(1)}
+            className={`px-2 py-1 ${
+              openTab == 1 ? "border-b-[#350abc]" : "border-b-transparent"
+            } border-b-2 hover:bg-transparent hover:text-black hover:border-b-[#350abc] flex items-center gap-1`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              fill="#000000"
+              viewBox="0 0 256 256"
+            >
+              <path d="M136,80v43.47l36.12,21.67a8,8,0,0,1-8.24,13.72l-40-24A8,8,0,0,1,120,128V80a8,8,0,0,1,16,0Zm-8-48A95.44,95.44,0,0,0,60.08,60.15C52.81,67.51,46.35,74.59,40,82V64a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H72a8,8,0,0,0,0-16H49c7.15-8.42,14.27-16.35,22.39-24.57a80,80,0,1,1,1.66,114.75,8,8,0,1,0-11,11.64A96,96,0,1,0,128,32Z"></path>
+            </svg>
+            History
+          </button>
+        </div>
+
+        <div>
+          {escrowLoading ? (
+            <div className="flex flex-row items-center gap-2 bg-white rounded-xl shadow-md px-4 py-2">
+              <h4 className="text-[14px] font-[400]">Amount in Escrow:</h4>
+              {/* <p className="text-[#350ABC] text-[14px] font-[600]">
+              </p> */}
+              <span className="h-5 w-8 bg-neutral-200 animate-pulse rounded"></span>
+            </div>
+          ) : (
+            <div className="bg-white rounded-xl shadow-md">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="flex flex-row items-center gap-2 px-4 py-2 hover:bg-transparent hover:text-black">
+                    <Info className="w-4 h-4 text-neutral-600" />
+                    <h4 className="text-[14px] font-[400]">
+                      Amount in Escrow:
+                    </h4>
+                    <p className="text-[#350ABC] text-[14px] font-[600]">
+                      ${escrowAmt}
+                    </p>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p className="text-xs text-neutral-600">
+                      Amount that has not yet been sent to <br />
+                      the talent and can be returned in case
+                      <br />
+                      of cancellation.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          )}
+        </div>
       </div>
 
       {openTab === 0 ? (

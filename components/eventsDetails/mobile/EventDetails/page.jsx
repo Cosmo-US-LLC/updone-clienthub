@@ -389,7 +389,7 @@ const EventDetails = ({ jobData, releaseData }) => {
               >
                 Chat Now <ArrowRight className="w-4 h-4" />
                 {jobData?.unread_message_count > 0 && (
-                  <span className="absolute -top-2 -right-1 z-10 bg-red-500 text-white text-xs font-bold w-fit min-w-5 text-center px-1.5 py-0.5 rounded-full">
+                  <span className="absolute -top-2 -right-1 z-10 bg-[#c70101] text-white text-xs font-semibold w-fit min-w-5 text-center px-1.5 py-0.5 rounded-full">
                     {jobData?.unread_message_count}
                   </span>
                 )}

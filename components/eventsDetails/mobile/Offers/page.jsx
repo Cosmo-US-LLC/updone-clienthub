@@ -114,59 +114,53 @@ const Offers = ({
     <>
       {showModal ? (
         <div>
-          {offersData?.map(
-            (offer, index) => (
-              (
-                <Dialog key={index} open={showModal} onOpenChange={setShowModal}>
-                  <DialogContent
-                    hideCloseButton={showModal}
-                    className="w-full max-w-full max-h-[100dvh] bg-transparent h-[100dvh] z-[299] overflow-y-auto px-2"
-                  >
-                    <DialogHeader hidden>
-                      <DialogTitle></DialogTitle>
-                      <DialogDescription></DialogDescription>
-                    </DialogHeader>
-                    <div>
-                      <GalleryContent
-                        images={
-                          offer?.worker?.gallery?.length > 0
-                            ? offer?.worker?.gallery
-                            : [offer?.worker?.profile_pic]
-                        }
-                        talent={offer?.worker}
-                        jobApiData={jobApiData}
-                        onClose={() => setShowModal(false)}
-                        isSelected={
-                          selectedTalentsLocal.some(
-                            (selected) => selected.id === offer?.worker?.id
-                          ) || offer?.worker?.alreadyInvited
-                        }
-                        onToggleSelect={() =>
-                          !offer?.worker?.alreadyInvited &&
-                          setSelectedTalentsLocal((prev) =>
-                            prev.some((item) => item.id === offer?.worker?.id)
-                              ? prev.filter(
-                                  (item) => item.id !== offer?.worker?.id
-                                )
-                              : [
-                                  ...prev,
-                                  {
-                                    id: offer?.worker?.id,
-                                    profile_pic: offer?.worker?.profile_pic,
-                                  },
-                                ]
-                          )
-                        }
-                        inviteId={offer?.invite_id}
-                        showButton={false}
-                        addButton={true}
-                      />
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              )
-            )
-          )}
+          {offersData?.map((offer, index) => (
+            <Dialog key={index} open={showModal} onOpenChange={setShowModal}>
+              <DialogContent
+                hideCloseButton={showModal}
+                className="w-full max-w-full max-h-[100dvh] bg-transparent h-[100dvh] z-[299] overflow-y-auto px-2"
+              >
+                <DialogHeader hidden>
+                  <DialogTitle></DialogTitle>
+                  <DialogDescription></DialogDescription>
+                </DialogHeader>
+                <div>
+                  <GalleryContent
+                    images={
+                      offer?.worker?.gallery?.length > 0
+                        ? offer?.worker?.gallery
+                        : [offer?.worker?.profile_pic]
+                    }
+                    talent={offer?.worker}
+                    jobApiData={jobApiData}
+                    onClose={() => setShowModal(false)}
+                    isSelected={
+                      selectedTalentsLocal.some(
+                        (selected) => selected.id === offer?.worker?.id
+                      ) || offer?.worker?.alreadyInvited
+                    }
+                    onToggleSelect={() =>
+                      !offer?.worker?.alreadyInvited &&
+                      setSelectedTalentsLocal((prev) =>
+                        prev.some((item) => item.id === offer?.worker?.id)
+                          ? prev.filter((item) => item.id !== offer?.worker?.id)
+                          : [
+                              ...prev,
+                              {
+                                id: offer?.worker?.id,
+                                profile_pic: offer?.worker?.profile_pic,
+                              },
+                            ]
+                      )
+                    }
+                    inviteId={offer?.invite_id}
+                    showButton={false}
+                    addButton={true}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          ))}
         </div>
       ) : (
         <div className="!min-w-full">
@@ -196,7 +190,6 @@ const Offers = ({
                           className="object-cover"
                           width={100}
                           height={100}
-                          onClick={() => setShowModal(true)}
                         />
                         <AvatarFallback>
                           {offer?.worker?.full_name[0]}
@@ -265,7 +258,7 @@ const Offers = ({
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-center gap-4 bg-[#F4FAFF] px-4 py-[10px] rounded-full mt-4 text-gray-700 text-[14px]">
+                  <div className="flex min-w-[300px] items-center justify-center gap-4 bg-[#F4FAFF] px-4 py-[10px] rounded-full mt-4 text-gray-700 text-[14px]">
                     <FaSuitcase className="text-blue-600" />
                     <span>
                       Last job was a {""}
@@ -306,7 +299,7 @@ const Offers = ({
                         </button>
                         {/* <FaFileInvoiceDollar className="text-gray-500 text-lg" /> */}
                         {offer?.unread_message_count > 0 && (
-                          <span className="absolute -top-2 -right-1 z-10 w-fit bg-red-500 text-white text-xs font-bold min-w-5 px-1.5 py-0.5 rounded-full">
+                          <span className="absolute -top-2 -right-1 z-10 w-fit bg-[#c70101] text-white text-xs text-center font-semibold min-w-5 px-1.5 py-0.5 rounded-full">
                             {offer?.unread_message_count}
                           </span>
                         )}
@@ -340,14 +333,16 @@ const Offers = ({
                 talent!
               </p>
 
-              <button
-                onClick={() => {
-                  setInviteMore();
-                }}
-                className="bg-purple-600 text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
-              >
-                Invite talent to job
-              </button>
+              {jobData?.status == "open" && (
+                <button
+                  onClick={() => {
+                    setInviteMore();
+                  }}
+                  className="bg-purple-600 text-white text-sm font-medium px-6 py-3 rounded-full mt-6"
+                >
+                  Invite talent to job
+                </button>
+              )}
             </div>
           )}
 
