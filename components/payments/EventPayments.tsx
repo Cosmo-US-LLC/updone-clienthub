@@ -1,18 +1,8 @@
 "use client";
+
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RenderLoader from "@/app/_components/ui/loader";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Accordion,
   AccordionContent,
@@ -20,16 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Link from "next/link";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import VerificationIcon from "@/app/_components/ui/shield";
-import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
-import VerificationIconMobile from "@/app/_components/ui/shield";
-import { ChevronLeft } from "lucide-react";
 import { formatDateMobile } from "@/app/lib/helpers/formatDateTime";
 import EventPaymentsMobile from "./mobile/EventPaymentsMobile";
 

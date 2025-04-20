@@ -15,6 +15,7 @@ import { setEmpty as setJobEmpty } from "@/app/lib/store/features/jobCreateSlice
 import { setEmpty as setBookingEmpty } from "@/app/lib/store/features/bookingSlice";
 import { setEmpty as setStaffEmpty } from "@/app/lib/store/features/staffSlice";
 import { apiRequest } from "@/app/lib/services";
+import { setEventsEmpty } from "@/app/lib/store/features/eventSlice";
 
 // Define an array of link objects
 const links = [
@@ -84,6 +85,7 @@ const SideBar = () => {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
   
       // alert('Redux cleared')
   

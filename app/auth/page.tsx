@@ -9,6 +9,7 @@ import { apiRequest } from "../lib/services";
 import Cookies from "js-cookie";
 import RenderLoader from "../_components/ui/loader";
 import { jwtDecode } from "jwt-decode";
+import { setEventsEmpty } from "../lib/store/features/eventSlice";
 
 const AuthRedirectPage = () => {
   const router = useRouter();
@@ -40,6 +41,8 @@ const AuthRedirectPage = () => {
     } catch (error) {
       console.error("Error fetching user profile:", error);
       dispatch(setAuth({ token, user: null }));
+    } finally {
+      dispatch(setEventsEmpty());
     }
   }, [token, dispatch]);
 

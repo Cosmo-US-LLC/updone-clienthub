@@ -23,6 +23,7 @@ import { PiUserLight } from "react-icons/pi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiRequest } from "@/app/lib/services";
+import { setEventsEmpty } from "@/app/lib/store/features/eventSlice";
 // import { setEmpty } from "@/app/lib/store/features/staffSlice";
 
 const Header = ({ isClientHub }: { isClientHub?: boolean }) => {
@@ -46,6 +47,7 @@ const Header = ({ isClientHub }: { isClientHub?: boolean }) => {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
     }
   }, [dispatch, router]);
 
@@ -84,6 +86,7 @@ const Header = ({ isClientHub }: { isClientHub?: boolean }) => {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
   
       // alert('Redux cleared')
   

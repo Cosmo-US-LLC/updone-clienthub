@@ -47,6 +47,7 @@ import { BsPlusLg } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlinePayment, MdOutlineReviews } from "react-icons/md";
 import { IoIosStarOutline } from "react-icons/io";
+import { setEventsEmpty } from "@/app/lib/store/features/eventSlice";
 
 function NavbarClienthub() {
   const router = useRouter();
@@ -79,6 +80,7 @@ function NavbarClienthub() {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
     }
   }, [dispatch, router]);
 
@@ -103,6 +105,7 @@ function NavbarClienthub() {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
 
       // alert('Redux cleared')
 
