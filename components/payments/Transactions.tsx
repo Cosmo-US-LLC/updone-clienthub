@@ -130,7 +130,11 @@ function Transactions({ isLoading, transactionsData, transactionsGroup }: any) {
                     <TableCell>{row?.date}</TableCell>
                     {/* Payment Type */}
                     <TableCell>
-                      {row?.payment_type !== "new_job" ? <span className="capitalize">{row?.payment_type}</span> : "Event"}
+                      {row?.payment_type !== "new_job" ? (
+                        <span className="capitalize">{row?.payment_type}</span>
+                      ) : (
+                        "Event"
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
