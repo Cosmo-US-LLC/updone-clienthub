@@ -59,9 +59,9 @@ const Invites = ({
   const [pageSize, setPageSize] = useState(12);
   const [skeletonCount, setSkeletonCount] = useState(0);
   const [loadingMobile, setLoadingMobile] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   const [jobApiData, setJobApiData] = useState(null);
-  console.log("galleryTalent", galleryTalent);
 
   const handleInviteClick = () => {
     setInviteMore(true);
@@ -143,7 +143,7 @@ const Invites = ({
 
   useEffect(() => {
     fetchJobDetails();
-  }, []);
+  }, [currentPage, selectedCount]);
 
   useEffect(() => {
     fetchTalentsData();
@@ -194,7 +194,6 @@ const Invites = ({
   };
 
   useEffect(() => {
-    console.log(selectedTalentsLocal);
   }, [selectedTalentsLocal]);
 
   const toggleGalleryOn = (talent) => {
@@ -210,7 +209,38 @@ const Invites = ({
     <div className="pb-5">
       <h1 className="text-[16px] font-[500] text-[#161616] mb-2">Invites</h1>
 
-      {invitesLoading ? (
+      {showModal ? (
+        invitesData?.map((invite, index) => (
+          <div key={index}>
+            <Dialog open={showModal} onOpenChange={setShowModal}>
+              <DialogContent
+                hideCloseButton={showModal}
+                className="w-full max-w-full max-h-[100dvh] bg-transparent h-[100dvh] z-[299] overflow-y-auto px-2"
+              >
+                <DialogHeader hidden className="bg-transparent !p-0 !m-0">
+                  <DialogTitle></DialogTitle>
+                  <DialogDescription></DialogDescription>
+                </DialogHeader>
+                <div className="flex-1 overflow-y-auto">
+                  <GalleryContent
+                    images={
+                      invite?.worker?.gallery?.length > 0
+                        ? invite?.worker?.gallery
+                        : [invite?.worker?.profile_pic]
+                    }
+                    talent={invite?.worker}
+                    jobApiData={jobApiData}
+                    onClose={() => setShowModal(false)}
+                    isSelected={""}
+                    onToggleSelect={""}
+                    showButton={false}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        ))
+      ) : invitesLoading ? (
         <Loading />
       ) : invitesData.length > 0 ? (
         <div className="flex flex-col gap-4 w-full">
@@ -227,6 +257,9 @@ const Invites = ({
                   </div> */}
                   <Avatar className="w-[60px] h-[60px] rounded-full border aspect-square">
                     <AvatarImage
+                      onClick={() => {
+                        setShowModal(true);
+                      }}
                       src={invite?.worker?.profile_pic}
                       className="object-cover"
                       width={100}
@@ -387,7 +420,6 @@ const Invites = ({
             <DialogTitle hidden={showGallery == true}>
               Invite More Talents
             </DialogTitle>
-            <>{console.log(jobData)}</>
             <DialogDescription hidden></DialogDescription>
           </DialogHeader>
           {showGallery == true ? (

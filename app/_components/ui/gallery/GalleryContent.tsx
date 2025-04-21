@@ -32,7 +32,6 @@ function GalleryContent({
   addButton = false,
   inviteId,
 }: any) {
-
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -88,7 +87,7 @@ function GalleryContent({
   }
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white rounded-xl">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white rounded-none sm:rounded-xl">
         <div className="w-full md:w-[59%] bg-black rounded-none sm:rounded-tl-xl overflow-hidden">
           <div className="relative w-full bg-black pt-0 sm:pt-3 overflow-hidden rounded-none sm:rounded-xl min-h-[300px]">
             {loading && (
@@ -111,7 +110,7 @@ function GalleryContent({
                   handlePrev();
                   e.stopPropagation();
                 }}
-                className="absolute left-2 xl:left-4 top-1/2 -translate-y-1/2 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner"
+                className="absolute left-2 xl:left-4 top-1/2 p-2 -translate-y-1/2 bg-[#e6e0fa] text-[#350ABC] rounded-full shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +132,7 @@ function GalleryContent({
                   handleNext();
                   e.stopPropagation();
                 }}
-                className="absolute right-2 xl:right-4 top-1/2 -translate-y-1/2 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner"
+                className="absolute right-2 xl:right-4 top-1/2 p-2 -translate-y-1/2 bg-[#e6e0fa] text-[#350ABC] rounded-full shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -155,6 +154,10 @@ function GalleryContent({
                   key={index}
                   src={img}
                   onClick={(e) => {
+                    if (images.length === 1 || selectedIndex === index) return; 
+                    e.stopPropagation();
+                    setSelectedIndex(index);
+                    setLoading(true);
                     e.stopPropagation();
                     setSelectedIndex(index);
                     setLoading(true);
@@ -173,7 +176,7 @@ function GalleryContent({
                 onClose();
                 e.stopPropagation();
               }}
-              className="absolute top-2 right-2 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner sm:hidden block"
+              className="absolute top-2 right-2 text-white rounded-md sm:hidden block"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -198,6 +201,10 @@ function GalleryContent({
                 key={index}
                 src={img}
                 onClick={(e) => {
+                  if (images.length === 1 || selectedIndex === index) return;
+                  e.stopPropagation();
+                  setSelectedIndex(index);
+                  setLoading(true);
                   e.stopPropagation();
                   setSelectedIndex(index);
                   setLoading(true);
@@ -214,10 +221,10 @@ function GalleryContent({
         </div>
 
         <div
-          className="w-full md:w-[41%] flex flex-col justify-between pt-1 px-4 sm:px-0 md:pt-12 pr-4 sm:pr-7"
+          className="w-full md:w-[41%] flex flex-col pt-1 px-4 sm:px-0 md:pt-12 pr-4 sm:pr-7"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="space-y-4">
+          <div className="space-y-4 border-0 sm:border-b border-gray-200 pb-0 lg:pb-4 xl:pb-6">
             <div className="flex flex-col sm:flex-row md:flex-col justify-between">
               <div className="flex items-center">
                 <h2 className="text-lg md:text-2xl font-bold">
@@ -516,8 +523,8 @@ function GalleryContent({
             </div>
           </div>
 
-          <div>
-            <div className="flex flex-wrap justify-between items-center gap-2 mb-2 mt-6 sm:mt-8">
+          <div className="flex flex-col justify-between h-full w-full pb-0 xl:pb-8">
+            <div className="flex flex-wrap justify-between items-center gap-2 mb-2 mt-6 sm:mt-4">
               <div className="flex items-center text-[14px] sm:text-[15px] justify-center text-gray-700 gap-1">
                 <p>Total:</p>
               </div>
@@ -531,57 +538,56 @@ function GalleryContent({
                 )}
               </div>
             </div>
-            {showButton && !addButton && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleSelect();
-                  onClose();
-                }}
-                disabled={talent?.alreadyInvited}
-                className={`h-10 w-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4 ${
-                  talent?.alreadyInvited
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                {(isSelected || talent?.alreadyInvited) && (
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="#2C2240"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                )}
-                {talent.alreadyInvited ? "Already invited" : "Select Talent"}
-              </button>
-            )}
+            <div className="flex flex-col items-center">
+              {showButton && !addButton && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleSelect();
+                    onClose();
+                  }}
+                  disabled={talent?.alreadyInvited}
+                  className="h-10 lg:h-12 xl:h-14 w-full lg:w-[70%] xl:w-[80%] rounded-none sm:rounded-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4"
+                >
+                  {(isSelected || talent?.alreadyInvited) && (
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="#2C2240"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                  {talent.alreadyInvited ? "Already invited" : "Select Talent"}
+                </button>
+              )}
 
-            {!showButton && addButton && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleSelect();
-                  onClose();
-                  payPayment(inviteId);
-                }}
-                className="h-10 w-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4"
-              >
-                Hire me for ${calculateTotal(
+              {!showButton && addButton && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleSelect();
+                    onClose();
+                    payPayment(inviteId);
+                  }}
+                  className="h-10 lg:h-12 xl:h-14 w-full lg:w-[70%] xl:w-[80%] rounded-none sm:rounded-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4"
+                >
+                  Hire me for $
+                  {calculateTotal(
                     talent?.per_hours_rate,
                     jobApiData
                       ? jobApiData.total_hours
                       : Cookies.get("event_hours")?.split(" ")[0]
-                )}
-              </button>
-            )}
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -591,11 +597,11 @@ function GalleryContent({
           onClose();
           e.stopPropagation();
         }}
-        className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-[#350ABC] text-white rounded-full p-2 shadow-md transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner hidden sm:block"
+        className="absolute top-2 right-2 sm:top-4 sm:right-4 rounded-md text-[#350ABC] hidden sm:block"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 md:h-6 md:w-6"
+          className="h-5 w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

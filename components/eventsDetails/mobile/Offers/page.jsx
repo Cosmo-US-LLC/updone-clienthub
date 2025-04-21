@@ -186,6 +186,9 @@ const Offers = ({
                   /> */}
                       <Avatar className="w-12 h-12 rounded-full border">
                         <AvatarImage
+                          onClick={() => {
+                            setShowModal(true);
+                          }}
                           src={offer?.worker?.profile_pic}
                           className="object-cover"
                           width={100}
@@ -287,7 +290,6 @@ const Offers = ({
                       <div className="relative flex items-center">
                         <button
                           onClick={() => {
-                            // console.log(offer);
                             dispatch(setOfferDetailData(offer));
                             router.push(
                               `/events/detail/${jobData?.id}/chat/${offer?.id}`
