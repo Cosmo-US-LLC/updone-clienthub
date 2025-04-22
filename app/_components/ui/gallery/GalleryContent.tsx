@@ -87,7 +87,7 @@ function GalleryContent({
   }
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white rounded-none sm:rounded-xl">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white rounded-none sm:rounded-xl !z-[99999999999]">
         <div className="w-full md:w-[59%] bg-black rounded-none sm:rounded-tl-xl overflow-hidden">
           <div className="relative w-full bg-black pt-0 sm:pt-3 overflow-hidden rounded-none sm:rounded-xl min-h-[300px]">
             {loading && (

@@ -75,6 +75,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
     setIsChatVisible(isVisible); // Update chat visibility state
   };
 
+  const hideModal = false;
+
   const customStyles = {
     content: {
       top: "50%",
@@ -87,8 +89,9 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
       borderRadius: "30px",
       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
       width: "100%",
-      maxWidth: "650px",
+      maxWidth: "700px",
       border: "0px",
+      maxHeight: "calc(100vh - 100px)",
     },
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.57)",
@@ -248,7 +251,10 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
     // Check if "Los Angeles, California" is part of the location
     let formattedLocation = location;
 
-    if (formattedLocation && formattedLocation?.includes("Los Angeles, California")) {
+    if (
+      formattedLocation &&
+      formattedLocation?.includes("Los Angeles, California")
+    ) {
       formattedLocation = formattedLocation?.replace(
         "Los Angeles, California",
         "LA, California"
@@ -257,7 +263,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
 
     // Remove "United States" if it exists
     if (formattedLocation && formattedLocation?.includes(", United States")) {
-    formattedLocation = formattedLocation?.replace(", United States", "");
+      formattedLocation = formattedLocation?.replace(", United States", "");
     }
 
     // Split the location into the first part and the remaining location
@@ -514,11 +520,32 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
             <Modal
               isOpen={modalIsOpen}
               onRequestClose={() => setModalIsOpen(false)}
+              ariaHideApp={false}
               style={customStyles}
             >
               <>
+                {/* Cross button */}
+                <button
+                  onClick={() => setModalIsOpen(false)}
+                  className="absolute top-2 right-4 !bg-transparent text-gray-600 hover:text-black font-bold z-50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
                 {/* Tabs */}
-                <div className="bg-[#FFF] rounded-[12px] px-2 pb-1">
+                <div className="bg-[#FFF] rounded-[12px] px-2 pb-1 relative">
                   <div className="w-full flex justify-center items-center mt-[20px] bg-[#FFF] rounded-tl-[24px] rounded-tr-[24px]">
                     <div className="inline-flex space-x-4 border-b max-w-full mx-auto border-[#DFDFDF]">
                       <div
@@ -554,7 +581,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="h-[100%] max-h-[calc(100vh-485px)] overflow-y-auto max-w-full mx-auto bg-[#FFF] rounded-bl-[24px] rounded-br-[24px]">
+                  <div className="h-[100%] max-h-[calc(100vh-100px)] overflow-y-auto max-w-full mx-auto bg-[#FFF] rounded-bl-[24px] rounded-br-[24px] p-4">
                     {/* <Suspense fallback={<>Loading...</>}> */}
                     <JobDetailsTabs
                       jobId={jobId}
@@ -568,6 +595,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                       isInModal={true}
                       offerSort={offerSort}
                       setOfferSort={setOfferSort}
+                      hideModal={hideModal}
                     />
                     {/* </Suspense> */}
                   </div>
