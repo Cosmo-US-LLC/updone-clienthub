@@ -25,12 +25,13 @@ type StaffMapProps = {
   index?: number;
   isInvited?: boolean;
   isJobDetailInvite?: boolean;
+  hideModal?: boolean;
 };
 export interface TimeRange {
   start_time: string;
   end_time: string;
 }
-const InviteCard = ({ data, isInvited }: StaffMapProps) => {
+const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [jobApiData, setJobApiData] = useState<any>(null);
@@ -66,7 +67,7 @@ const InviteCard = ({ data, isInvited }: StaffMapProps) => {
 
   return (
     <>
-      {showModal ? (
+      {showModal && hideModal ? (
         <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent
           hideCloseButton={showModal}

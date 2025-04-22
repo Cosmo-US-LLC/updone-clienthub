@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import Invites from './Invites'
 import Offers from './Offers'
 
-const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, setSelectedOffer, selectedOffer, messagesRefreshed, isInModal, offerSort, setOfferSort }: any) => {
+const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, setSelectedOffer, selectedOffer, messagesRefreshed, isInModal, offerSort, setOfferSort, hideModal }: any) => {
     const [data, setData] = useState<any>(null);
     const { jobData } = useAppSelector(selectStaff);
     const { auth: storedData } = useAppSelector(selectAuth);
@@ -78,10 +78,11 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, se
                                 isInModal={isInModal}
                                 offerSort={offerSort}
                                 setOfferSort={setOfferSort}
+                                hideModal={hideModal}
                             />
                         )}
                         {activeTab === 'b' && (
-                            <Invites jobId={jobId} data={data} jobData={jobData} isInModal={isInModal} />
+                            <Invites jobId={jobId} data={data} jobData={jobData} isInModal={isInModal} hideModal={hideModal} />
                         )}
                     </section>
                 </div>
@@ -104,10 +105,11 @@ const JobDetailsTabs = ({ activeTab, setOffers, offers, offersLoading, jobId, se
                                 isInModal={isInModal}
                                 offerSort={offerSort}
                                 setOfferSort={setOfferSort}
+                                hideModal={hideModal}
                             />
                         )}
                         {activeTab === 'b' && (
-                            <Invites jobId={jobId} data={data} jobData={jobData} isInModal={isInModal} />
+                            <Invites jobId={jobId} data={data} jobData={jobData} isInModal={isInModal} hideModal={hideModal} />
                         )}
                     </section>
                 </div>

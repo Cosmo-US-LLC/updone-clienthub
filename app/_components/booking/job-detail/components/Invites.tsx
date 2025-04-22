@@ -28,7 +28,7 @@ const services: any = {
   "Event Helper": 4,
 };
 
-const Invites = ({ data, jobId, jobData, isInModal }: any) => {
+const Invites = ({ data, jobId, jobData, isInModal, hideModal }: any) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [inviteMore, setInviteMore] = useState(false);
@@ -178,6 +178,7 @@ const Invites = ({ data, jobId, jobData, isInModal }: any) => {
               isInvited={staff?.worker?.has_offered}
               index={index}
               data={staff}
+              hideModal={hideModal}
             />
           </div>
         ))}
@@ -185,7 +186,7 @@ const Invites = ({ data, jobId, jobData, isInModal }: any) => {
 
       {data?.length === 0 ? (
         <>
-          <div className="flex justify-center  items-start relative">
+          <div className="flex justify-center items-start relative">
             <div>
               <div className="w-[100%]">
                 <Image

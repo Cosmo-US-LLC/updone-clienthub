@@ -13,7 +13,8 @@ import {
 import { apiRequest } from "@/app/lib/services";
 import { useParams } from "next/navigation";
 
-function TalentImage({ talent, size = 0 }: any) {
+function TalentImage({ talent, hideModal = true, size = 0 }: any) {
+  console.log("hideModal", hideModal);
   
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -43,7 +44,7 @@ function TalentImage({ talent, size = 0 }: any) {
 
   return (
     <div className="relative">
-      {showModal && talent?.status !== "completed" && talent?.status !== "pending" ? (
+      {showModal && talent?.status !== "completed" && talent?.status !== "pending" && hideModal ? (
         <Dialog open={showModal} onOpenChange={setShowModal}>
           <DialogContent
             hideCloseButton={showModal}
@@ -91,7 +92,7 @@ function TalentImage({ talent, size = 0 }: any) {
             </div>
           </DialogContent>
         </Dialog>
-      ) : showModal && talent?.status == "pending" ? (
+      ) : showModal && talent?.status == "pending" && hideModal ? (
         <Dialog open={showModal} onOpenChange={setShowModal}>
           <DialogContent
             hideCloseButton={showModal}
