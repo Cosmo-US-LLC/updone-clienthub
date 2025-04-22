@@ -7,7 +7,7 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import { useStripe } from "@stripe/react-stripe-js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 // import useIsMobile from "@/app/lib/hooks/useMobile";
@@ -21,6 +21,10 @@ const PaymentSuccessfull = ({ jobId, clientSecret }: any) => {
   const { auth: storedData } = useAppSelector(selectAuth);
   const { handleError } = useError();
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const [hasFired, setHasFired] = useState(false);
+  const hasCalledAPI = useRef(false); // 🛡️ Ref to prevent double calls
+
+
 
   const paymentSuccessfullApi = async (paymentIntent: any) => {
     setIsButtonLoading(true);
@@ -49,19 +53,24 @@ const PaymentSuccessfull = ({ jobId, clientSecret }: any) => {
   };
 
   useEffect(() => {
+    const alreadyProcessed = sessionStorage.getItem(`stripe_job_${jobId}`);
+    if (hasCalledAPI.current || alreadyProcessed === "1") return;
+
     const updatePaymentStatus = async () => {
       if (stripe && clientSecret) {
-        const { paymentIntent } = await stripe.retrievePaymentIntent(
-          clientSecret
-        );
-        if (paymentIntent && paymentIntent.status === "succeeded") {
-          paymentSuccessfullApi(paymentIntent);
-        } else {
+        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+
+        if (paymentIntent?.status === "succeeded") {
+          hasCalledAPI.current = true;
+          sessionStorage.setItem(`stripe_job_${jobId}`, "1"); // 🧠 lock the key
+
+          await paymentSuccessfullApi(paymentIntent);
         }
       }
     };
+
     updatePaymentStatus();
-  }, [stripe]);
+  }, [stripe, clientSecret, jobId]);
 
   return (
     // ${is-Mobile === false ? "w-[50%] m-auto" : "bg-[#F3F0FF] min-h-screen"}
