@@ -91,7 +91,7 @@ jobs:
           nvm use node &&
 
           # cd updone/updone-clienthub &&
-          cd ../var/www/updone-talentpro &&
+          cd ../var/www/updone-clienthub &&
           echo "Pulling latest code..." 2>&1 &&
           git stash
           git pull 2>&1 &&
