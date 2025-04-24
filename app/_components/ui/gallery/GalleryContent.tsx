@@ -32,6 +32,7 @@ function GalleryContent({
   addButton = false,
   inviteId,
 }: any) {
+  console.log("talent32323", talent);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -154,7 +155,7 @@ function GalleryContent({
                   key={index}
                   src={img}
                   onClick={(e) => {
-                    if (images.length === 1 || selectedIndex === index) return; 
+                    if (images.length === 1 || selectedIndex === index) return;
                     e.stopPropagation();
                     setSelectedIndex(index);
                     setLoading(true);
@@ -228,7 +229,7 @@ function GalleryContent({
             <div className="flex flex-col sm:flex-row md:flex-col justify-between">
               <div className="flex items-center">
                 <h2 className="text-lg md:text-2xl font-bold">
-                  {talent?.full_name || "John Doe"}
+                  {talent?.full_name || talent?.worker?.full_name || "John Doe"}
                 </h2>
                 {talent?.id_is_verified && talent?.contact_is_verified ? (
                   <TooltipProvider>
@@ -262,8 +263,11 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[15px] text-gray-700 mt-1">
                 Last seen{" "}
-                {talent?.user?.last_active
-                  ? timeAgo(talent?.user?.last_active)
+                {talent?.user?.last_active || talent?.worker?.user?.last_active
+                  ? timeAgo(
+                      talent?.user?.last_active ||
+                        talent?.worker?.user?.last_active
+                    )
                   : "weeks ago"}
               </div>
             </div>
@@ -292,7 +296,7 @@ function GalleryContent({
                           <p>Location:</p>
                         </div>
                         <div className="flex items-center text-[14px] sm:text-[18px] font-semibold">
-                          <span>{talent?.city}</span>
+                          <span>{talent?.city || talent?.worker?.city}</span>
                         </div>
                       </div>
 
@@ -315,7 +319,9 @@ function GalleryContent({
                         </div>
                         <div className="flex items-center">
                           <p className="text-[14px] sm:text-[18px] font-semibold">
-                            {parseFloat(talent?.rating).toFixed(1)}
+                            {parseFloat(
+                              talent?.rating || talent?.worker?.rating
+                            ).toFixed(1)}
                           </p>
                         </div>
                       </div>
@@ -356,7 +362,7 @@ function GalleryContent({
                           <p>Last Job:</p>
                         </div>
                         <p className="text-[14px] sm:text-[18px] font-semibold">
-                          {talent?.last_job}
+                          {talent?.last_job || talent?.worker?.last_job}
                         </p>
                       </div>
 
@@ -376,7 +382,9 @@ function GalleryContent({
                           <p>Total Jobs:</p>
                         </div>
                         <p className="text-[14px] sm:text-[18px] font-semibold">
-                          {talent?.total_jobs_count} Jobs
+                          {talent?.total_jobs_count ||
+                            talent?.worker?.total_jobs_count}{" "}
+                          Jobs
                         </p>
                       </div>
 
@@ -392,11 +400,24 @@ function GalleryContent({
                               <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                             </svg>
                           </div>
-                          <p>Rate per hour:</p>
+                          {(!showButton && !addButton) || addButton ? (
+                            <p>Offered Rate:</p>
+                          ) : (
+                            <p>Rate per hour:</p>
+                          )}
                         </div>
-                        <div className="text-[14px] sm:text-[18px] font-semibold">
-                          ${parseFloat(talent?.per_hours_rate).toFixed(0)}
-                        </div>
+                        {(!showButton && !addButton) || addButton ? (
+                          <div className="text-[14px] sm:text-[18px] font-semibold">
+                            $
+                            {parseFloat(
+                              talent?.per_hours_rate || talent?.offered_price
+                            ).toFixed(0)}
+                          </div>
+                        ) : (
+                          <div className="text-[14px] sm:text-[18px] font-semibold">
+                            ${parseFloat(talent?.per_hours_rate).toFixed(0)}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </AccordionContent>
@@ -415,7 +436,7 @@ function GalleryContent({
                 <p>Location:</p>
               </div>
               <div className="flex items-center text-[14px] sm:text-[18px] font-semibold">
-                <span>{talent?.city}</span>
+                <span>{talent?.city || talent?.worker?.city}</span>
               </div>
             </div>
 
@@ -438,7 +459,9 @@ function GalleryContent({
               </div>
               <div className="flex items-center">
                 <p className="text-[14px] sm:text-[18px] font-semibold">
-                  {parseFloat(talent?.rating).toFixed(1)}
+                  {parseFloat(talent?.rating || talent?.worker?.rating).toFixed(
+                    1
+                  )}
                 </p>
               </div>
             </div>
@@ -479,7 +502,7 @@ function GalleryContent({
                 <p>Last Job:</p>
               </div>
               <p className="text-[14px] sm:text-[18px] font-semibold">
-                {talent?.last_job}
+                {talent?.last_job || talent?.worker?.last_job}
               </p>
             </div>
 
@@ -499,7 +522,8 @@ function GalleryContent({
                 <p>Total Jobs:</p>
               </div>
               <p className="text-[14px] sm:text-[18px] font-semibold">
-                {talent?.total_jobs_count} Jobs
+                {talent?.total_jobs_count || talent?.worker?.total_jobs_count}{" "}
+                Jobs
               </p>
             </div>
 
@@ -515,11 +539,22 @@ function GalleryContent({
                     <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                   </svg>
                 </div>
-                <p>Rate per hour:</p>
+                {(!showButton && !addButton) || addButton ? (
+                  <p>Offered Rate:</p>
+                ) : (
+                  <p>Rate per hour:</p>
+                )}
               </div>
-              <div className="text-[14px] sm:text-[18px] font-semibold">
+              
+              {(!showButton && !addButton) || addButton ? (
+                  <div className="text-[14px] sm:text-[18px] font-semibold">
+                  ${parseFloat(talent?.per_hours_rate || talent?.offered_price).toFixed(0)}
+                </div>
+                ) : (
+                  <div className="text-[14px] sm:text-[18px] font-semibold">
                 ${parseFloat(talent?.per_hours_rate).toFixed(0)}
               </div>
+                )}
             </div>
           </div>
 
@@ -530,12 +565,14 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[18px] font-semibold">
                 $
-                {calculateTotal(
-                  talent?.per_hours_rate,
-                  jobApiData
-                    ? jobApiData.total_hours
-                    : Cookies.get("event_hours")?.split(" ")[0]
-                )}
+                {(!showButton && !addButton) || addButton
+                  ? talent?.total_price
+                  : `${calculateTotal(
+                      talent?.per_hours_rate,
+                      jobApiData
+                        ? jobApiData.total_hours
+                        : Cookies.get("event_hours")?.split(" ")[0]
+                    )}`}
               </div>
             </div>
             <div className="flex flex-col items-center">
@@ -579,12 +616,14 @@ function GalleryContent({
                   className="h-10 lg:h-12 xl:h-14 w-full lg:w-[70%] xl:w-[80%] rounded-none sm:rounded-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4"
                 >
                   Hire me for $
-                  {calculateTotal(
-                    talent?.per_hours_rate,
-                    jobApiData
-                      ? jobApiData.total_hours
-                      : Cookies.get("event_hours")?.split(" ")[0]
-                  )}
+                  {(!showButton && !addButton) || addButton
+                    ? talent?.total_price
+                    : `${calculateTotal(
+                        talent?.per_hours_rate,
+                        jobApiData
+                          ? jobApiData.total_hours
+                          : Cookies.get("event_hours")?.split(" ")[0]
+                      )}`}
                 </button>
               )}
             </div>
@@ -592,28 +631,28 @@ function GalleryContent({
         </div>
       </div>
 
-      <button
-        onClick={(e) => {
-          onClose();
-          e.stopPropagation();
-        }}
-        className="absolute top-2 right-2 sm:top-4 sm:right-4 rounded-md text-[#350ABC] hidden sm:block"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="2"
+        <button
+          onClick={(e) => {
+            onClose();
+            e.stopPropagation();
+          }}
+          className="absolute top-4 right-4 rounded-md text-[#350ABC] hidden sm:block"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
     </>
   );
 }

@@ -109,7 +109,7 @@ function TalentImage({ talent, hideModal = true, size = 0 }: any) {
                     ? talent?.worker?.gallery
                     : [talent?.worker?.profile_pic]
                 }
-                talent={talent?.worker}
+                talent={talent}
                 jobApiData={jobApiData}
                 onClose={() => setShowModal(false)}
                 isSelected={

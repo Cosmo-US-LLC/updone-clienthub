@@ -52,6 +52,7 @@ const Offers = ({
   offersLoading,
   setInviteMore,
 }) => {
+  console.log("jobdataaaaa", jobData?.status)
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
@@ -131,7 +132,7 @@ const Offers = ({
                         ? offer?.worker?.gallery
                         : [offer?.worker?.profile_pic]
                     }
-                    talent={offer?.worker}
+                    talent={offer}
                     jobApiData={jobApiData}
                     onClose={() => setShowModal(false)}
                     isSelected={
@@ -155,7 +156,7 @@ const Offers = ({
                     }
                     inviteId={offer?.invite_id}
                     showButton={false}
-                    addButton={true}
+                    addButton={jobData?.status == "open" ? true : false}
                   />
                 </div>
               </DialogContent>
