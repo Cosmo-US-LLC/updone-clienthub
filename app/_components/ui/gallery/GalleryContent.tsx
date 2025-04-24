@@ -17,6 +17,9 @@ import {
 } from "@/components/ui/tooltip";
 import { VerificationStatus } from "../verified-status-check-tooltip";
 import VerificationIconMobile from "../shield";
+import { useDispatch } from "react-redux";
+import { setOffersId } from "@/app/lib/store/features/bookingSlice";
+import { useRouter } from "next/navigation";
 
 function GalleryContent({
   images,
@@ -24,10 +27,19 @@ function GalleryContent({
   isSelected,
   onToggleSelect,
   jobApiData,
-  onClose
+  onClose,
+  showButton = true,
+  addButton = false,
+  inviteId,
 }: any) {
-  console.log("jobApiData", jobApiData);
-  console.log("talent", talent);
+  console.log("talent32323", talent);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const payPayment = (invite_id: any) => {
+    dispatch(setOffersId(invite_id));
+    router.push(`/events/payment/${invite_id}`);
+  };
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -76,7 +88,7 @@ function GalleryContent({
   }
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 bg-white rounded-none sm:rounded-xl !z-[99999999999]">
         <div className="w-full md:w-[59%] bg-black rounded-none sm:rounded-tl-xl overflow-hidden">
           <div className="relative w-full bg-black pt-0 sm:pt-3 overflow-hidden rounded-none sm:rounded-xl min-h-[300px]">
             {loading && (
@@ -99,7 +111,7 @@ function GalleryContent({
                   handlePrev();
                   e.stopPropagation();
                 }}
-                className="absolute left-2 xl:left-4 top-1/2 p-2 -translate-y-1/2 bg-[#e6e0fa] text-[#350ABC] rounded-full hover:bg-gray-100"
+                className="absolute left-2 xl:left-4 top-1/2 p-2 -translate-y-1/2 bg-[#e6e0fa] text-[#350ABC] rounded-full shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +133,7 @@ function GalleryContent({
                   handleNext();
                   e.stopPropagation();
                 }}
-                className="absolute right-2 xl:right-4 top-1/2 p-2 -translate-y-1/2  bg-[#e6e0fa] text-[#350ABC] rounded-full shadow-md hover:bg-gray-100"
+                className="absolute right-2 xl:right-4 top-1/2 p-2 -translate-y-1/2 bg-[#e6e0fa] text-[#350ABC] rounded-full shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -143,6 +155,10 @@ function GalleryContent({
                   key={index}
                   src={img}
                   onClick={(e) => {
+                    if (images.length === 1 || selectedIndex === index) return;
+                    e.stopPropagation();
+                    setSelectedIndex(index);
+                    setLoading(true);
                     e.stopPropagation();
                     setSelectedIndex(index);
                     setLoading(true);
@@ -156,6 +172,28 @@ function GalleryContent({
                 />
               ))}
             </div>
+            <button
+              onClick={(e) => {
+                onClose();
+                e.stopPropagation();
+              }}
+              className="absolute top-2 right-2 text-white rounded-md sm:hidden block"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 md:h-6 md:w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
 
           <div className="hidden sm:flex justify-center gap-2 flex-wrap p-2">
@@ -164,6 +202,10 @@ function GalleryContent({
                 key={index}
                 src={img}
                 onClick={(e) => {
+                  if (images.length === 1 || selectedIndex === index) return;
+                  e.stopPropagation();
+                  setSelectedIndex(index);
+                  setLoading(true);
                   e.stopPropagation();
                   setSelectedIndex(index);
                   setLoading(true);
@@ -180,14 +222,14 @@ function GalleryContent({
         </div>
 
         <div
-          className="w-full md:w-[41%] flex flex-col justify-between pt-1 px-4 sm:px-0 md:pt-12 pr-4 sm:pr-7"
+          className="w-full md:w-[41%] flex flex-col pt-1 px-4 sm:px-0 md:pt-12 pr-4 sm:pr-7"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="space-y-4">
+          <div className="space-y-4 border-0 sm:border-b border-gray-200 pb-0 lg:pb-4 xl:pb-6">
             <div className="flex flex-col sm:flex-row md:flex-col justify-between">
               <div className="flex items-center">
                 <h2 className="text-lg md:text-2xl font-bold">
-                  {talent?.full_name || "John Doe"}
+                  {talent?.full_name || talent?.worker?.full_name || "John Doe"}
                 </h2>
                 {talent?.id_is_verified && talent?.contact_is_verified ? (
                   <TooltipProvider>
@@ -201,7 +243,7 @@ function GalleryContent({
                         <div className=" text-white rounded w-[30px]">
                           <VerificationIconMobile
                             id_is_verified={talent.id_is_verified}
-                            contact_is_verified={talent.contact_is_verified}
+                            contact_is_verified={talent?.contact_is_verified}
                             height={30}
                             width={30}
                           />
@@ -210,7 +252,7 @@ function GalleryContent({
                       <TooltipContent side="bottom" className="z-40">
                         <VerificationStatus
                           id_is_verified={talent.id_is_verified}
-                          contact_is_verified={talent.contact_is_verified}
+                          contact_is_verified={talent?.contact_is_verified}
                         />
                       </TooltipContent>
                     </Tooltip>
@@ -221,8 +263,11 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[15px] text-gray-700 mt-1">
                 Last seen{" "}
-                {talent?.last_active
-                  ? timeAgo(talent.last_active)
+                {talent?.user?.last_active || talent?.worker?.user?.last_active
+                  ? timeAgo(
+                      talent?.user?.last_active ||
+                        talent?.worker?.user?.last_active
+                    )
                   : "weeks ago"}
               </div>
             </div>
@@ -251,7 +296,7 @@ function GalleryContent({
                           <p>Location:</p>
                         </div>
                         <div className="flex items-center text-[14px] sm:text-[18px] font-semibold">
-                          <span>{talent?.city}</span>
+                          <span>{talent?.city || talent?.worker?.city}</span>
                         </div>
                       </div>
 
@@ -274,7 +319,9 @@ function GalleryContent({
                         </div>
                         <div className="flex items-center">
                           <p className="text-[14px] sm:text-[18px] font-semibold">
-                            {parseFloat(talent?.rating).toFixed(1)}
+                            {parseFloat(
+                              talent?.rating || talent?.worker?.rating
+                            ).toFixed(1)}
                           </p>
                         </div>
                       </div>
@@ -315,7 +362,7 @@ function GalleryContent({
                           <p>Last Job:</p>
                         </div>
                         <p className="text-[14px] sm:text-[18px] font-semibold">
-                          {talent?.last_job}
+                          {talent?.last_job || talent?.worker?.last_job}
                         </p>
                       </div>
 
@@ -335,7 +382,9 @@ function GalleryContent({
                           <p>Total Jobs:</p>
                         </div>
                         <p className="text-[14px] sm:text-[18px] font-semibold">
-                          {talent?.total_jobs_count} Jobs
+                          {talent?.total_jobs_count ||
+                            talent?.worker?.total_jobs_count}{" "}
+                          Jobs
                         </p>
                       </div>
 
@@ -351,11 +400,24 @@ function GalleryContent({
                               <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                             </svg>
                           </div>
-                          <p>Rate per hour:</p>
+                          {(!showButton && !addButton) || addButton ? (
+                            <p>Offered Rate:</p>
+                          ) : (
+                            <p>Rate per hour:</p>
+                          )}
                         </div>
-                        <div className="text-[14px] sm:text-[18px] font-semibold">
-                          ${parseFloat(talent?.per_hours_rate).toFixed(0)}
-                        </div>
+                        {(!showButton && !addButton) || addButton ? (
+                          <div className="text-[14px] sm:text-[18px] font-semibold">
+                            $
+                            {parseFloat(
+                              talent?.per_hours_rate || talent?.offered_price
+                            ).toFixed(0)}
+                          </div>
+                        ) : (
+                          <div className="text-[14px] sm:text-[18px] font-semibold">
+                            ${parseFloat(talent?.per_hours_rate).toFixed(0)}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </AccordionContent>
@@ -374,7 +436,7 @@ function GalleryContent({
                 <p>Location:</p>
               </div>
               <div className="flex items-center text-[14px] sm:text-[18px] font-semibold">
-                <span>{talent?.city}</span>
+                <span>{talent?.city || talent?.worker?.city}</span>
               </div>
             </div>
 
@@ -397,7 +459,9 @@ function GalleryContent({
               </div>
               <div className="flex items-center">
                 <p className="text-[14px] sm:text-[18px] font-semibold">
-                  {parseFloat(talent?.rating).toFixed(1)}
+                  {parseFloat(talent?.rating || talent?.worker?.rating).toFixed(
+                    1
+                  )}
                 </p>
               </div>
             </div>
@@ -438,7 +502,7 @@ function GalleryContent({
                 <p>Last Job:</p>
               </div>
               <p className="text-[14px] sm:text-[18px] font-semibold">
-                {talent?.last_job}
+                {talent?.last_job || talent?.worker?.last_job}
               </p>
             </div>
 
@@ -458,7 +522,8 @@ function GalleryContent({
                 <p>Total Jobs:</p>
               </div>
               <p className="text-[14px] sm:text-[18px] font-semibold">
-                {talent?.total_jobs_count} Jobs
+                {talent?.total_jobs_count || talent?.worker?.total_jobs_count}{" "}
+                Jobs
               </p>
             </div>
 
@@ -474,87 +539,120 @@ function GalleryContent({
                     <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                   </svg>
                 </div>
-                <p>Rate per hour:</p>
+                {(!showButton && !addButton) || addButton ? (
+                  <p>Offered Rate:</p>
+                ) : (
+                  <p>Rate per hour:</p>
+                )}
               </div>
-              <div className="text-[14px] sm:text-[18px] font-semibold">
+              
+              {(!showButton && !addButton) || addButton ? (
+                  <div className="text-[14px] sm:text-[18px] font-semibold">
+                  ${parseFloat(talent?.per_hours_rate || talent?.offered_price).toFixed(0)}
+                </div>
+                ) : (
+                  <div className="text-[14px] sm:text-[18px] font-semibold">
                 ${parseFloat(talent?.per_hours_rate).toFixed(0)}
               </div>
+                )}
             </div>
           </div>
 
-          <div>
-            <div className="flex flex-wrap justify-between items-center gap-2 mb-2 mt-6 sm:mt-8">
+          <div className="flex flex-col justify-between h-full w-full pb-0 xl:pb-8">
+            <div className="flex flex-wrap justify-between items-center gap-2 mb-2 mt-6 sm:mt-4">
               <div className="flex items-center text-[14px] sm:text-[15px] justify-center text-gray-700 gap-1">
                 <p>Total:</p>
               </div>
               <div className="text-[14px] sm:text-[18px] font-semibold">
                 $
-                {calculateTotal(
-                  talent?.per_hours_rate,
-                  jobApiData
-                    ? jobApiData.total_hours
-                    : Cookies.get("event_hours")?.split(" ")[0]
-                )}
+                {(!showButton && !addButton) || addButton
+                  ? talent?.total_price
+                  : `${calculateTotal(
+                      talent?.per_hours_rate,
+                      jobApiData
+                        ? jobApiData.total_hours
+                        : Cookies.get("event_hours")?.split(" ")[0]
+                    )}`}
               </div>
             </div>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleSelect();
-                onClose();
-              }}
-              disabled={talent?.alreadyInvited}
-              className={`h-10 w-full flex items-center justify-center gap-2 border transition bg-[#e6e0fa] text-[#350ABC]  mb-4 ${
-                talent?.alreadyInvited
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              {(isSelected || talent?.alreadyInvited) && (
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="#2C2240"
-                  viewBox="0 0 24 24"
+            <div className="flex flex-col items-center">
+              {showButton && !addButton && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleSelect();
+                    onClose();
+                  }}
+                  disabled={talent?.alreadyInvited}
+                  className="h-10 lg:h-12 xl:h-14 w-full lg:w-[70%] xl:w-[80%] rounded-none sm:rounded-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                  {(isSelected || talent?.alreadyInvited) && (
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="#2C2240"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                  {talent.alreadyInvited ? "Already invited" : "Select Talent"}
+                </button>
               )}
-              {talent.alreadyInvited ? "Already invited" : "Select Talent"}
-            </button>
-            
+
+              {!showButton && addButton && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleSelect();
+                    onClose();
+                    payPayment(inviteId);
+                  }}
+                  className="h-10 lg:h-12 xl:h-14 w-full lg:w-[70%] xl:w-[80%] rounded-none sm:rounded-full flex items-center justify-center gap-2 border transition-all duration-300 ease-in-out grow_ellipse active:scale-95 active:shadow-inner bg-[#350abc] text-white mb-4"
+                >
+                  Hire me for $
+                  {(!showButton && !addButton) || addButton
+                    ? talent?.total_price
+                    : `${calculateTotal(
+                        talent?.per_hours_rate,
+                        jobApiData
+                          ? jobApiData.total_hours
+                          : Cookies.get("event_hours")?.split(" ")[0]
+                      )}`}
+                </button>
+              )}
+            </div>
           </div>
         </div>
+        <button
+          onClick={(e) => {
+            onClose();
+            e.stopPropagation();
+          }}
+          className="absolute top-4 right-4 z-[9999] rounded-md text-[#350ABC] max-sm:block"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
       </div>
 
-      <button
-        onClick={(e) => {
-          onClose();
-          e.stopPropagation();
-        }}
-        className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-[#e6e0fa] text-[#350ABC] rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 md:h-6 md:w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
     </>
   );
 }

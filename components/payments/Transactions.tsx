@@ -1,7 +1,6 @@
 "use client";
+
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RenderLoader from "@/app/_components/ui/loader";
 import {
@@ -13,12 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import Link from "next/link";
 import {
   Tooltip,
@@ -28,17 +21,12 @@ import {
 } from "@/components/ui/tooltip";
 import VerificationIcon from "@/app/_components/ui/shield";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
-import { ChevronLeft } from "lucide-react";
-import VerificationIconMobile from "@/app/_components/ui/shield";
 import EventPaymentsMobile from "./mobile/EventPaymentsMobile";
 
 function Transactions({ isLoading, transactionsData, transactionsGroup }: any) {
   return (
     <>
       <div
-        // className={`container max-w-full h-full overflow-y-auto mx-auto py-6 flex justify-center items-start ${
-        //   isLoading && "!overflow-hidden"
-        // }`}
         className="h-[calc(100%-80px)] max-lg:hidden flex flex-col max-lg:px-8 max-lg:py-8"
       >
         {isLoading ? (
@@ -58,12 +46,7 @@ function Transactions({ isLoading, transactionsData, transactionsGroup }: any) {
           </div>
         ) : (
           <>
-            {/* <div className="h-[40vh] overflow-hidden">
-              <CardTable headers={headers} bodyData={transactionsData || []} />
-            </div> */}
-
             <Table className="grow relative hover:bg-transparent">
-              {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
               <TableHeader className="sticky top-0 z-10 bg-[#f6f9fc]">
                 <TableRow>
                   <TableHead className="w-[130px]">Payment ID</TableHead>
@@ -137,47 +120,6 @@ function Transactions({ isLoading, transactionsData, transactionsGroup }: any) {
                         ) : (
                           ""
                         )}
-                        {/* {openMenu?.rowIndex === index &&
-                        openMenu?.menuType === "verified" && (
-                          <div
-                            style={{
-                              boxShadow: "0px 8px 26px 0px rgba(0, 0, 0, 0.12)",
-                            }}
-                            className={`right-[-15px] absolute flex flex-col gap-2 ${
-                              index === 0 ? "" : "top-[-100px]"
-                            } w-[250px] bg-[#FFF] shadow-md p-4 rounded-[4px] z-10`}
-                          >
-                            <div className="flex gap-2">
-                              <h4 className="font-[400] text-[#6B6B6B] text-[14px]">
-                                Phone Number
-                              </h4>
-                              {row?.contact_is_verified === 1 ? (
-                                <p className="text-[#0C9000] font-[400] text-[14px]">
-                                  (Verified)
-                                </p>
-                              ) : (
-                                <p className="text-[#C20000] font-[400] text-[14px]">
-                                  (Not-Verified)
-                                </p>
-                              )}
-                            </div>
-                            <hr className="border-t border-gray-200 my-0" />
-                            <div className="flex gap-2">
-                              <h4 className="font-[400] text-[#6B6B6B] text-[14px]">
-                                Social Security
-                              </h4>
-                              {row?.id_is_verified === 1 ? (
-                                <p className="text-[#0C9000] font-[400] text-[14px]">
-                                  (Verified)
-                                </p>
-                              ) : (
-                                <p className="text-[#C20000] font-[400] text-[14px]">
-                                  (Not-Verified)
-                                </p>
-                              )}{" "}
-                            </div>
-                          </div>
-                        )} */}
                       </div>
                     </TableCell>
                     {/* Requested Service */}

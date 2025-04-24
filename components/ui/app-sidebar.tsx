@@ -48,6 +48,7 @@ import { Skeleton } from "./skeleton";
 import { FiLogOut } from "react-icons/fi";
 import { Button } from "./button";
 import { BsCreditCard } from "react-icons/bs";
+import { setEventsEmpty } from "@/app/lib/store/features/eventSlice";
 
 const items = [
   {
@@ -140,6 +141,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
 
       // alert('Redux cleared')
 

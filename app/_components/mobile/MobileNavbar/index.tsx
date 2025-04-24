@@ -33,6 +33,7 @@ import { TbCalendarUp } from "react-icons/tb";
 import { FaRegCalendarCheck } from "react-icons/fa6";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiRequest } from "@/app/lib/services";
+import { setEventsEmpty } from "@/app/lib/store/features/eventSlice";
 
 const MobileNavbar = ({ ...props }) => {
   const pathname = usePathname();
@@ -73,6 +74,7 @@ const MobileNavbar = ({ ...props }) => {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
 
       // alert('Redux cleared')
 

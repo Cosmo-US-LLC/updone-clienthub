@@ -41,6 +41,8 @@ import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import EventPayments from "@/components/payments/EventPayments";
 import Transactions from "@/components/payments/Transactions";
+// import EventPayments from "@/components/payments/EventPayments";
+// import Transactions from "@/components/payments/Transactions";
 
 const CardTable = ({
   headers,

@@ -5,6 +5,7 @@ import { clearAuth, setEmpty as setAuthEmpty } from "@/app/lib/store/features/au
 import { setEmpty as setJobEmpty } from "@/app/lib/store/features/jobCreateSlice";
 import { setEmpty as setBookingEmpty } from "@/app/lib/store/features/bookingSlice";
 import { setEmpty as setStaffEmpty } from "@/app/lib/store/features/staffSlice";
+import { setEventsEmpty } from "../store/features/eventSlice";
 
 interface RequestOptions<T> {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE'; // Adjust as per your API needs
@@ -56,6 +57,7 @@ export async function apiRequest<T>(
             store.dispatch(setBookingEmpty());
             store.dispatch(setJobEmpty());
             store.dispatch(setAuthEmpty());
+            store.dispatch(setEventsEmpty());
             Cookies.remove("authToken");
             Cookies.remove("authData");
             window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/logout?status=401`

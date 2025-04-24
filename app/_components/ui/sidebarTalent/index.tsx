@@ -22,6 +22,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { MdOutlineReviews } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { apiRequest } from "@/app/lib/services";
+import { setEventsEmpty } from "@/app/lib/store/features/eventSlice";
 
 // Define an array of link objects
 const links = [
@@ -82,6 +83,7 @@ const SideBarTalent = () => {
       dispatch(setBookingEmpty());
       dispatch(setJobEmpty());
       dispatch(setAuthEmpty());
+      dispatch(setEventsEmpty());
 
       // alert('Redux cleared')
 

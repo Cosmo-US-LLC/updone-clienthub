@@ -2,7 +2,7 @@
 
 import { apiRequest } from "@/app/lib/services";
 import { selectAuth } from "@/app/lib/store/features/authSlice";
-import { useAppSelector } from "@/app/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/lib/store/hooks";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { GoPerson } from "react-icons/go";
@@ -33,6 +33,7 @@ import VerificationIconMobile from "@/app/_components/ui/shield";
 import { ColumnDef } from "@tanstack/react-table";
 
 // This type is used to define the shape of our data.
+
 // You can use a Zod schema here if you want.
 export type Payment = {
   event_title: string;
@@ -48,6 +49,7 @@ export type Payment = {
   event_location: string;
 };
 import MyEvents from "@/components/events/mobile/MyEvents/page";
+import { selectEvent, setEvents } from "../lib/store/features/eventSlice";
 
 // Headers
 const headers = [
@@ -62,10 +64,12 @@ const headers = [
 ];
 
 const DynamicCardTablePage = () => {
+  const dispatch = useAppDispatch();
   const [eventData, setGetEventData] = useState([]);
   const [eventListing, setEventListing] = useState<Payment[]>([]);
   const [userName, setUserName] = useState("");
   const { auth: storedData } = useAppSelector(selectAuth);
+  const { events: storedEventsData } = useAppSelector(selectEvent);
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
   const [isCloseClicked, setIsCloseClicked] = useState<any>("true");
@@ -81,7 +85,7 @@ const DynamicCardTablePage = () => {
 
   const fetchOffers = async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(storedEventsData?.length < 1 ? true : false);
       console.log(storedData);
       const response = await apiRequest("/client/events", {
         method: "POST",
@@ -94,7 +98,8 @@ const DynamicCardTablePage = () => {
           page_size: 100,
         },
       });
-      setGetEventData(response?.records);
+      // setGetEventData(response?.records);
+      dispatch(setEvents(response?.records));
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -197,20 +202,6 @@ const DynamicCardTablePage = () => {
     },
   ];
 
-  // event_title: string;
-  // event_status: string;
-  // unread_message_count: string;
-  // event_total_offers: string;
-  // event_assigned_to_name: string;
-  // event_assigned_to_profile_pic: string;
-  // event_assigned_to_contact_verified: string;
-  // event_assigned_to_id_verified: string;
-  // event_required_service: string;
-  // event_date_time: string;
-  // event_location: string;
-
-  // console.log(eventListing)
-
   if (!userName) {
     return (
       <div className="h-[50svh]">
@@ -281,7 +272,7 @@ const DynamicCardTablePage = () => {
           )}
         </div>
 
-        {!isLoading && eventData?.length === 0 ? (
+        {!isLoading && storedEventsData?.length === 0 ? (
           <div className="text-center py-10 w-full h-fit !bg-[#f6f9fc]">
             <div className="flex flex-col justify-center items-center">
               <div className="text-center pb-[48px]">
@@ -391,8 +382,8 @@ const DynamicCardTablePage = () => {
                         </TableCell>
                       </TableRow>
                     ))
-                  : eventData?.length > 0 &&
-                    eventData?.map((event: any, id: any) => (
+                  : storedEventsData?.length > 0 &&
+                  storedEventsData?.map((event: any, id: any) => (
                       <TableRow
                         key={id}
                         onClick={() =>
@@ -620,7 +611,7 @@ const DynamicCardTablePage = () => {
       </div>
 
       <div className="lg:hidden overflow-hidden">
-        <MyEvents isLoading={isLoading} eventData={eventData} formatDateAndTime={formatDateAndTime} />
+        <MyEvents isLoading={isLoading} eventData={storedEventsData} formatDateAndTime={formatDateAndTime} />
       </div>
     </>
   );
