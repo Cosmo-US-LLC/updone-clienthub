@@ -629,14 +629,12 @@ function GalleryContent({
             </div>
           </div>
         </div>
-      </div>
-
         <button
           onClick={(e) => {
             onClose();
             e.stopPropagation();
           }}
-          className="absolute top-4 right-4 rounded-md text-[#350ABC] hidden sm:block"
+          className="absolute top-4 right-4 z-[9999] rounded-md text-[#350ABC] max-sm:block"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -653,6 +651,8 @@ function GalleryContent({
             />
           </svg>
         </button>
+      </div>
+
     </>
   );
 }

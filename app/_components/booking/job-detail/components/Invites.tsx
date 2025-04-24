@@ -246,7 +246,7 @@ const Invites = ({ data, jobId, jobData, isInModal, hideModal }: any) => {
         </div>
       )}
 
-      <Dialog open={inviteMore} onOpenChange={setInviteMore}>
+      <Dialog open={inviteMore} onOpenChange={(val) => {setInviteMore(val); toggleGalleryOff(val);}}>
         <DialogContent
         hideCloseButton={showGallery}
           className={`w-[90vw] xl:w-[70vw] max-w-5xl max-h-[80vh] overflow-y-auto ${
