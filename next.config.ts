@@ -3,8 +3,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  reactStrictMode: false,
   productionBrowserSourceMaps: true,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
@@ -57,4 +57,8 @@ disableLogger: true,
 // https://docs.sentry.io/product/crons/
 // https://vercel.com/docs/cron-jobs
 automaticVercelMonitors: true,
+debug: true,
+sourcemaps: {
+  deleteSourcemapsAfterUpload: false,
+}
 });

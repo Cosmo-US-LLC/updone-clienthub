@@ -150,7 +150,7 @@ function GalleryContent({
             )}
 
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 block sm:hidden flex justify-center gap-2">
-              {images.map((img: any, index: any) => (
+              {Array.isArray(images) && images?.map((img: any, index: any) => (
                 <img
                   key={index}
                   src={img}
@@ -197,7 +197,7 @@ function GalleryContent({
           </div>
 
           <div className="hidden sm:flex justify-center gap-2 flex-wrap p-2">
-            {images.map((img: any, index: any) => (
+            {Array.isArray(images) && images?.map((img: any, index: any) => (
               <img
                 key={index}
                 src={img}
