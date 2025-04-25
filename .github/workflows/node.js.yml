@@ -80,6 +80,8 @@ jobs:
         ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
 
     - name: Deploy application via SSH
+      env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} 
 
