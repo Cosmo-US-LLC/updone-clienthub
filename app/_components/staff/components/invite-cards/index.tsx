@@ -84,12 +84,13 @@ const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
                   ? data?.worker?.gallery
                   : [data?.worker?.profile_pic]
               }
-              talent={data?.worker}
+              talent={data}
               jobApiData={jobApiData}
               onClose={() => setShowModal(false)}
               isSelected={""}
               onToggleSelect={""}
               showButton={false}
+              showTotalPrice={true}
             />
           </div>
         </DialogContent>

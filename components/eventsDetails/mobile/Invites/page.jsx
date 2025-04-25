@@ -213,7 +213,7 @@ const Invites = ({
         <Dialog open={true} onOpenChange={() => setActiveInviteIndex(null)}>
           <DialogContent
             hideCloseButton={true}
-            className="w-full max-w-full max-h-[100dvh] bg-transparent h-[100dvh] z-[299] overflow-y-auto px-2"
+            className="w-full max-w-full max-h-[100dvh] bg-transparent h-[100dvh] z-[299999] !border-0 overflow-y-auto px-2"
           >
             <DialogHeader hidden className="bg-transparent !p-0 !m-0">
               <DialogTitle></DialogTitle>
@@ -232,6 +232,7 @@ const Invites = ({
                 isSelected={""}
                 onToggleSelect={""}
                 showButton={false}
+                showTotalPrice={true}
               />
             </div>
           </DialogContent>
