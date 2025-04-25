@@ -112,14 +112,14 @@ jobs:
           npm run build 2>&1 &&
           
           echo "Restarting application with PM2..." 2>&1 &&
-            if pm2 list | grep "qa-updone"; then
+            if pm2 list | grep "qa-clienthub"; then
             # If it's running, restart the app
             echo "App is running, restarting..." &&
-            pm2 restart qa-updone;
+            pm2 restart qa-clienthub;
           else
             # If it's not running, start the app
             echo "App is not running, starting..." &&
-            pm2 start npm --name "qa-updone" -- run start;
+            pm2 start npm --name "qa-clienthub" -- run start;
           fi
           # pm2 restart 1 2>&1
           # pm2 restart 2 2>&1
