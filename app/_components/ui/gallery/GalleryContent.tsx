@@ -30,10 +30,13 @@ function GalleryContent({
   onClose,
   showButton = true,
   addButton = false,
+  showTotalPrice = false,
   inviteId,
   jobData,
+  talentData,
 }: any) {
-  // console.log("talent32323", talent, jobApiData);
+  console.log("talent32323", talentData);
+  console.log("showButton", showButton, addButton, showTotalPrice, jobData);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -411,7 +414,10 @@ function GalleryContent({
                           <div className="text-[14px] sm:text-[18px] font-semibold">
                             $
                             {parseFloat(
-                              talent?.per_hours_rate || talent?.offered_price
+                              talentData
+                                ? talentData?.invite?.offered_price
+                                : talent?.per_hours_rate ||
+                                    talent?.offered_price
                             ).toFixed(0)}
                           </div>
                         ) : (
@@ -551,7 +557,9 @@ function GalleryContent({
                 <div className="text-[14px] sm:text-[18px] font-semibold">
                   $
                   {parseFloat(
-                    talent?.per_hours_rate || talent?.offered_price
+                    talent?.per_hours_rate ||
+                      talent?.offered_price ||
+                      talent?.worker?.offered_price
                   ).toFixed(0)}
                 </div>
               ) : (
@@ -570,8 +578,11 @@ function GalleryContent({
               <div className="text-[14px] sm:text-[18px] font-semibold">
                 $
                 {(showButton == false && addButton === true) ||
+                (showButton == false && showTotalPrice === true) ||
                 addButton == true
-                  ? talent?.total_price
+                  ? talentData
+                    ? talentData?.total_price
+                    : talent?.total_price || talent?.worker?.total_price
                   : `${calculateTotal(
                       talent?.per_hours_rate,
                       jobApiData
@@ -610,7 +621,7 @@ function GalleryContent({
                 </button>
               )}
 
-              {!showButton && addButton && jobData?.status == "open" && (
+              {!showButton && addButton && jobData == "open" && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -639,7 +650,7 @@ function GalleryContent({
             onClose();
             e.stopPropagation();
           }}
-          className="absolute top-4 right-4 z-[9999] rounded-md text-[#350ABC] max-sm:block"
+          className="absolute top-4 right-4 z-[9999] rounded-md text-[#350ABC] hidden sm:block"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -657,7 +668,6 @@ function GalleryContent({
           </svg>
         </button>
       </div>
-
     </>
   );
 }
