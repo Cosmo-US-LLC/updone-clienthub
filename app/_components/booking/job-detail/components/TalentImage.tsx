@@ -13,8 +13,8 @@ import {
 import { apiRequest } from "@/app/lib/services";
 import { useParams } from "next/navigation";
 
-function TalentImage({ talent, hideModal = true, size = 0 }: any) {
-  console.log("hideModal", hideModal);
+function TalentImage({ talent, hideModal = true, size = 0, totalPrice = false, }: any) {
+  console.log("hideModal", talent);
   
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -63,6 +63,7 @@ function TalentImage({ talent, hideModal = true, size = 0 }: any) {
                 }
                 talent={talent?.invite?.worker}
                 jobApiData={jobApiData}
+                talentData={talent}
                 onClose={() => setShowModal(false)}
                 isSelected={
                   selectedTalentsLocal.some(
@@ -88,6 +89,7 @@ function TalentImage({ talent, hideModal = true, size = 0 }: any) {
                   )
                 }
                 showButton={false}
+                showTotalPrice={totalPrice}
               />
             </div>
           </DialogContent>
@@ -138,6 +140,7 @@ function TalentImage({ talent, hideModal = true, size = 0 }: any) {
                 inviteId={talent?.invite_id}
                 showButton={false}
                 addButton={true}
+                jobData={"open"}
               />
             </div>
           </DialogContent>

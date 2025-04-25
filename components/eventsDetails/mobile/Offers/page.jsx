@@ -155,8 +155,9 @@ const Offers = ({
                       )
                     }
                     inviteId={offer?.invite_id}
+                    jobData={jobData?.status}
                     showButton={false}
-                    addButton={jobData?.status == "open" ? true : false}
+                    addButton={true}
                   />
                 </div>
               </DialogContent>
