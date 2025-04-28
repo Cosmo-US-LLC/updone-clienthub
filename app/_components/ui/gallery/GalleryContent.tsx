@@ -31,11 +31,12 @@ function GalleryContent({
   showButton = true,
   addButton = false,
   showTotalPrice = false,
+  showHirePrice = false,
   inviteId,
   jobData,
   talentData,
 }: any) {
-  console.log("talent32323", talentData);
+  console.log("talent32323", talent);
   console.log("showButton", showButton, addButton, showTotalPrice, jobData);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -404,7 +405,7 @@ function GalleryContent({
                               <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                             </svg>
                           </div>
-                          {(!showButton && !addButton) || addButton ? (
+                          {(!showButton && !addButton && !showTotalPrice) || addButton ? (
                             <p>Offered Rate:</p>
                           ) : (
                             <p>Rate per hour:</p>
@@ -546,14 +547,14 @@ function GalleryContent({
                     <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                   </svg>
                 </div>
-                {(!showButton && !addButton) || addButton ? (
+                {(!showButton && !addButton && !showTotalPrice) || addButton ? (
                   <p>Offered Rate:</p>
                 ) : (
                   <p>Rate per hour:</p>
                 )}
               </div>
 
-              {(!showButton && !addButton) || addButton ? (
+              {(!showButton && !addButton && !showTotalPrice) || addButton ? (
                 <div className="text-[14px] sm:text-[18px] font-semibold">
                   $
                   {parseFloat(
@@ -564,7 +565,7 @@ function GalleryContent({
                 </div>
               ) : (
                 <div className="text-[14px] sm:text-[18px] font-semibold">
-                  ${parseFloat(talent?.per_hours_rate).toFixed(0)}
+                  ${parseFloat(talent?.per_hours_rate || talent?.worker?.per_hours_rate).toFixed(0)}
                 </div>
               )}
             </div>
@@ -578,13 +579,13 @@ function GalleryContent({
               <div className="text-[14px] sm:text-[18px] font-semibold">
                 $
                 {(showButton == false && addButton === true) ||
-                (showButton == false && showTotalPrice === true) ||
+                (showButton == false && showTotalPrice === true && showHirePrice === false) ||
                 addButton == true
                   ? talentData
                     ? talentData?.total_price
                     : talent?.total_price || talent?.worker?.total_price
                   : `${calculateTotal(
-                      talent?.per_hours_rate,
+                      talent?.per_hours_rate || talent?.worker?.per_hours_rate,
                       jobApiData
                         ? jobApiData.total_hours
                         : Cookies.get("event_hours")?.split(" ")[0]
