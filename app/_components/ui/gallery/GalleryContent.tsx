@@ -36,7 +36,7 @@ function GalleryContent({
   jobData,
   talentData,
 }: any) {
-  // console.log("talent32323222", images);
+  // console.log("talent32323222", talent);
   // console.log("showButton", showButton, addButton, showTotalPrice, jobData);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -64,29 +64,47 @@ function GalleryContent({
     setLoading(true);
   };
 
-  function timeAgo(dateTimeString: any) {
+  function timeAgo(dateTimeString: string) {
     const inputDate: any = new Date(dateTimeString);
     const now: any = new Date();
     const diffMs = now - inputDate;
-
+    
+    const seconds = Math.floor(diffMs / 1000);
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (minutes < 60) {
+    
+    // Handle "Just now" for 0 seconds
+    if (seconds < 60) {
+      return 'Just now';
+    }
+    // Handle "1 minute ago" and more than 1 minute
+    else if (minutes === 1) {
+      return '1 minute ago';
+    } else if (minutes < 60) {
       return `${minutes} minutes ago`;
+    }
+    // Handle "1 hour ago" and more than 1 hour
+    else if (hours === 1) {
+      return '1 hour ago';
     } else if (hours < 24) {
       return `${hours} hours ago`;
+    }
+    // Handle days
+    else if (days === 1) {
+      return '1 day ago';
     } else if (days < 7) {
       return `${days} days ago`;
-    } else if (days < 14) {
+    }
+    // Handle weeks
+    else if (days < 14) {
       return `1 week ago`;
     } else {
       const weeks = Math.floor(days / 7);
       return `${weeks} weeks ago`;
     }
   }
-
+  
   function calculateTotal(hourRate: string, amount: string) {
     const totalHours = parseFloat(amount);
     const parsedHourRate = parseFloat(hourRate);
@@ -269,9 +287,9 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[15px] text-gray-700 mt-1">
                 Last seen{" "}
-                {talent?.user?.last_active || talent?.worker?.user?.last_active
+                {talent?.last_active || talent?.user?.last_active || talent?.worker?.user?.last_active
                   ? timeAgo(
-                      talent?.user?.last_active ||
+                    talent?.last_active || talent?.user?.last_active ||
                         talent?.worker?.user?.last_active
                     )
                   : "weeks ago"}
