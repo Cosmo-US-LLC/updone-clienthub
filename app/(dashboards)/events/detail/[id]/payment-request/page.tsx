@@ -10,6 +10,7 @@ import LoginToUnlock from "@/app/_components/booking/mobile/talent/LoginToUnlock
 import { ChevronLeft, Loader2 } from "lucide-react";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { MdOutlineArrowBackIos } from "react-icons/md";
 
 function AdditionalPay({
   additionalHours,
@@ -55,6 +56,8 @@ function Page() {
   const [error, setError] = useState<any>(null);
   const [loggedIn, setLoggedIn] = useState<any>(undefined);
   const { auth: storedData } = useAppSelector(selectAuth);
+  const [customTipAmount, setCustomTipAmount] = useState<number>(0);
+const [useCustomTip, setUseCustomTip] = useState(false);
   const { handleError } = useError();
   const [selectedTipPercentage, setSelectedTipPercentage] = useState<
     number | null
@@ -64,9 +67,12 @@ function Page() {
   const initialPayment = data?.initial_payment || 0;
   const additionalAmount = data?.additional_amount_requested || 0;
   const additionalHours = data?.additional_hours_worked || 0;
-  const tipAmount = selectedTipPercentage
-    ? (initialPayment * selectedTipPercentage) / 100
-    : 0;
+  const tipAmount = useCustomTip
+  ? customTipAmount
+  : selectedTipPercentage
+  ? (initialPayment * selectedTipPercentage) / 100
+  : 0;
+
   const totalAmount = initialPayment + additionalAmount + tipAmount;
   const talentName = data?.talent_details?.full_name || "Talent";
 
@@ -135,9 +141,12 @@ function Page() {
 
   const handleReleasePayment = async () => {
     setProcessing(true);
-
+  
     try {
-      if (!selectedTipPercentage && data?.includes_settlement === false) {
+      const hasCustomTip = useCustomTip && customTipAmount > 0;
+      const hasPercentageTip = !useCustomTip && selectedTipPercentage !== null;
+  
+      if (!hasCustomTip && !hasPercentageTip && data?.includes_settlement === false) {
         await apiRequest(
           `/job/approveReleaseRequest`,
           {
@@ -155,8 +164,15 @@ function Page() {
         );
         router.push(`/events/detail/${params?.id}/payment-request/success`);
       } else {
-        if (selectedTipPercentage) {
-          const tipAmount = (initialPayment * selectedTipPercentage) / 100;
+        if (hasCustomTip || hasPercentageTip) {
+          let finalTipAmount = 0;
+  
+          if (hasCustomTip) {
+            finalTipAmount = customTipAmount;
+          } else if (hasPercentageTip && selectedTipPercentage) {
+            finalTipAmount = (initialPayment * selectedTipPercentage) / 100;
+          }
+  
           await apiRequest(
             `/job/addTip`,
             {
@@ -168,12 +184,13 @@ function Page() {
               },
               body: {
                 job_id: params?.id,
-                tip_amount: tipAmount,
+                tip_amount: finalTipAmount,
               },
             },
             handleError
           );
         }
+  
         router.push(`/events/detail/${params?.id}/payment-release`);
       }
     } catch (error) {
@@ -182,6 +199,7 @@ function Page() {
       setProcessing(false);
     }
   };
+  
 
   useEffect(() => {
     if (storedData?.token) {
@@ -299,40 +317,84 @@ function Page() {
               <p className="text-[rgb(22,22,22)] text-[16px] font-poppins font-[500] leading-[1.6]">
                 Tip Your Talent
               </p>
-              <div className="flex flex-wrap gap-3 w-full">
-                {[16, 18, 20, 22].map((percentage) => (
-                  <button
-                    key={percentage}
-                    onClick={() => handleTipSelection(percentage)}
-                    className={`flex justify-center items-center cursor-pointer py-2 px-3 w-[48%] rounded-full border ${
-                      selectedTipPercentage === percentage
-                        ? "bg-[#350ABC] text-white"
-                        : "bg-white text-gray-600 border-gray-300"
-                    } ${
-                      selectedTipPercentage !== percentage
-                        ? "hover:bg-transparent hover:text-gray-600 hover:border-gray-300"
-                        : ""
-                    }`}
-                  >
-                    <span className="flex justify-between items-center gap-2">
-                      <span className="text-[16px] font-poppins font-[600]">
-                        $
-                        {((initialPayment * percentage) / 100)
-                          .toFixed()
-                          ?.replace(/(\d+\.\d{2})/, (match) => {
-                            const [whole, fraction] = match.split(".");
-                            return fraction[1] >= "5"
-                              ? (parseFloat(whole) + 1).toFixed(2)
-                              : whole + "." + fraction[0] + "0";
-                          })}
-                      </span>
-                      <span className="text-[16px] font-poppins font-[400] ">
-                        {percentage}%
-                      </span>
-                    </span>
-                  </button>
-                ))}
-              </div>
+              <div className="flex flex-col gap-3 w-full">
+  {!useCustomTip ? (
+    <>
+      <div className="flex flex-wrap gap-3">
+        {[16, 18, 20, 22].map((percentage) => (
+          <button
+            key={percentage}
+            onClick={() => {
+              setCustomTipAmount(0); // reset manual input
+              setSelectedTipPercentage(
+                selectedTipPercentage === percentage ? null : percentage
+              );
+            }}
+            className={`flex justify-center items-center cursor-pointer py-2 px-3 w-[48%] rounded-full border ${
+              selectedTipPercentage === percentage
+                ? "bg-[#350ABC] text-white"
+                : "bg-white text-gray-600 border-gray-300"
+            }`}
+          >
+            <span className="flex justify-between items-center gap-2">
+              <span className="text-[16px] font-poppins font-[600]">
+                $
+                {((initialPayment * percentage) / 100).toFixed(2)}
+              </span>
+              <span className="text-[16px] font-poppins font-[400]">
+                {percentage}%
+              </span>
+            </span>
+          </button>
+        ))}
+      </div>
+      <div
+        className="text-[#350ABC] text-[14px] font-medium mt-2 inline-flex items-center cursor-pointer gap-1"
+        onClick={() => {
+          setUseCustomTip(true);
+          setSelectedTipPercentage(null);
+        }}
+      >
+        <span className="text-lg">+</span> Add Custom Tip
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="relative">
+  <span className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400 text-[16px] font-poppins font-[400]">$</span>
+  <input
+    type="number"
+    min="0"
+    step="1"
+    value={customTipAmount === 0 ? "" : customTipAmount}
+    onChange={(e) => {
+      const value = e.target.value;
+      if (value === "" || (!isNaN(Number(value)) && Number(value) >= 0)) {
+        setCustomTipAmount(Number(value));
+      }
+    }}
+    placeholder="Enter tip amount"
+    className="pl-8 border border-gray-300 rounded-full py-3 px-4 text-[16px] font-poppins font-[400] text-black outline-none focus:border-[#350ABC] w-full"
+    onKeyDown={(e) => {
+      if (["e", "E", "-", "+"].includes(e.key)) {
+        e.preventDefault();
+      }
+    }}
+  />
+</div>
+      <div
+        className="text-[#350ABC] text-[14px] font-medium mt-2 inline-flex cursor-pointer justify-end items-center gap-1"
+        onClick={() => {
+          setUseCustomTip(false);
+          setCustomTipAmount(0);
+        }}
+      >
+        <MdOutlineArrowBackIos className="w-3 h-3"/> Back 
+      </div>
+    </>
+  )}
+</div>
+
             </div>
           </div>
 
@@ -344,7 +406,7 @@ function Page() {
             {data?.includes_settlement && (
               <div
                 className={`flex justify-between items-center ${
-                  !selectedTipPercentage ? "border-b border-gray-200 pb-2" : ""
+                  !selectedTipPercentage ? " border-gray-200 pb-2" : ""
                 }`}
               >
                 <span className="text-[#161616] text-[16px] font-poppins font-[400] leading-[1.6] pt-2">
@@ -355,16 +417,17 @@ function Page() {
                 </span>
               </div>
             )}
-            {selectedTipPercentage && (
-              <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                <span className="text-[#161616] text-[16px] font-poppins font-[400] leading-[1.6] pt-2">
-                  Tip
-                </span>
-                <span className="text-[22px] font-poppins font-[500] text-[#161616]">
-                  ${tipAmount.toFixed()}
-                </span>
-              </div>
-            )}
+            {tipAmount > 0 && (
+  <div className="flex justify-between items-center  border-gray-200 pb-2">
+    <span className="text-[#161616] text-[16px] font-poppins font-[400] leading-[1.6] pt-2">
+      Tip
+    </span>
+    <span className="text-[22px] font-poppins font-[500] text-[#161616]">
+    ${Math.round(tipAmount)}
+    </span>
+  </div>
+)}
+
             {/* <div className="flex justify-between items-center border-b border-gray-200 pb-2">
               <span className="text-[#161616] text-[16px] font-poppins font-[500] leading-[1.6] pt-2">
                 Total Amount
@@ -383,20 +446,19 @@ function Page() {
                   data?.release_status !== "release_requested"
                 }
               >
-                {processing ? (
-                  <Loader2 className="w-5 h-5 animate-spin mx-auto" />
-                ) : data?.already_released ? (
-                  "Already Released"
-                ) : selectedTipPercentage &&
-                  data?.additional_amount_requested ? (
-                  `Pay $${Math.round(tipAmount + additionalAmount)}`
-                ) : selectedTipPercentage ? (
-                  `Pay $${Math.round(tipAmount)}`
-                ) : data?.additional_amount_requested ? (
-                  `Pay $${Math.round(additionalAmount)}`
-                ) : (
-                  "Release Payment"
-                )}
+               {processing ? (
+  <Loader2 className="w-5 h-5 animate-spin mx-auto" />
+) : data?.already_released ? (
+  "Already Released"
+) : tipAmount > 0 && data?.additional_amount_requested ? (
+  `Pay $${Math.round(tipAmount + additionalAmount)}`
+) : tipAmount > 0 ? (
+  `Pay $${Math.round(tipAmount)}`
+) : data?.additional_amount_requested ? (
+  `Pay $${Math.round(additionalAmount)}`
+) : (
+  "Release Payment"
+)}
               </button>
             </div>
 
