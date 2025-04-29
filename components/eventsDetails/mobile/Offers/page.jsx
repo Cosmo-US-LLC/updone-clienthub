@@ -155,8 +155,9 @@ const Offers = ({
                       )
                     }
                     inviteId={offer?.invite_id}
+                    jobData={jobData?.status}
                     showButton={false}
-                    addButton={jobData?.status == "open" ? true : false}
+                    addButton={true}
                   />
                 </div>
               </DialogContent>
@@ -173,7 +174,7 @@ const Offers = ({
             <Loading />
           ) : offersData.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {offersData.map((offer, index) => (
+              {offersData?.map((offer, index) => (
                 <div
                   key={index}
                   className="bg-white p-4 rounded-lg border-[2px] border-[#E9E9E9]   "

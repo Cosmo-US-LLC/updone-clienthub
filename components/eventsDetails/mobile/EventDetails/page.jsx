@@ -144,7 +144,7 @@ const EventDetails = ({ jobData, releaseData }) => {
               // true
             }`}
           >
-            <TalentImage talent={jobData} size={1} />
+            <TalentImage talent={jobData} size={1} totalPrice={true} />
             {/* <Avatar className="w-[62px] h-[62px]">
               <AvatarImage
                 src={jobData?.invite?.worker?.profile_pic}
