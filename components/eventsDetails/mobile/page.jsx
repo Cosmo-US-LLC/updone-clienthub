@@ -217,7 +217,7 @@ const Page = ({ jobId, jobData }) => {
       </Link>
       <div className="flex flex-col items-center px-4 pb-4 pt-2 gap-4">
         <div className="flex items-center justify-between bg-[#FFF] rounded-full p-1 w-full shadow-sm">
-          {tabs.map((tab, index) => (
+          {tabs?.map((tab, index) => (
             <button
               key={index}
               onClick={() => setActiveTab(tab.name)}
