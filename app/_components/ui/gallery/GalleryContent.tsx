@@ -36,8 +36,8 @@ function GalleryContent({
   jobData,
   talentData,
 }: any) {
-  console.log("talent32323222", images);
-  console.log("showButton", showButton, addButton, showTotalPrice, jobData);
+  // console.log("talent32323222", images);
+  // console.log("showButton", showButton, addButton, showTotalPrice, jobData);
   const dispatch = useDispatch();
   const router = useRouter();
   const parsedImages = typeof images === 'string' ? JSON.parse(images) : images;
