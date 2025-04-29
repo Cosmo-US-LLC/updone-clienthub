@@ -36,10 +36,11 @@ function GalleryContent({
   jobData,
   talentData,
 }: any) {
-  console.log("talent32323", talent);
-  console.log("showButton", showButton, addButton, showTotalPrice, jobData);
+  // console.log("talent32323222", images);
+  // console.log("showButton", showButton, addButton, showTotalPrice, jobData);
   const dispatch = useDispatch();
   const router = useRouter();
+  const parsedImages = typeof images === 'string' ? JSON.parse(images) : images;
 
   const payPayment = (invite_id: any) => {
     dispatch(setOffersId(invite_id));
@@ -51,14 +52,14 @@ function GalleryContent({
 
   const handleNext = () => {
     setSelectedIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      prevIndex === parsedImages.length - 1 ? 0 : prevIndex + 1
     );
     setLoading(true);
   };
 
   const handlePrev = () => {
     setSelectedIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? parsedImages.length - 1 : prevIndex - 1
     );
     setLoading(true);
   };
@@ -102,7 +103,7 @@ function GalleryContent({
               </div>
             )}
             <img
-              src={images[selectedIndex]}
+              src={parsedImages[selectedIndex]}
               alt={`Image ${selectedIndex}`}
               onClick={(e) => e.stopPropagation()}
               onLoad={() => setLoading(false)}
@@ -110,7 +111,7 @@ function GalleryContent({
               className="w-full h-auto max-h-[60vh] md:max-h-[65vh] object-contain mx-auto"
             />
 
-            {images.length > 1 && (
+            {parsedImages.length > 1 && (
               <button
                 onClick={(e) => {
                   handlePrev();
@@ -132,7 +133,7 @@ function GalleryContent({
               </button>
             )}
 
-            {images.length > 1 && (
+            {parsedImages.length > 1 && (
               <button
                 onClick={(e) => {
                   handleNext();
@@ -155,12 +156,12 @@ function GalleryContent({
             )}
 
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 block sm:hidden flex justify-center gap-2">
-              {Array.isArray(images) && images?.map((img: any, index: any) => (
+              {parsedImages?.map((img: any, index: any) => (
                 <img
                   key={index}
                   src={img}
                   onClick={(e) => {
-                    if (images.length === 1 || selectedIndex === index) return;
+                    if (parsedImages.length === 1 || selectedIndex === index) return;
                     e.stopPropagation();
                     setSelectedIndex(index);
                     setLoading(true);
@@ -202,12 +203,12 @@ function GalleryContent({
           </div>
 
           <div className="hidden sm:flex justify-center gap-2 flex-wrap p-2">
-            {Array.isArray(images) && images?.map((img: any, index: any) => (
+            {parsedImages?.map((img: any, index: any) => (
               <img
                 key={index}
                 src={img}
                 onClick={(e) => {
-                  if (images.length === 1 || selectedIndex === index) return;
+                  if (parsedImages.length === 1 || selectedIndex === index) return;
                   e.stopPropagation();
                   setSelectedIndex(index);
                   setLoading(true);
