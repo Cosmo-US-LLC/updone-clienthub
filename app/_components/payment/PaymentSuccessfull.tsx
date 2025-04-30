@@ -7,14 +7,17 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import { useStripe } from "@stripe/react-stripe-js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useRef} from "react";
 import { useSelector } from "react-redux";
+
 
 const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
   const stripe = useStripe();
   const router = useRouter();
 
   const offerDetailData = useSelector(selectOfferDetailData);
+    const hasCalledAPI = useRef(false); // 🛡️ Ref to prevent double calls
+  
   const { auth: storedData } = useAppSelector(selectAuth);
   const { handleError } = useError();
   const [jobId, setJobId] = useState();
@@ -63,19 +66,32 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
   };
 
   useEffect(() => {
+    if (!stripe || !clientSecret) return;
+  
+    const storageKey = `payment_done_${offerId}`;
+  
+    if (typeof window !== "undefined") {
+      const alreadyProcessed = sessionStorage.getItem(storageKey);
+      if (alreadyProcessed === "1") {
+        console.log("Already processed, skipping API call");
+        return;
+      }
+    }
+  
     const updatePaymentStatus = async () => {
-      if (stripe && clientSecret) {
-        const { paymentIntent } = await stripe.retrievePaymentIntent(
-          clientSecret
-        );
-        if (paymentIntent && paymentIntent.status === "succeeded") {
-          paymentSuccessfullApi(paymentIntent);
-        } else {
+      const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+      if (paymentIntent && paymentIntent.status === "succeeded") {
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem(storageKey, "1");
         }
+        console.log("api called");
+        await paymentSuccessfullApi(paymentIntent);
       }
     };
+  
     updatePaymentStatus();
-  }, [stripe]);
+  }, [stripe, clientSecret, offerId]);
+  
 
   return (
     <div className="flex flex-col  items-center justify-center min-h-[100%] !px-8 max-lg:pt-20">
