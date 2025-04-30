@@ -287,10 +287,10 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[15px] text-gray-700 mt-1">
                 Last seen{" "}
-                {talent?.last_active || talent?.user?.last_active || talent?.worker?.user?.last_active
+                {talent?.last_active || talent?.user?.last_active || talent?.worker?.user?.last_active || talent?.worker?.last_active
                   ? timeAgo(
                     talent?.last_active || talent?.user?.last_active ||
-                        talent?.worker?.user?.last_active
+                        talent?.worker?.user?.last_active || talent?.worker?.last_active
                     )
                   : "weeks ago"}
               </div>
