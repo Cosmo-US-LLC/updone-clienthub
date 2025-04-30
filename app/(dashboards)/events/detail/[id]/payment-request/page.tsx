@@ -139,14 +139,24 @@ const [useCustomTip, setUseCustomTip] = useState(false);
     }
   };
 
+  
+
   const handleReleasePayment = async () => {
     setProcessing(true);
-  
+
     try {
-      const hasCustomTip = useCustomTip && customTipAmount > 0;
-      const hasPercentageTip = !useCustomTip && selectedTipPercentage !== null;
-  
-      if (!hasCustomTip && !hasPercentageTip && data?.includes_settlement === false) {
+      let finalTipAmount = 0;
+
+      // If custom tip is entered, use that value
+      if (useCustomTip && customTipAmount > 0) {
+        finalTipAmount = customTipAmount; // Custom tip entered by user
+      } else if (selectedTipPercentage) {
+        // If percentage is selected, calculate the tip amount
+        finalTipAmount = (initialPayment * selectedTipPercentage) / 100;
+      }
+
+      // If there's no tip and settlement hasn't been approved, just release the payment
+      if (finalTipAmount === 0 && data?.includes_settlement === false) {
         await apiRequest(
           `/job/approveReleaseRequest`,
           {
@@ -164,15 +174,8 @@ const [useCustomTip, setUseCustomTip] = useState(false);
         );
         router.push(`/events/detail/${params?.id}/payment-request/success`);
       } else {
-        if (hasCustomTip || hasPercentageTip) {
-          let finalTipAmount = 0;
-  
-          if (hasCustomTip) {
-            finalTipAmount = customTipAmount;
-          } else if (hasPercentageTip && selectedTipPercentage) {
-            finalTipAmount = (initialPayment * selectedTipPercentage) / 100;
-          }
-  
+        // If a valid tip exists, add it
+        if (finalTipAmount > 0) {
           await apiRequest(
             `/job/addTip`,
             {
@@ -190,7 +193,8 @@ const [useCustomTip, setUseCustomTip] = useState(false);
             handleError
           );
         }
-  
+
+        // Proceed to release payment after tip (if any) is sent
         router.push(`/events/detail/${params?.id}/payment-release`);
       }
     } catch (error) {
@@ -199,6 +203,9 @@ const [useCustomTip, setUseCustomTip] = useState(false);
       setProcessing(false);
     }
   };
+  
+  
+  
   
 
   useEffect(() => {
