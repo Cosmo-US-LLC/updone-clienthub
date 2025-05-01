@@ -12,7 +12,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import VerificationIconMobile from "@/app/_components/ui/shield";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import GalleryContent from "@/app/_components/ui/gallery/GalleryContent";
 import { apiRequest } from "@/app/lib/services";
 import { useParams } from "next/navigation";
@@ -36,6 +42,7 @@ const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
   const [showModal, setShowModal] = useState(false);
   const [jobApiData, setJobApiData] = useState<any>(null);
   const staff = data?.worker;
+  console.log("staff", staff, data);
   const params = useParams();
 
   const openModal = () => {
@@ -45,55 +52,63 @@ const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
   const closeModal = () => {
     setModalOpen(false);
   };
-    const fetchJobDetails = async () => {
-      try {
-        const apiResponse = await apiRequest("/job/details/public", {
-          method: "POST",
-          body: {
-            job_id: params?.id,
-          },
-        });
-        if (apiResponse) {
-          setJobApiData(apiResponse);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const fetchJobDetails = async () => {
+    try {
+      const apiResponse = await apiRequest("/job/details/public", {
+        method: "POST",
+        body: {
+          job_id: params?.id,
+        },
+      });
+      if (apiResponse) {
+        setJobApiData(apiResponse);
       }
-    };
-  
-    useEffect(() => {
-      fetchJobDetails();
-    }, [showModal]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobDetails();
+  }, [showModal]);
+
+  function calculateTotal(hourRate: string, amount: string) {
+    const totalHours = parseFloat(amount);
+    const parsedHourRate = parseFloat(hourRate);
+    return parsedHourRate * totalHours;
+  }
 
   return (
     <>
       {showModal && hideModal ? (
         <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent
-          hideCloseButton={showModal}
-          className="w-[65vw] xl:w-[55vw] max-w-5xl max-h-[90vh] !rounded-xl !m-0 !gap-0 bg-transparent !p-0 !border-0 z-[299] overflow-y-auto"
-        >
-          <DialogHeader hidden className="bg-transparent !p-0 !m-0">
-            <DialogTitle></DialogTitle>
-            <DialogDescription></DialogDescription>
-          </DialogHeader>
-          <div className="flex-1 overflow-y-auto">
-            <GalleryContent
-              images={
-                data?.worker?.gallery?.length > 0
-                  ? data?.worker?.gallery
-                  : [data?.worker?.profile_pic]
-              }
-              talent={data?.worker}
-              jobApiData={jobApiData}
-              onClose={() => setShowModal(false)}
-              isSelected={""}
-              onToggleSelect={""}
-              showButton={false}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+          <DialogContent
+            hideCloseButton={showModal}
+            className="w-[65vw] xl:w-[55vw] max-w-5xl max-h-[90vh] !rounded-xl !m-0 !gap-0 bg-transparent !p-0 !border-0 z-[299] overflow-y-auto"
+          >
+            <DialogHeader hidden className="bg-transparent !p-0 !m-0">
+              <DialogTitle></DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <div className="flex-1 overflow-y-auto">
+              <GalleryContent
+                images={
+                  data?.worker?.gallery?.length > 0
+                    ? data?.worker?.gallery
+                    : [data?.worker?.profile_pic]
+                }
+                talent={data}
+                jobApiData={jobApiData}
+                onClose={() => setShowModal(false)}
+                isSelected={""}
+                onToggleSelect={""}
+                showButton={false}
+                showTotalPrice={true}
+                showHirePrice={true}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
       ) : (
         <div>
           <div
@@ -271,7 +286,7 @@ const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
               className={`flex justify-center items-center border-t-[1px] border-[#F7F7F7] pb-2`}
             >
               <p className="font-[500] text-[36px] text-[#350ABC]">
-                ${staff?.total_price}
+                ${calculateTotal(staff?.per_hours_rate, data?.hours_required)}
               </p>
               <p className="self-end leading-10 text-[#6B6B6B] text-[14px]">
                 Total

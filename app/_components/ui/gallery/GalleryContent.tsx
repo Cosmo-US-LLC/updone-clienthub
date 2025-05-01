@@ -30,11 +30,17 @@ function GalleryContent({
   onClose,
   showButton = true,
   addButton = false,
+  showTotalPrice = false,
+  showHirePrice = false,
   inviteId,
+  jobData,
+  talentData,
 }: any) {
-  console.log("talent32323", talent);
+  // console.log("talent32323222", talent);
+  // console.log("showButton", showButton, addButton, showTotalPrice, jobData);
   const dispatch = useDispatch();
   const router = useRouter();
+  const parsedImages = typeof images === 'string' ? JSON.parse(images) : images;
 
   const payPayment = (invite_id: any) => {
     dispatch(setOffersId(invite_id));
@@ -46,41 +52,59 @@ function GalleryContent({
 
   const handleNext = () => {
     setSelectedIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      prevIndex === parsedImages.length - 1 ? 0 : prevIndex + 1
     );
     setLoading(true);
   };
 
   const handlePrev = () => {
     setSelectedIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? parsedImages.length - 1 : prevIndex - 1
     );
     setLoading(true);
   };
 
-  function timeAgo(dateTimeString: any) {
+  function timeAgo(dateTimeString: string) {
     const inputDate: any = new Date(dateTimeString);
     const now: any = new Date();
     const diffMs = now - inputDate;
-
+    
+    const seconds = Math.floor(diffMs / 1000);
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (minutes < 60) {
+    
+    // Handle "Just now" for 0 seconds
+    if (seconds < 60) {
+      return 'Just now';
+    }
+    // Handle "1 minute ago" and more than 1 minute
+    else if (minutes === 1) {
+      return '1 minute ago';
+    } else if (minutes < 60) {
       return `${minutes} minutes ago`;
+    }
+    // Handle "1 hour ago" and more than 1 hour
+    else if (hours === 1) {
+      return '1 hour ago';
     } else if (hours < 24) {
       return `${hours} hours ago`;
+    }
+    // Handle days
+    else if (days === 1) {
+      return '1 day ago';
     } else if (days < 7) {
       return `${days} days ago`;
-    } else if (days < 14) {
+    }
+    // Handle weeks
+    else if (days < 14) {
       return `1 week ago`;
     } else {
       const weeks = Math.floor(days / 7);
       return `${weeks} weeks ago`;
     }
   }
-
+  
   function calculateTotal(hourRate: string, amount: string) {
     const totalHours = parseFloat(amount);
     const parsedHourRate = parseFloat(hourRate);
@@ -97,7 +121,7 @@ function GalleryContent({
               </div>
             )}
             <img
-              src={images[selectedIndex]}
+              src={parsedImages[selectedIndex]}
               alt={`Image ${selectedIndex}`}
               onClick={(e) => e.stopPropagation()}
               onLoad={() => setLoading(false)}
@@ -105,7 +129,7 @@ function GalleryContent({
               className="w-full h-auto max-h-[60vh] md:max-h-[65vh] object-contain mx-auto"
             />
 
-            {images.length > 1 && (
+            {parsedImages.length > 1 && (
               <button
                 onClick={(e) => {
                   handlePrev();
@@ -127,7 +151,7 @@ function GalleryContent({
               </button>
             )}
 
-            {images.length > 1 && (
+            {parsedImages.length > 1 && (
               <button
                 onClick={(e) => {
                   handleNext();
@@ -150,12 +174,12 @@ function GalleryContent({
             )}
 
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 block sm:hidden flex justify-center gap-2">
-              {Array.isArray(images) && images?.map((img: any, index: any) => (
+              {parsedImages?.map((img: any, index: any) => (
                 <img
                   key={index}
                   src={img}
                   onClick={(e) => {
-                    if (images.length === 1 || selectedIndex === index) return;
+                    if (parsedImages.length === 1 || selectedIndex === index) return;
                     e.stopPropagation();
                     setSelectedIndex(index);
                     setLoading(true);
@@ -197,12 +221,12 @@ function GalleryContent({
           </div>
 
           <div className="hidden sm:flex justify-center gap-2 flex-wrap p-2">
-            {Array.isArray(images) && images?.map((img: any, index: any) => (
+            {parsedImages?.map((img: any, index: any) => (
               <img
                 key={index}
                 src={img}
                 onClick={(e) => {
-                  if (images.length === 1 || selectedIndex === index) return;
+                  if (parsedImages.length === 1 || selectedIndex === index) return;
                   e.stopPropagation();
                   setSelectedIndex(index);
                   setLoading(true);
@@ -263,10 +287,10 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[15px] text-gray-700 mt-1">
                 Last seen{" "}
-                {talent?.user?.last_active || talent?.worker?.user?.last_active
+                {talent?.last_active || talent?.user?.last_active || talent?.worker?.user?.last_active || talent?.worker?.last_active
                   ? timeAgo(
-                      talent?.user?.last_active ||
-                        talent?.worker?.user?.last_active
+                    talent?.last_active || talent?.user?.last_active ||
+                        talent?.worker?.user?.last_active || talent?.worker?.last_active
                     )
                   : "weeks ago"}
               </div>
@@ -400,7 +424,7 @@ function GalleryContent({
                               <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                             </svg>
                           </div>
-                          {(!showButton && !addButton) || addButton ? (
+                          {(!showButton && !addButton && !showTotalPrice) || addButton ? (
                             <p>Offered Rate:</p>
                           ) : (
                             <p>Rate per hour:</p>
@@ -410,7 +434,10 @@ function GalleryContent({
                           <div className="text-[14px] sm:text-[18px] font-semibold">
                             $
                             {parseFloat(
-                              talent?.per_hours_rate || talent?.offered_price
+                              talentData
+                                ? talentData?.invite?.offered_price
+                                : talent?.per_hours_rate ||
+                                    talent?.offered_price
                             ).toFixed(0)}
                           </div>
                         ) : (
@@ -539,22 +566,27 @@ function GalleryContent({
                     <path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"></path>
                   </svg>
                 </div>
-                {(!showButton && !addButton) || addButton ? (
+                {(!showButton && !addButton && !showTotalPrice) || addButton ? (
                   <p>Offered Rate:</p>
                 ) : (
                   <p>Rate per hour:</p>
                 )}
               </div>
-              
-              {(!showButton && !addButton) || addButton ? (
-                  <div className="text-[14px] sm:text-[18px] font-semibold">
-                  ${parseFloat(talent?.per_hours_rate || talent?.offered_price).toFixed(0)}
+
+              {(!showButton && !addButton && !showTotalPrice) || addButton ? (
+                <div className="text-[14px] sm:text-[18px] font-semibold">
+                  $
+                  {parseFloat(
+                    talent?.per_hours_rate ||
+                      talent?.offered_price ||
+                      talent?.worker?.offered_price
+                  ).toFixed(0)}
                 </div>
-                ) : (
-                  <div className="text-[14px] sm:text-[18px] font-semibold">
-                ${parseFloat(talent?.per_hours_rate).toFixed(0)}
-              </div>
-                )}
+              ) : (
+                <div className="text-[14px] sm:text-[18px] font-semibold">
+                  ${parseFloat(talent?.per_hours_rate || talent?.worker?.per_hours_rate).toFixed(0)}
+                </div>
+              )}
             </div>
           </div>
 
@@ -565,10 +597,14 @@ function GalleryContent({
               </div>
               <div className="text-[14px] sm:text-[18px] font-semibold">
                 $
-                {(!showButton && !addButton) || addButton
-                  ? talent?.total_price
+                {(showButton == false && addButton === true) ||
+                (showButton == false && showTotalPrice === true && showHirePrice === false) ||
+                addButton == true
+                  ? talentData
+                    ? talentData?.total_price
+                    : talent?.total_price || talent?.worker?.total_price
                   : `${calculateTotal(
-                      talent?.per_hours_rate,
+                      talent?.per_hours_rate || talent?.worker?.per_hours_rate,
                       jobApiData
                         ? jobApiData.total_hours
                         : Cookies.get("event_hours")?.split(" ")[0]
@@ -605,7 +641,7 @@ function GalleryContent({
                 </button>
               )}
 
-              {!showButton && addButton && (
+              {!showButton && addButton && jobData == "open" && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -634,7 +670,7 @@ function GalleryContent({
             onClose();
             e.stopPropagation();
           }}
-          className="absolute top-4 right-4 z-[9999] rounded-md text-[#350ABC] max-sm:block"
+          className="absolute top-4 right-4 z-[9999] rounded-md text-[#350ABC] hidden sm:block"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -652,7 +688,6 @@ function GalleryContent({
           </svg>
         </button>
       </div>
-
     </>
   );
 }
