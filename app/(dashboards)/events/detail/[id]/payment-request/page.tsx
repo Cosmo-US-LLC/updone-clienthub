@@ -458,11 +458,11 @@ const [useCustomTip, setUseCustomTip] = useState(false);
 ) : data?.already_released ? (
   "Already Released"
 ) : tipAmount > 0 && data?.additional_amount_requested ? (
-  `Pay $${Math.round(initialPayment + tipAmount + additionalAmount)}`
+  `Pay $${Math.round(tipAmount + additionalAmount)}`
 ) : tipAmount > 0 ? (
-  `Pay $${Math.round(initialPayment+tipAmount)}`
+  `Pay $${Math.round(tipAmount)}`
 ) : data?.additional_amount_requested ? (
-  `Pay $${Math.round(initialPayment+additionalAmount)}`
+  `Pay $${Math.round(additionalAmount)}`
 ) : (
   "Release Payment"
 )}
