@@ -346,8 +346,8 @@ const [useCustomTip, setUseCustomTip] = useState(false);
             <span className="flex justify-between items-center gap-2">
               <span className="text-[16px] font-poppins font-[600]">
                 $
-                {((initialPayment * percentage) / 100).toFixed(2)}
-              </span>
+                {Math.round((initialPayment * percentage) / 100)}
+                </span>
               <span className="text-[16px] font-poppins font-[400]">
                 {percentage}%
               </span>
