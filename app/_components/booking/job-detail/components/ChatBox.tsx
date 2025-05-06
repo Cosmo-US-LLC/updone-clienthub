@@ -191,14 +191,16 @@ const ChatBox = ({
       return `${days} days ago`;
     }
     // Handle weeks
-    else if (days < 14) {
-      return `1 week ago`;
+    else if (days === 7) {
+      return '1 week ago';  // Exactly 1 week
+    } else if (days === 14) {
+      return '2 weeks ago';  // Exactly 2 weeks
     } else {
-      const weeks = Math.floor(days / 7);
-      return `${weeks} weeks ago`;
+      return 'weeks ago'; // After 2 weeks, show just "weeks ago"
     }
   }
-
+  
+  
   return (
     <div
       className={`w-full ${

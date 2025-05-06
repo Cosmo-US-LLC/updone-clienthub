@@ -34,9 +34,9 @@ const Offers = ({
   setSelectedOffer,
   selectedOffer,
   isInModal,
-  offerSort, 
+  offerSort,
   setOfferSort,
-  hideModal
+  hideModal,
 }: {
   offers: any[];
   job: any;
@@ -44,9 +44,9 @@ const Offers = ({
   setSelectedOffer: any;
   selectedOffer: any;
   isInModal: any;
-  offerSort: any; 
+  offerSort: any;
   setOfferSort: any;
-  hideModal: any
+  hideModal: any;
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -92,11 +92,12 @@ const Offers = ({
       return `${days} days ago`;
     }
     // Handle weeks
-    else if (days < 14) {
-      return `1 week ago`;
+    else if (days === 7) {
+      return '1 week ago';  // Exactly 1 week
+    } else if (days === 14) {
+      return '2 weeks ago';  // Exactly 2 weeks
     } else {
-      const weeks = Math.floor(days / 7);
-      return `${weeks} weeks ago`;
+      return 'weeks ago'; // After 2 weeks, show just "weeks ago"
     }
   }
   
@@ -139,7 +140,8 @@ const Offers = ({
                         ? `${offer.worker.full_name.slice(0, 17)}...`
                         : offer.worker.full_name}
                     </p>
-                    {(offer?.worker?.id_is_verified && offer?.worker?.id_is_verified) ? (
+                    {offer?.worker?.id_is_verified &&
+                    offer?.worker?.id_is_verified ? (
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger className="hover:bg-transparent">
@@ -164,11 +166,16 @@ const Offers = ({
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    ) : <div className="h-[30px]"></div>}
+                    ) : (
+                      <div className="h-[30px]"></div>
+                    )}
                   </div>
                   <div className="flex flex-row gap-1.5">
                     <p className="text-[#4C4B4B] text-[12px] font-[400] leading-[16px]">
-                      Last seen {offer?.worker?.user?.last_active ? `${timeAgo(offer?.worker?.user?.last_active)}` : "weeks ago"}
+                      Last seen{" "}
+                      {offer?.worker?.user?.last_active
+                        ? `${timeAgo(offer?.worker?.user?.last_active)}`
+                        : "weeks ago"}
                       {/* <>{console.log(offer?.worker?.user?.last_active)}</> */}
                     </p>
                   </div>

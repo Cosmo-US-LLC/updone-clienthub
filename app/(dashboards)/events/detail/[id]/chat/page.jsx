@@ -65,44 +65,47 @@ function page() {
       }
     };
     const GetOffers = async () => {
-        try {
-          const response = await apiRequest(`/invitation/fetchOffers`, {
-            method: "POST",
-            headers: {
-              revalidate: true,
-              ...(storedData && {
-                Authorization: `Bearer ${storedData.token}`,
-              }),
-            },
-            body: {
-              job_id: params?.id,
-              sort_by: "latest"
-            },
-          });
-    
-          if (response?.offers) {
-            // console.log(response?.offers);
-            // setOffersData(response?.offers);
-            if (jobData?.status === "assigned" || jobData?.status === "completed") {
-              const currentInviteId = jobData?.invite?.id;
-              response?.offers?.forEach((offer) => {
-                if (offer?.invite_id === currentInviteId) {
-                  setSelectedOffer(offer);
-                }
-              });
-            }
-          } else {
-            console.error("Unexpected data format:", response);
+      try {
+        const response = await apiRequest(`/invitation/fetchOffers`, {
+          method: "POST",
+          headers: {
+            revalidate: true,
+            ...(storedData && {
+              Authorization: `Bearer ${storedData.token}`,
+            }),
+          },
+          body: {
+            job_id: params?.id,
+            sort_by: "latest",
+          },
+        });
+
+        if (response?.offers) {
+          // console.log(response?.offers);
+          // setOffersData(response?.offers);
+          if (
+            jobData?.status === "assigned" ||
+            jobData?.status === "completed"
+          ) {
+            const currentInviteId = jobData?.invite?.id;
+            response?.offers?.forEach((offer) => {
+              if (offer?.invite_id === currentInviteId) {
+                setSelectedOffer(offer);
+              }
+            });
           }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        } finally {
-        //   setOffersLoading(false);
+        } else {
+          console.error("Unexpected data format:", response);
         }
-      };
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        //   setOffersLoading(false);
+      }
+    };
 
     fetchJobDetails();
-    GetOffers()
+    GetOffers();
   }, []);
 
   useEffect(() => {
@@ -118,40 +121,41 @@ function page() {
     const inputDate = new Date(dateTimeString);
     const now = new Date();
     const diffMs = now - inputDate;
-    
+
     const seconds = Math.floor(diffMs / 1000);
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     // Handle "Just now" for 0 seconds
     if (seconds < 60) {
-      return 'Just now';
+      return "Just now";
     }
     // Handle "1 minute ago" and more than 1 minute
     else if (minutes === 1) {
-      return '1 minute ago';
+      return "1 minute ago";
     } else if (minutes < 60) {
       return `${minutes} minutes ago`;
     }
     // Handle "1 hour ago" and more than 1 hour
     else if (hours === 1) {
-      return '1 hour ago';
+      return "1 hour ago";
     } else if (hours < 24) {
       return `${hours} hours ago`;
     }
     // Handle days
     else if (days === 1) {
-      return '1 day ago';
+      return "1 day ago";
     } else if (days < 7) {
       return `${days} days ago`;
     }
     // Handle weeks
-    else if (days < 14) {
-      return `1 week ago`;
+    else if (days === 7) {
+      return "1 week ago"; // Exactly 1 week
+    } else if (days === 14) {
+      return "2 weeks ago"; // Exactly 2 weeks
     } else {
-      const weeks = Math.floor(days / 7);
-      return `${weeks} weeks ago`;
+      return "weeks ago"; // After 2 weeks, show just "weeks ago"
     }
   }
 
@@ -185,7 +189,7 @@ function page() {
           <div className="pl-1">
             <div className="text-xl leading-tight">
               {jobData?.invite?.worker?.full_name || "N/A"}
-               {/* - {jobData?.invite?.id} */}
+              {/* - {jobData?.invite?.id} */}
               <br />
             </div>
             <div className="font-normal leading-tight text-sm text-neutral-600">
