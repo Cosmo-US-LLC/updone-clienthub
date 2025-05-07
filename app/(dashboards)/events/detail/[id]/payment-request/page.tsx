@@ -58,6 +58,8 @@ function Page() {
   const { auth: storedData } = useAppSelector(selectAuth);
   const [customTipAmount, setCustomTipAmount] = useState<number>(0);
 const [useCustomTip, setUseCustomTip] = useState(false);
+const [customTipWarning, setCustomTipWarning] = useState<string>("");
+const [isPayDisabled, setIsPayDisabled] = useState(false);
   const { handleError } = useError();
   const [selectedTipPercentage, setSelectedTipPercentage] = useState<
     number | null
@@ -333,9 +335,11 @@ const [useCustomTip, setUseCustomTip] = useState(false);
             key={percentage}
             onClick={() => {
               setCustomTipAmount(0); // reset manual input
+              setCustomTipWarning(""); // Clear any warnings
               setSelectedTipPercentage(
                 selectedTipPercentage === percentage ? null : percentage
               );
+              setIsPayDisabled(false); // Enable pay button
             }}
             className={`flex justify-center items-center cursor-pointer py-2 px-3 w-[48%] rounded-full border ${
               selectedTipPercentage === percentage
@@ -360,6 +364,8 @@ const [useCustomTip, setUseCustomTip] = useState(false);
         onClick={() => {
           setUseCustomTip(true);
           setSelectedTipPercentage(null);
+          setCustomTipWarning(""); // Clear any previous warnings
+        setIsPayDisabled(false); // Enable pay button
         }}
       >
         <span className="text-lg">+</span> Add Custom Tip
@@ -367,7 +373,7 @@ const [useCustomTip, setUseCustomTip] = useState(false);
     </>
   ) : (
     <>
-      <div className="relative">
+      <div className="relative mb-2">
   <span className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400 text-[16px] font-poppins font-[400]">$</span>
   <input
     type="number"
@@ -377,7 +383,15 @@ const [useCustomTip, setUseCustomTip] = useState(false);
     onChange={(e) => {
       const value = e.target.value;
       if (value === "" || (!isNaN(Number(value)) && Number(value) >= 0)) {
-        setCustomTipAmount(Number(value));
+        const amount = Number(value);
+        if (amount <= 300) {
+          setCustomTipAmount(amount);
+          setCustomTipWarning("");
+          setIsPayDisabled(false);
+        } else {
+          setCustomTipWarning("Max limit $300.");
+          setIsPayDisabled(true);
+        }
       }
     }}
     placeholder="Enter tip amount"
@@ -388,12 +402,20 @@ const [useCustomTip, setUseCustomTip] = useState(false);
       }
     }}
   />
+   
 </div>
+{customTipWarning && (
+        <p className="text-red-600 text-[14px] mt-2 font-poppins">
+          {customTipWarning}
+        </p>
+      )}
       <div
         className="text-[#350ABC] text-[14px] font-medium mt-2 inline-flex cursor-pointer justify-end items-center gap-1"
         onClick={() => {
           setUseCustomTip(false);
           setCustomTipAmount(0);
+          setCustomTipWarning("");
+          setIsPayDisabled(false);
         }}
       >
         <MdOutlineArrowBackIos className="w-3 h-3"/> Back 
