@@ -389,7 +389,7 @@ const [isPayDisabled, setIsPayDisabled] = useState(false);
           setCustomTipWarning("");
           setIsPayDisabled(false);
         } else {
-          setCustomTipWarning("Max limit $300");
+          setCustomTipWarning("Max limit: $300");
           setIsPayDisabled(true);
         }
       }
