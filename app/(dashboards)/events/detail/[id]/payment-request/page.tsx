@@ -264,7 +264,6 @@ const [isPayDisabled, setIsPayDisabled] = useState(false);
   } else {
     if (loggedIn === true) {
       return (
-        // ${is-Mobile === false ? "w-[51%] mt-4 mx-auto" : ""}
         <div
           className={`lg:w-[51%] lg:mt-4 lg:mx-auto flex flex-col h-[calc(100dvh-60px)] rounded-xl overflow-hidden bg-[#F3F0FF]`}
         >
