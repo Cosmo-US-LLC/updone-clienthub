@@ -346,11 +346,11 @@ const MobileNavbar = ({ ...props }) => {
               <p className="text-neutral-500 text-center text-xs">
                 Copyright &copy; 2025 Updone. All rights reserved.
                 <br />
-                <Link className="pt-1 underline" href={"terms-condition"}>
+                <Link className="pt-1 underline" href={`${process.env.NEXT_PUBLIC_BASE_URL}/terms-condition`}>
                   Terms & Conditions
                 </Link>
                 ,&nbsp;
-                <Link className="pt-1 underline" href={"privacy-policy"}>
+                <Link className="pt-1 underline" href={`${process.env.NEXT_PUBLIC_BASE_URL}/privacy-policy`}>
                   Privacy Policy
                 </Link>
               </p>

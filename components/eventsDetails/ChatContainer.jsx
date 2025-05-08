@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { apiRequest } from "@/app/lib/services";
 import { useError } from "@/app/lib/context/ErrorProvider";
@@ -136,52 +136,51 @@ function ChatContainer({ job, offerId }) {
     const inputDate = new Date(dateTimeString);
     const now = new Date();
     const diffMs = now - inputDate;
-    
+
     const seconds = Math.floor(diffMs / 1000);
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     // Handle "Just now" for 0 seconds
     if (seconds < 60) {
-      return 'Just now';
+      return "Just now";
     }
     // Handle "1 minute ago" and more than 1 minute
     else if (minutes === 1) {
-      return '1 minute ago';
+      return "1 minute ago";
     } else if (minutes < 60) {
       return `${minutes} minutes ago`;
     }
     // Handle "1 hour ago" and more than 1 hour
     else if (hours === 1) {
-      return '1 hour ago';
+      return "1 hour ago";
     } else if (hours < 24) {
       return `${hours} hours ago`;
     }
     // Handle days
     else if (days === 1) {
-      return '1 day ago';
+      return "1 day ago";
     } else if (days < 7) {
       return `${days} days ago`;
     }
     // Handle weeks
-    else if (days < 14) {
-      return `1 week ago`;
+    else if (days === 7) {
+      return "1 week ago"; // Exactly 1 week
+    } else if (days === 14) {
+      return "2 weeks ago"; // Exactly 2 weeks
     } else {
-      const weeks = Math.floor(days / 7);
-      return `${weeks} weeks ago`;
+      return "weeks ago"; // After 2 weeks, show just "weeks ago"
     }
   }
 
   if (chatLoading) {
-    return (<Loading />);
+    return <Loading />;
   }
 
   return (
     <>
-      <div
-        className={`pb-[80px] px-4 bg-white`}
-      >
+      <div className={`pb-[80px] px-4 bg-white`}>
         {chatLoading ? (
           <Loading />
         ) : (
@@ -324,7 +323,11 @@ function ChatContainer({ job, offerId }) {
                   sendMessage();
                 }
               }}
-              className={`!h-[48px] w-full bg-[#FFEFD7] !text-[16px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl transition-all duration-150 ${feildError ? "border-red-500 bg-red-100 shadow-md shadow-red-200" : ""}`}
+              className={`!h-[48px] w-full bg-[#FFEFD7] !text-[16px] flex-1 p-2 border border-gray-300 outline-none !rounded-xl transition-all duration-150 ${
+                feildError
+                  ? "border-red-500 bg-red-100 shadow-md shadow-red-200"
+                  : ""
+              }`}
               placeholder="Add your comment here..."
               max={1500}
             />

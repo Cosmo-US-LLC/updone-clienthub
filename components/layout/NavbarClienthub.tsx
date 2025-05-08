@@ -305,7 +305,7 @@ function NavbarClienthub() {
                     <br />
                     <Link
                       className="pt-1 underline"
-                      href={"terms-condition"}
+                      href={`${process.env.NEXT_PUBLIC_BASE_URL}/terms-condition`}
                       onClick={toggleMenu}
                     >
                       Terms & Conditions
@@ -313,7 +313,7 @@ function NavbarClienthub() {
                     ,&nbsp;
                     <Link
                       className="pt-1 underline"
-                      href={"privacy-policy"}
+                      href={`${process.env.NEXT_PUBLIC_BASE_URL}/privacy-policy`}
                       onClick={toggleMenu}
                     >
                       Privacy Policy
