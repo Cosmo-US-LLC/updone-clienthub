@@ -67,30 +67,25 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
 
   useEffect(() => {
     if (!stripe || !clientSecret) return;
-  
-    const storageKey = `payment_done_${offerId}`;
-  
-    if (typeof window !== "undefined") {
-      const alreadyProcessed = sessionStorage.getItem(storageKey);
-      if (alreadyProcessed === "1") {
-        console.log("Already processed, skipping API call");
-        return;
-      }
-    }
-  
+
     const updatePaymentStatus = async () => {
-      const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
-      if (paymentIntent && paymentIntent.status === "succeeded") {
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem(storageKey, "1");
+        try {
+            const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+            
+            if (paymentIntent && paymentIntent.status === "succeeded") {
+                console.log("API call for successful payment");
+                await paymentSuccessfullApi(paymentIntent);
+            } else {
+                console.error("Payment intent not successful:", paymentIntent);
+            }
+        } catch (error) {
+            console.error("Error retrieving payment intent:", error);
         }
-        console.log("api called");
-        await paymentSuccessfullApi(paymentIntent);
-      }
     };
-  
+
     updatePaymentStatus();
-  }, [stripe, clientSecret, offerId]);
+}, [stripe, clientSecret, offerId]);
+
   
 
   return (
