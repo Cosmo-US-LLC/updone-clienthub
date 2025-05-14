@@ -32,7 +32,7 @@ import {
 import GalleryContent from "@/app/_components/ui/gallery/GalleryContent";
 
 const EventDetails = ({ jobData, releaseData }) => {
-  const router = useRouter();
+  const router = useRouter(); 
   const [status, setStatus] = useState(jobData?.status);
   const [copiedText, setCopiedText] = useState("");
 

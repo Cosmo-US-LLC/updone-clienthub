@@ -52,7 +52,6 @@ const Offers = ({
   offersLoading,
   setInviteMore,
 }) => {
-  console.log("jobdataaaaa", jobData?.status)
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
