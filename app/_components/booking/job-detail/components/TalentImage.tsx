@@ -14,7 +14,7 @@ import { apiRequest } from "@/app/lib/services";
 import { useParams } from "next/navigation";
 
 function TalentImage({ talent, hideModal = true, size = 0, totalPrice = false, }: any) {
-  console.log("hideModal", talent);
+  // console.log("hideModal", talent);
   
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
   const [showModal, setShowModal] = useState(false);

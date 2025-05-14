@@ -18,11 +18,49 @@ import { Skeleton } from "@/components/ui/skeleton";
 import VerificationIconMobile from "@/app/_components/ui/shield";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { VerificationStatus } from "@/app/_components/ui/verified-status-check-tooltip";
+import { useAppDispatch, useAppSelector } from "@/app/lib/store/hooks";
+import { selectAuth } from "@/app/lib/store/features/authSlice";
+import { selectEvent, setEvents } from "@/app/lib/store/features/eventSlice";
+import { apiRequest } from "@/app/lib/services";
 
-const Page = ({ eventData, isLoading }: any) => {
+const Page = () => {
   // console.log("mobile my events page", formatDateAndTime);
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [client, setClient] = useState(false);
+  const { auth: storedData } = useAppSelector(selectAuth);
+  const { events: eventData } = useAppSelector(selectEvent);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userName, setUserName] = useState("");
+
+  const fetchOffers = async () => {
+    try {
+      setIsLoading(eventData?.length < 1 ? true : false);
+      console.log(storedData);
+      const response = await apiRequest("/client/events", {
+        method: "POST",
+        headers: {
+          revalidate: true,
+          ...(storedData && { Authorization: `Bearer ${storedData?.token}` }),
+        },
+        body: {
+          page_number: 1,
+          page_size: 100,
+        },
+      });
+      // setGetEventData(response?.records);
+      dispatch(setEvents(response?.records));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOffers();
+    setUserName(storedData ? storedData?.user?.name : "");
+  }, []);
 
   useEffect(() => {
     setClient(true);
@@ -216,32 +254,14 @@ const Page = ({ eventData, isLoading }: any) => {
                     <div className="flex justify-between items-center w-full px-2 ">
                       <span className="font-[500] text-[16px] text-black flex items-center gap-1 ">
                         {event.event_assigned_to.full_name}
-                        {(event?.event_assigned_to?.id_is_verified &&
-                          event?.event_assigned_to?.contact_is_verified) ? (
-                            <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger className="hover:bg-transparent">
-                                    <div className=" text-white rounded">
-                                      <VerificationIconMobile
-                                        id_is_verified={
-                                          event?.event_assigned_to
-                                            ?.id_is_verified
-                                        }
-                                        contact_is_verified={
-                                          event?.event_assigned_to
-                                            ?.contact_is_verified
-                                        }
-                                        height={23}
-                                        width={23}
-                                      />
-                                    </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent
-                                    side="bottom"
-                                    className="z-40"
-                                  >
-                                    <VerificationStatus
+                        {event?.event_assigned_to?.id_is_verified &&
+                        event?.event_assigned_to?.contact_is_verified ? (
+                          <div className="text-[#28a745] flex justify-center items-center cursor-pointer">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger className="hover:bg-transparent">
+                                  <div className=" text-white rounded">
+                                    <VerificationIconMobile
                                       id_is_verified={
                                         event?.event_assigned_to?.id_is_verified
                                       }
@@ -249,12 +269,28 @@ const Page = ({ eventData, isLoading }: any) => {
                                         event?.event_assigned_to
                                           ?.contact_is_verified
                                       }
+                                      height={23}
+                                      width={23}
                                     />
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </div>
-                          ) : ''}
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent side="bottom" className="z-40">
+                                  <VerificationStatus
+                                    id_is_verified={
+                                      event?.event_assigned_to?.id_is_verified
+                                    }
+                                    contact_is_verified={
+                                      event?.event_assigned_to
+                                        ?.contact_is_verified
+                                    }
+                                  />
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </span>
                       <span className="text-[#4C4B4B] font-[400] text-[14px]">
                         {event.event_required_service}
