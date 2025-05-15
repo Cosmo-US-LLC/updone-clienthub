@@ -109,7 +109,7 @@ const DynamicCardTablePage = () => {
 
   // useEffect(() => {
   // }, []);
-  
+
   useEffect(() => {
     setIsCloseClicked(localStorage?.getItem("eventsBanner") || false);
 
@@ -141,21 +141,23 @@ const DynamicCardTablePage = () => {
           const formattedDate = startDate.toLocaleDateString(
             "en-US",
             dateOptions
-          ); 
+          );
           const formattedStartTime = startDate.toLocaleTimeString(
             "en-US",
             timeOptions
-          );  
+          );
           const formattedEndTime = endDate.toLocaleTimeString(
             "en-US",
             timeOptions
-          );  
+          );
 
-         
           formattedResults.push(
-            <span key={date} className="flex flex-row text-[#774DFD] gap-2 md:gap-0 md:flex-col">
+            <span
+              key={date}
+              className="flex flex-row text-[#774DFD] gap-2 md:gap-0 md:flex-col"
+            >
               {formattedDate}
-              <br className="hidden md:block"/>
+              <br className="hidden md:block" />
               <span className="text-[#161616]">
                 {`${formattedStartTime} - ${formattedEndTime}`}
               </span>
@@ -170,7 +172,7 @@ const DynamicCardTablePage = () => {
 
   // Data Table Conversion
   const convertEventToPayment = (event: any): Payment => {
-    console.log(event, event?.event_assigned_to)
+    console.log(event, event?.event_assigned_to);
     return {
       event_title: event?.event_title,
       event_status: event?.event_status,
@@ -178,14 +180,16 @@ const DynamicCardTablePage = () => {
       event_total_offers: event?.event_total_offers?.toString(),
       event_assigned_to_name: event?.event_assigned_to?.full_name,
       event_assigned_to_profile_pic: event?.event_assigned_to?.profile_pic,
-      event_assigned_to_contact_verified: event?.event_assigned_to?.contact_is_verified.toString(),
-      event_assigned_to_id_verified: event?.event_assigned_to?.id_is_verified.toString(),
+      event_assigned_to_contact_verified:
+        event?.event_assigned_to?.contact_is_verified.toString(),
+      event_assigned_to_id_verified:
+        event?.event_assigned_to?.id_is_verified.toString(),
       event_required_service: event?.event_required_service,
       event_date_time: formatDateAndTime(event?.event_date_time),
       event_location: event?.event_location,
     };
   };
-  
+
   // Data Table Headers
   const columns: ColumnDef<Payment>[] = [
     {
@@ -383,7 +387,7 @@ const DynamicCardTablePage = () => {
                       </TableRow>
                     ))
                   : storedEventsData?.length > 0 &&
-                  storedEventsData?.map((event: any, id: any) => (
+                    storedEventsData?.map((event: any, id: any) => (
                       <TableRow
                         key={id}
                         onClick={() =>
@@ -475,12 +479,31 @@ const DynamicCardTablePage = () => {
                                 {event?.event_assigned_to?.full_name}
                               </span>
                               <div className="absolute bottom-3 left-5 ml-1 text-[#28a745] flex justify-center items-center cursor-pointer">
-                              {(event?.event_assigned_to?.id_is_verified && event?.event_assigned_to?.id_is_verified) ? (
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger className="hover:bg-transparent">
-                                      <div className=" text-white pr-4 pl-2  rounded">
-                                        <VerificationIconMobile
+                                {event?.event_assigned_to?.id_is_verified &&
+                                event?.event_assigned_to?.id_is_verified ? (
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger className="hover:bg-transparent">
+                                        <div className=" text-white pr-4 pl-2  rounded">
+                                          <VerificationIconMobile
+                                            id_is_verified={
+                                              event?.event_assigned_to
+                                                ?.id_is_verified
+                                            }
+                                            contact_is_verified={
+                                              event?.event_assigned_to
+                                                ?.contact_is_verified
+                                            }
+                                            height={23}
+                                            width={23}
+                                          />
+                                        </div>
+                                      </TooltipTrigger>
+                                      <TooltipContent
+                                        side="bottom"
+                                        className="z-40"
+                                      >
+                                        <VerificationStatus
                                           id_is_verified={
                                             event?.event_assigned_to
                                               ?.id_is_verified
@@ -489,29 +512,13 @@ const DynamicCardTablePage = () => {
                                             event?.event_assigned_to
                                               ?.contact_is_verified
                                           }
-                                          height={23}
-                                          width={23}
                                         />
-                                      </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent
-                                      side="bottom"
-                                      className="z-40"
-                                    >
-                                      <VerificationStatus
-                                        id_is_verified={
-                                          event?.event_assigned_to
-                                            ?.id_is_verified
-                                        }
-                                        contact_is_verified={
-                                          event?.event_assigned_to
-                                            ?.contact_is_verified
-                                        }
-                                      />
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              ) : ''}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                             </div>
                           ) : (
@@ -611,7 +618,7 @@ const DynamicCardTablePage = () => {
       </div>
 
       <div className="lg:hidden overflow-hidden">
-        <MyEvents isLoading={isLoading} eventData={storedEventsData} formatDateAndTime={formatDateAndTime} />
+        <MyEvents />
       </div>
     </>
   );
