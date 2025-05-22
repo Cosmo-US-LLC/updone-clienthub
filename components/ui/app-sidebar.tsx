@@ -7,6 +7,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { LuLogOut } from "react-icons/lu";
 import { PiCurrencyDollar, PiHandCoins, PiUsersThree } from "react-icons/pi";
 import { SlLocationPin } from "react-icons/sl";
+import { BiHomeAlt2 } from "react-icons/bi";
 
 import { NavUser } from "@/components/ui/sidebar-user";
 import {
@@ -49,28 +50,39 @@ import { FiLogOut } from "react-icons/fi";
 import { Button } from "./button";
 import { BsCreditCard } from "react-icons/bs";
 import { setEventsEmpty } from "@/app/lib/store/features/eventSlice";
+// import {
+//   HomeIcon,
+//   EventIcon,
+//   PaymentIcon,
+//   SettlementIcon,
+//   ReviewIcon,
+// } from "../../app/(dashboards)/icons";
 
 const items = [
   {
-    title: "My Events",
+    title: "Home",
     url: "/",
-    icon: SlLocationPin,
+    icon: "h",
+  },
+  {
+    title: "My Events",
+    url: "/events",
+    icon: "e",
   },
   {
     title: "Payments",
     url: "/payments",
-    icon: PiCurrencyDollar,
+    icon: "p",
   },
   {
     title: "Settlements",
     url: "/settlements",
-    icon: PiHandCoins,
-    // icon: PiUsersThree,
+    icon: "s",
   },
   {
     title: "Reviews",
     url: "/reviews",
-    icon: IoIosStarOutline,
+    icon: "r",
   },
 ];
 const items2 = [
@@ -100,18 +112,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   React.useEffect(() => {
     setLogoutPath(`${process.env.NEXT_PUBLIC_BASE_URL}`);
     const findActiveIndex = () => {
-      if (pathname == "/" || pathname.includes("/events")) {
+      if (pathname == "/" || pathname.includes("/home")) {
         setActiveIndex(0);
-      } else if (pathname.includes("/payments")) {
+      } else if (pathname.includes("/events")) {
         setActiveIndex(1);
-      } else if (pathname.includes("/settlements")) {
+      } else if (pathname.includes("/payments")) {
         setActiveIndex(2);
-      } else if (pathname.includes("/reviews")) {
+      } else if (pathname.includes("/settlements")) {
         setActiveIndex(3);
-      } else if (pathname.includes("/settings")) {
+      } else if (pathname.includes("/reviews")) {
         setActiveIndex(4);
-      } else if (pathname.includes("/payment-methods")) {
+      } else if (pathname.includes("/settings")) {
         setActiveIndex(5);
+      } else if (pathname.includes("/payment-methods")) {
+        setActiveIndex(6);
       }
       // Check which link matches the current pathname
       // const activeLinkIndex = [...links, ...bottomLinks].findIndex((link) =>
@@ -155,9 +169,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     });
   };
   return (
-    <Sidebar collapsible="icon" {...props} className="">
-      <SidebarHeader className="min-h-[65px] mb-4 flex justify-center overflow-hidden">
-        <Link href={`/`} className="relative">
+    <Sidebar {...props} className="">
+      <SidebarHeader
+        className="min-h-[65px] mb-4 flex justify-center z-[0]"
+        style={{
+          background: "#7E4DE2 !important",
+        }}
+      >
+        {/* <Link href={`/`} className="relative">
           <Image
             src={"/images/favicon.svg"}
             alt="Updone"
@@ -167,9 +186,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               "h-[40px] shrink-0 transition-all duration-300 ease-in-out ml-2.5",
               "scale-0 opacity-0 group-data-[collapsible=icon]:scale-100 group-data-[collapsible=icon]:opacity-100"
             )}
-          />
+          /> */}
 
-          <div
+        {/* <div
             className={cn(
               "absolute top-1 shrink-0 transition-all duration-300 delay-100 ease-in-out",
               "left-0 opacity-100 group-data-[collapsible=icon]:left-10 group-data-[collapsible=icon]:opacity-0"
@@ -193,10 +212,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </p>
               <div className="h-[8px]"></div>
             </div>
-          </div>
-        </Link>
+          </div> */}
+        {/* </Link> */}
         <div className="absolute -right-3 top-[53px] flex items-center">
-          <SidebarTriggerArrow className="!h-[24px] w-[24px] !rounded-full bg-white border" />
+          <SidebarTriggerArrow className="!h-[24px] w-[24px] !rounded-full border !hidden" />
         </div>
       </SidebarHeader>
       <SidebarContent className="group-data-[collapsible=icon]:!items-center">
@@ -208,26 +227,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuButton asChild>
                     <Link
                       href={item.url}
-                      //   className={`group-data-[collapsible=icon]:!ml-[14px] group-data-[collapsible=icon]:!scale-125 !transition-all ${
-                      className={`group-data-[collapsible=icon]:!ml-[10px] !text-[15px] !transition-all !h-fit !py-3 ${
-                        activeIndex === index
-                          ? "bg-[#F8F6FF]"
-                          : "hover:!bg-[#F8F6FF]"
-                      }`}
+                      className={`group-data-[collapsible=icon]:!ml-[10px] !text-[10px] !text-[kanit] !flex-col !transition-all !h-fit !py-1 !gap-0 hover:!bg-transparent hover:!text-[#EBE6FF] hover:!font-[700]`}
                       title={item.title}
                     >
-                      <item.icon
-                        className={`!w-5 !h-5 ${
-                          activeIndex === index
-                            ? "text-[#350ABC]"
-                            : "text-[#2C2240]"
+                      <span
+                        className={`!w-11 !h-11 !p-0 !m-0 !gap-0 flex items-center justify-center rounded-xl ${
+                          activeIndex === index ? "bg-[#F8F6FF]" : ""
                         }`}
-                      />
+                      >
+                        <item.icon />
+                      </span>
                       <span
                         className={`${
                           activeIndex === index
-                            ? "text-[#350ABC]"
-                            : "text-[#2C2240]"
+                            ? "text-[#EBE6FF] !font-[700] bg-transparent"
+                            : "!font-[400] text-[#EBE6FF]"
                         }`}
                       >
                         {item.title}
@@ -299,7 +313,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               {isClient && storedData?.user?.name ? (
                 <>
                   <Avatar className="h-10 w-10 rounded-lg">
-                    <AvatarImage src={storedData?.user?.image} className="object-cover" />
+                    <AvatarImage
+                      src={storedData?.user?.image}
+                      className="object-cover"
+                    />
                     <AvatarFallback className="rounded-lg">{`
                         ${storedData?.user?.name?.split(" ")[0][0]}${
                       storedData?.user?.name?.split(" ").length > 1
