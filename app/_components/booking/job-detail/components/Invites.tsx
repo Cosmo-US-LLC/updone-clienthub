@@ -48,7 +48,7 @@ const Invites = ({ data, jobId, jobData, isInModal, hideModal }: any) => {
   const fetchData = async () => {
     setLoading(true);
     let body: any = {
-      city_id: 1,
+      city_id: jobData?.city_id || 1,
       service_id: services[jobData?.service_name] || 1,
       page_number: currentPage,
       page_size: selectedCount || 12,

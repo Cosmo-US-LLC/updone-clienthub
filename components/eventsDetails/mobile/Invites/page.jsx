@@ -76,7 +76,7 @@ const Invites = ({
   const fetchTalentsData = async (add = false, page = 1) => {
     setLoadingMobile(true);
     let body = {
-      city_id: 1,
+      city_id: jobData?.city_id || 1,
       // city_id: parseInt(Cookies.get("event_city")) || 1,
       service_id: parseInt(Cookies.get("event_service_id")) || 1,
       page_number: add ? page : currentPage,
