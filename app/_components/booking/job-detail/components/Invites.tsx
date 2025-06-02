@@ -25,7 +25,7 @@ const services: any = {
   "Cocktail server": 3,
   Barback: 6,
   "Promo Model": 4,
-  "Event Helper": 4,
+  "Event Helper": 5,
 };
 
 const Invites = ({ data, jobId, jobData, isInModal, hideModal }: any) => {
