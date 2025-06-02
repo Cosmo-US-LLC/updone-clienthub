@@ -145,39 +145,38 @@ function TalentImage({ talent, hideModal = true, size = 0, totalPrice = false, }
             </div>
           </DialogContent>
         </Dialog>
-      ) : (
-        <Avatar
-          className={`${sizes[size]} object-cover rounded-full ${
-            size == 0 && "border-2 border-[#F3F0FF]"
-          } cursor-pointer`}
-          onClick={(event) => {
-            event.stopPropagation();
-            setShowModal(true);
-          }}
-        >
-          <AvatarImage
-            src={
-              talent?.invite?.worker?.profile_pic || talent?.worker?.profile_pic
+      ) : null}
+      <Avatar
+        className={`${sizes[size]} object-cover rounded-full ${
+          size == 0 && "border-2 border-[#F3F0FF]"
+        } cursor-pointer`}
+        onClick={(event) => {
+          event.stopPropagation();
+          setShowModal(true);
+        }}
+      >
+        <AvatarImage
+          src={
+            talent?.invite?.worker?.profile_pic || talent?.worker?.profile_pic
+          }
+          alt="Talent Profile Picture"
+          className="object-cover"
+        />
+        <AvatarFallback>
+          {(() => {
+            const fullName =
+              talent?.invite?.worker?.full_name || talent?.full_name || "";
+
+            const nameParts = fullName.split(" ");
+
+            if (nameParts.length > 1) {
+              return `${nameParts[0][0]}${nameParts[1][0]}`;
+            } else {
+              return `${fullName[0] || ""}${fullName[1] || ""}`;
             }
-            alt="Talent Profile Picture"
-            className="object-cover"
-          />
-          <AvatarFallback>
-            {(() => {
-              const fullName =
-                talent?.invite?.worker?.full_name || talent?.full_name || "";
-
-              const nameParts = fullName.split(" ");
-
-              if (nameParts.length > 1) {
-                return `${nameParts[0][0]}${nameParts[1][0]}`;
-              } else {
-                return `${fullName[0] || ""}${fullName[1] || ""}`;
-              }
-            })()}
-          </AvatarFallback>
-        </Avatar>
-      )}
+          })()}
+        </AvatarFallback>
+      </Avatar>
     </div>
   );
 }

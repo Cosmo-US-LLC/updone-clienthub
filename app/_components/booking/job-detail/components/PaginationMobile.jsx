@@ -28,11 +28,11 @@ const PaginationMobile = ({
   //   return <div className="h-[200px]"><Loader /></div>;
   // }
 
-  if (totalPages < 2) {
-    return null;
-  }
+  // if (totalPages < 2) {
+  //   return null;
+  // }
 
-  if (pageNo >= totalPages) {
+  if (pageNo >= totalPages || totalPages < 2) {
     return (
       <div className="flex flex-col items-center pt-4 pb-14">
         <p className="text-[#350ABC] text-center font-medium bg-white px-6 py-4 rounded-md shadow-md text-[16px]">

@@ -22,10 +22,10 @@ import GalleryContent from "@/app/_components/ui/gallery/GalleryContent";
 const services: any = {
   Bartender: 1,
   Waiter: 2,
-  "Cocktail Server": 3,
+  "Cocktail server": 3,
   Barback: 6,
   "Promo Model": 4,
-  "Event Helper": 4,
+  "Event Helper": 5,
 };
 
 const Invites = ({ data, jobId, jobData, isInModal, hideModal }: any) => {
@@ -48,7 +48,7 @@ const Invites = ({ data, jobId, jobData, isInModal, hideModal }: any) => {
   const fetchData = async () => {
     setLoading(true);
     let body: any = {
-      city_id: 1,
+      city_id: jobData?.city_id || 1,
       service_id: services[jobData?.service_name] || 1,
       page_number: currentPage,
       page_size: selectedCount || 12,
