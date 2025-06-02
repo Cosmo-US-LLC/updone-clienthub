@@ -22,7 +22,7 @@ import GalleryContent from "@/app/_components/ui/gallery/GalleryContent";
 const services: any = {
   Bartender: 1,
   Waiter: 2,
-  "Cocktail Server": 3,
+  "Cocktail server": 3,
   Barback: 6,
   "Promo Model": 4,
   "Event Helper": 4,
