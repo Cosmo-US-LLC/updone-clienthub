@@ -13,10 +13,14 @@ interface PaginationProps {
   bottomPadding?: string;
   // setIsOptionSelected?: any;
   isOptionSelected?: any;
+  currentPageCount?: any;
+  serviceName?: any;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
+  currentPageCount=0,
+  serviceName="",
   pageSize,
   totalCount,
   onPageChange,
@@ -143,7 +147,8 @@ const Pagination: React.FC<PaginationProps> = ({
   return (
     <div className={`flex justify-between items-center ${bottomPadding} w-[100%] pr-6`}>
       <div className="flex cursor-pointer items-center">
-        <p className="">Records Per Page:</p>
+        <p>Showing {currentPageCount} of {totalCount} {serviceName}s</p>
+        {/* <p className="">Records Per Page:</p>
         
         <CommonSelect
           options={PAGINATION_LIMIT}
@@ -153,7 +158,7 @@ const Pagination: React.FC<PaginationProps> = ({
           onChange={handlePageSizeChange}
           className="w-14 h-8 border-none !bg-[#FFF] ml-8 !cursor-pointer outline-none font-[400] leading-[24px] text-[14px] tracking-[-0.28px] rounded-md focus:border-none p-1"
           isLimit
-        />
+        /> */}
       </div>
       <ul
         className="flex rounded-[6px] text-[15px] bg-white gap-3 h-12 lg:ml-44 font-[700] items-center"

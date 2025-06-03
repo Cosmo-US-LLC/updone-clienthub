@@ -237,7 +237,7 @@ const ChatBox = ({
               {selectedOffer?.worker?.full_name}
               <br />
               <span className="text-[12px] text-neutral-600">
-                Last seen{" "}
+                Last active{" "}
                 {selectedOffer?.worker?.user?.last_active
                   ? `${timeAgo(selectedOffer?.worker?.user?.last_active)}`
                   : "weeks ago"}

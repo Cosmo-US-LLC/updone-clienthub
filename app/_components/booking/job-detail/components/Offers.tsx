@@ -172,7 +172,7 @@ const Offers = ({
                   </div>
                   <div className="flex flex-row gap-1.5">
                     <p className="text-[#4C4B4B] text-[12px] font-[400] leading-[16px]">
-                      Last seen{" "}
+                      Last active{" "}
                       {offer?.worker?.user?.last_active
                         ? `${timeAgo(offer?.worker?.user?.last_active)}`
                         : "weeks ago"}

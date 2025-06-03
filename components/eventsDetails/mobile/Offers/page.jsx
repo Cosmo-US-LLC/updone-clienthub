@@ -430,7 +430,7 @@ const Offers = ({
                   <br />
                 </div>
                 <div className="font-normal leading-tight text-sm text-neutral-600">
-                  Last seen{" "}
+                  Last active{" "}
                   {selectedOffer?.worker?.user?.last_active
                     ? `${timeAgo(selectedOffer?.worker?.user?.last_active)}`
                     : "weeks ago"}

@@ -42,7 +42,7 @@ const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
   const [showModal, setShowModal] = useState(false);
   const [jobApiData, setJobApiData] = useState<any>(null);
   const staff = data?.worker;
-  console.log("staff", staff, data);
+  // console.log("staff", staff, data);
   const params = useParams();
 
   const openModal = () => {

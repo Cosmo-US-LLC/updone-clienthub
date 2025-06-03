@@ -222,7 +222,7 @@ const EventDetails = ({ jobData, releaseData }) => {
                 {/* <FaCheck className="text-green-500 text-md" title="Verified" /> */}
               </div>
               <div className="text-sm text-neutral-600">
-                Last seen{" "}
+                Last active{" "}
                 {jobData?.invite?.worker?.last_active
                   ? `${timeAgo(jobData?.invite?.worker?.last_active)}`
                   : "weeks ago"}

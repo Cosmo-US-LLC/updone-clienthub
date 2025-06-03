@@ -7,13 +7,22 @@ import React, { useEffect, useState } from "react";
 import TalentCard from "../../recommended-talent/TalentCard";
 
 const services: any = {
-  "Bartender": 1,
-  "Waiter": 2,
+  Bartender: 1,
+  Waiter: 2,
   "Cocktail Server": 3,
-  "Barback": 6,
+  Barback: 6,
   "Promo Model": 4,
   "Event Helper": 4,
 };
+
+  const servicesList = [
+    "Bartender",
+    "Waiter",
+    "Cocktail Server",
+    "Promo Model",
+    "Event Helper",
+    "Barback",
+  ];
 
 function InviteMoreTalents({
   selectedTalentsLocal,
@@ -27,7 +36,7 @@ function InviteMoreTalents({
   selectedCount,
   setSelectedCount,
   data,
-  setData
+  setData,
 }: any) {
   const [loading, setLoading] = useState(false);
   const skeletonCards = Array(selectedCount || 8).fill(null);
@@ -43,6 +52,8 @@ function InviteMoreTalents({
     // setIsOptionSelected(false);
     setCurrentPage(page);
   };
+
+  console.log(jobApiData)
 
   return (
     <div>
@@ -91,6 +102,8 @@ function InviteMoreTalents({
                       (selected: any) => selected.id === talent.id
                     ) || talent?.alreadyInvited
                   }
+                  services={servicesList}
+                  serviceName={jobApiData?.service_name || ""}
                   onToggleSelect={() =>
                     !talent?.alreadyInvited &&
                     setSelectedTalentsLocal((prev: any) =>
@@ -116,6 +129,8 @@ function InviteMoreTalents({
           onPageChange={handlePageChange}
           handleChange={handleChange}
           bottomPadding={"py-[20px]"}
+          currentPageCount={data?.records?.length}
+          serviceName={jobApiData?.service_name || ""}
           //   setIsOptionSelected={setIsOptionSelected}
         />
       )}

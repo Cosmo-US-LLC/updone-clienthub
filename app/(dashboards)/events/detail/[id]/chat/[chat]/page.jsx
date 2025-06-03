@@ -115,7 +115,7 @@ function page() {
               <br />
             </div>
             <div className="font-normal leading-tight text-sm text-neutral-600">
-              Last seen{" "}
+              Last active{" "}
               {offerDetailData?.worker?.user?.last_active
                 ? `${timeAgo(offerDetailData?.worker?.user?.last_active)}`
                 : "weeks ago"}
