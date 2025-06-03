@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
   }
   if (roleId && (roleId != 4 || roleId != 2)) {
     return NextResponse.redirect(
-      new URL(process.env.NEXT_PUBLIC_BASE_URL || "/", request.url)
+      new URL(`${process.env.NEXT_PUBLIC_BASE_URL}?middleware-redirect-role=${roleId}` || "/", request.url)
     );
   }
 
