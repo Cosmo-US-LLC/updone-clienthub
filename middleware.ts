@@ -59,7 +59,7 @@ export function middleware(request: NextRequest) {
     hostAllowedPaths.some((path) => currentPath.startsWith(path))
   ) {
     return NextResponse.redirect(
-      new URL(process.env.NEXT_PUBLIC_BASE_URL || "/", request.url)
+      new URL(`${process.env.NEXT_PUBLIC_BASE_URL}?middleware-redirect=token-or-path-issue` || "/", request.url)
     );
   }
   // const role_id = parsedAuthData?.user?.role_id;
