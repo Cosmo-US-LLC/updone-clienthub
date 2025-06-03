@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
       console.error("Error parsing authData:", error);
     }
   }
-  if (roleId && roleId != 4) {
+  if (roleId && (roleId != 4 || roleId != 2)) {
     return NextResponse.redirect(
       new URL(process.env.NEXT_PUBLIC_BASE_URL || "/", request.url)
     );
