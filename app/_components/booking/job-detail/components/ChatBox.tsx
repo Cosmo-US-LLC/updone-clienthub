@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setOffersId } from "@/app/lib/store/features/bookingSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Info, TriangleAlert } from "lucide-react";
 
 type Message = {
   id: number;
@@ -271,6 +272,11 @@ const ChatBox = ({
           <div
             className={`relative flex-1 overflow-y-auto p-4 mt-[84px] max-h-[88%]  `}
           >
+            <div className="max-w-[270px] bg-yellow-50 px-2 py-2 mb-4 rounded-lg border border-yellow-400 mx-auto text-xs flex items-center justify-center gap-3">
+              {/* <TriangleAlert className="w-6 h-6" />  */}
+              <Info className="w-4 h-4" />
+              Do not share your contact details.
+            </div>
             {Object.entries(groupedMessages).map(([date, msgs]: any) => (
               <div key={date}>
                 {/* Date Timestamp */}

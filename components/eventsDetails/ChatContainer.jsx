@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "@/app/loading";
+import { Info } from "lucide-react";
 
 function ChatContainer({ job, offerId }) {
   const { auth: storedData } = useAppSelector(selectAuth);
@@ -184,85 +185,91 @@ function ChatContainer({ job, offerId }) {
         {chatLoading ? (
           <Loading />
         ) : (
-          Object.entries(groupedMessages).map(([date, msgs]) => (
-            <div key={date}>
-              {/* Date Timestamp */}
-              <p className="text-[#72777A] text-[12px] font-[500] leading-[16px] text-center mb-4">
-                {date}
-              </p>
+          <>
+            <div className="max-w-[270px] bg-yellow-50 px-2 py-2 my-4 rounded-lg border border-yellow-400 mx-auto text-xs flex items-center justify-center gap-3">
+              {/* <TriangleAlert className="w-6 h-6" />  */}
+              <Info className="w-4 h-4" />
+              Do not share your contact details.
+            </div>
+            {Object.entries(groupedMessages).map(([date, msgs]) => (
+              <div key={date}>
+                {/* Date Timestamp */}
+                <p className="text-[#72777A] text-[12px] font-[500] leading-[16px] text-center mb-4">
+                  {date}
+                </p>
 
-              {/* Messages */}
-              {msgs.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex mb-2 ${
-                    msg?.sender_user_id === storedData?.user?.id
-                      ? "justify-end" // Sender's messages on the right
-                      : "justify-start" // Receiver's messages on the left
-                  }`}
-                >
-                  {msg?.sender_user_id === storedData?.user?.id ? (
-                    // Sender's div
-                    <div
-                      className={`max-w-[90%] py-3 px-4 bg-[#774DFD] text-white rounded-t-[24px] rounded-bl-[24px]`}
-                      style={{
-                        wordBreak: "break-word",
-                        overflowWrap: "break-word",
-                        position: "relative",
-                      }}
-                    >
-                      <div className="flex flex-col">
-                        <p className="text-[14px] font-[400] leading-[28px]">
-                          {msg.message_body}
-                        </p>
-                      </div>
-                      {/* Elliptical Tail for Sender */}
+                {/* Messages */}
+                {msgs.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex mb-2 ${
+                      msg?.sender_user_id === storedData?.user?.id
+                        ? "justify-end" // Sender's messages on the right
+                        : "justify-start" // Receiver's messages on the left
+                    }`}
+                  >
+                    {msg?.sender_user_id === storedData?.user?.id ? (
+                      // Sender's div
                       <div
+                        className={`max-w-[90%] py-3 px-4 bg-[#774DFD] text-white rounded-t-[24px] rounded-bl-[24px]`}
                         style={{
-                          position: "absolute",
-                          bottom: 0,
-                          right: "-5px",
-                          width: "20px",
-                          height: "10px",
-                          background: "#774DFD",
-                          borderBottomLeftRadius: "15px",
-                          transform: "rotate(180deg)",
+                          wordBreak: "break-word",
+                          overflowWrap: "break-word",
+                          position: "relative",
                         }}
-                      ></div>
-                    </div>
-                  ) : (
-                    // Receiver's div
-                    <div
-                      className={`max-w-[90%] py-3 px-4 bg-[white] text-black border border-1 border-[#EBE6FF] rounded-br-[24px] rounded-t-[24px]`}
-                      style={{
-                        wordBreak: "break-word",
-                        overflowWrap: "break-word",
-                        position: "relative",
-                      }}
-                    >
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: 0,
-                          left: "-5px",
-                          width: "20px",
-                          height: "10px",
-                          background: "white",
-                          borderBottomRightRadius: "15px",
-                          transform: "rotate(-180deg)",
-                        }}
-                      ></div>
-                      <div className="flex flex-col">
-                        <p className="text-[14px] font-[400] leading-[28px]">
-                          {msg.message_body}
-                        </p>
+                      >
+                        <div className="flex flex-col">
+                          <p className="text-[14px] font-[400] leading-[28px]">
+                            {msg.message_body}
+                          </p>
+                        </div>
+                        {/* Elliptical Tail for Sender */}
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: "-5px",
+                            width: "20px",
+                            height: "10px",
+                            background: "#774DFD",
+                            borderBottomLeftRadius: "15px",
+                            transform: "rotate(180deg)",
+                          }}
+                        ></div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    ) : (
+                      // Receiver's div
+                      <div
+                        className={`max-w-[90%] py-3 px-4 bg-[white] text-black border border-1 border-[#EBE6FF] rounded-br-[24px] rounded-t-[24px]`}
+                        style={{
+                          wordBreak: "break-word",
+                          overflowWrap: "break-word",
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "-5px",
+                            width: "20px",
+                            height: "10px",
+                            background: "white",
+                            borderBottomRightRadius: "15px",
+                            transform: "rotate(-180deg)",
+                          }}
+                        ></div>
+                        <div className="flex flex-col">
+                          <p className="text-[14px] font-[400] leading-[28px]">
+                            {msg.message_body}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
 
-              {/* <div className="flex justify-center items-center h-full w-full">
+                {/* <div className="flex justify-center items-center h-full w-full">
                 {job?.status !== "assigned" && job?.status !== "completed" && (
                     <div
                     className={`absolute bottom-0 border border-[white] text-[white] bg-[#774DFD] h-[42px] w-[114px] flex items-center justify-center rounded-full cursor-pointer`}
@@ -279,8 +286,9 @@ function ChatContainer({ job, offerId }) {
                     </div>
                 )}
             </div> */}
-            </div>
-          ))
+              </div>
+            ))}
+          </>
         )}
         {/* Ref for Auto-Scroll */}
         <div ref={messagesEndRef} />
