@@ -101,6 +101,7 @@ const page = () => {
         body: {
           amount: parseInt(data?.total_price),
           save_payment_method: true,
+          offerId: params?.offerId
         },
       },
       handleError
