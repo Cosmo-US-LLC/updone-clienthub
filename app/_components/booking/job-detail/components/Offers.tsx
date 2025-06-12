@@ -37,6 +37,7 @@ const Offers = ({
   offerSort,
   setOfferSort,
   hideModal,
+  serviceName
 }: {
   offers: any[];
   job: any;
@@ -47,6 +48,7 @@ const Offers = ({
   offerSort: any;
   setOfferSort: any;
   hideModal: any;
+  serviceName: any;
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -131,7 +133,7 @@ const Offers = ({
               className="flex flex-row items-center justify-between border border-1 border-[#EBE6FF] px-2 h-[120px] mb-4 mx-2 rounded-xl"
             >
               <div className="flex flex-row items-center justify-start gap-2">
-                <TalentImage talent={offer} hideModal={hideModal} />
+                <TalentImage talent={offer} hideModal={hideModal} serviceName={serviceName} />
 
                 <div className="flex flex-col w-[156px]">
                   <div className="flex flex-row gap-1.5 items-center">

@@ -657,6 +657,7 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
                   setIsChatHidden={setIsChatHidden}
                   offerSort={offerSort}
                   setOfferSort={setOfferSort}
+                  jobDetailData={jobDetailData}
                 />
               </div>
             </div>

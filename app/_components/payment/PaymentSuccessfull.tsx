@@ -7,17 +7,16 @@ import { useAppSelector } from "@/app/lib/store/hooks";
 import { useStripe } from "@stripe/react-stripe-js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState ,useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-
 
 const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
   const stripe = useStripe();
   const router = useRouter();
 
   const offerDetailData = useSelector(selectOfferDetailData);
-    const hasCalledAPI = useRef(false); // 🛡️ Ref to prevent double calls
-  
+  const hasCalledAPI = useRef(false); // 🛡️ Ref to prevent double calls
+
   const { auth: storedData } = useAppSelector(selectAuth);
   const { handleError } = useError();
   const [jobId, setJobId] = useState();
@@ -61,7 +60,6 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
       // router.replace(urlWithoutQuery);
     } catch (err) {
       console.error("Error processing payment:", err);
-    } finally {
     }
   };
 
@@ -69,24 +67,24 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
     if (!stripe || !clientSecret) return;
 
     const updatePaymentStatus = async () => {
-        try {
-            const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
-            
-            if (paymentIntent && paymentIntent.status === "succeeded") {
-                console.log("API call for successful payment");
-                await paymentSuccessfullApi(paymentIntent);
-            } else {
-                console.error("Payment intent not successful:", paymentIntent);
-            }
-        } catch (error) {
-            console.error("Error retrieving payment intent:", error);
+      try {
+        const { paymentIntent } = await stripe.retrievePaymentIntent(
+          clientSecret
+        );
+
+        if (paymentIntent && paymentIntent.status === "succeeded") {
+          console.log("API call for successful payment");
+          await paymentSuccessfullApi(paymentIntent);
+        } else {
+          console.error("Payment intent not successful:", paymentIntent);
         }
+      } catch (error) {
+        console.error("Error retrieving payment intent:", error);
+      }
     };
 
     updatePaymentStatus();
-}, [stripe, clientSecret, offerId]);
-
-  
+  }, [stripe, clientSecret, offerId]);
 
   return (
     <div className="flex flex-col  items-center justify-center min-h-[100%] !px-8 max-lg:pt-20">
@@ -128,7 +126,12 @@ const PaymentSuccessfull = ({ offerId, clientSecret }: any) => {
             className="bg-[#FFF] my-[32px] rounded-[8px] px-[24px] py-[16px] flex justify-between items-center w-full"
           >
             <div className="text-[#350ABC] text-[28px] font-[400]">
-              ${calculateTotal(offerDetailData?.working_hours, offerDetailData?.offered_amount)}&nbsp;
+              $
+              {calculateTotal(
+                offerDetailData?.working_hours,
+                offerDetailData?.offered_amount
+              )}
+              &nbsp;
               <span className="text-[#6B6B6B] text-[14px] font-[400]">
                 Payment Successful!
               </span>

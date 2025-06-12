@@ -28,7 +28,7 @@ const services: any = {
   "Event Helper": 5,
 };
 
-const Invites = ({ data, jobId, jobData, isInModal, hideModal }: any) => {
+const Invites = ({ data, jobId, jobData, isInModal, hideModal, serviceName }: any) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [inviteMore, setInviteMore] = useState(false);

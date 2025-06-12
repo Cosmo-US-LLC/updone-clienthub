@@ -13,7 +13,7 @@ import {
 import { apiRequest } from "@/app/lib/services";
 import { useParams } from "next/navigation";
 
-function TalentImage({ talent, hideModal = true, size = 0, totalPrice = false, }: any) {
+function TalentImage({ talent, hideModal = true, size = 0, totalPrice = false, serviceName }: any) {
   // console.log("hideModal", talent);
   
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
