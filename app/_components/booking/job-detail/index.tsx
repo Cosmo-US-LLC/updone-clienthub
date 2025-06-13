@@ -59,6 +59,8 @@ const JobDetail = ({ jobId }: { jobId?: any }) => {
 
   const [offerSort, setOfferSort] = useState("latest");
 
+  console.log(jobDetailData)
+
   useEffect(() => {
     if (selectedOffer !== null) {
       setIsChatVisible(true);

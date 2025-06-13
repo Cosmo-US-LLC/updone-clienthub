@@ -80,6 +80,7 @@ const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
 
   return (
     <>
+      {/* {console.log(data)} */}
       {showModal && hideModal ? (
         <Dialog open={showModal} onOpenChange={setShowModal}>
           <DialogContent
@@ -97,7 +98,7 @@ const InviteCard = ({ data, isInvited, hideModal = true }: StaffMapProps) => {
                     ? data?.worker?.gallery
                     : [data?.worker?.profile_pic]
                 }
-                talent={data}
+                talent={data?.worker}
                 jobApiData={jobApiData}
                 onClose={() => setShowModal(false)}
                 isSelected={""}

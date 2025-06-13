@@ -54,6 +54,7 @@ function TalentImage({ talent, hideModal = true, size = 0, totalPrice = false, s
               <DialogTitle></DialogTitle>
               <DialogDescription></DialogDescription>
             </DialogHeader>
+            {/* {console.log(talent,jobApiData)} */}
             <div>
               <GalleryContent
                 images={
@@ -111,7 +112,8 @@ function TalentImage({ talent, hideModal = true, size = 0, totalPrice = false, s
                     ? talent?.worker?.gallery
                     : [talent?.worker?.profile_pic]
                 }
-                talent={talent}
+                talent={talent?.worker}
+                talentData={talent}
                 jobApiData={jobApiData}
                 onClose={() => setShowModal(false)}
                 isSelected={

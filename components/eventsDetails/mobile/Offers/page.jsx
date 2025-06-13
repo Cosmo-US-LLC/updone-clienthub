@@ -113,6 +113,7 @@ const Offers = ({
 
   return (
     <>
+    {console.log(offerSelected)}
       <Dialog
         open={showModal}
         onOpenChange={(val) => {
@@ -138,7 +139,8 @@ const Offers = ({
                   ? offerSelected?.worker?.gallery
                   : [offerSelected?.worker?.profile_pic]
               }
-              talent={offerSelected}
+              talent={offerSelected?.worker}
+              talentData={offerSelected}
               jobApiData={jobApiData}
               onClose={() => setShowModal(false)}
               isSelected={

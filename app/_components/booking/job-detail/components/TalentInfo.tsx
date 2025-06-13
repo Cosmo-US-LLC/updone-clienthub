@@ -22,7 +22,7 @@ const TalentInfo = ({ jobDetailData, jobId }: any) => {
   const [EmailTooltipVisible, setEmailTooltipVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedTalentsLocal, setSelectedTalentsLocal] = useState([]);
-  const [jobApiData, setJobApiData] = useState<any>(null);
+  // const [jobApiData, setJobApiData] = useState<any>(null);
 
   const handleCopyPhoneNumber = (text: any) => {
     copyToClipboard(text);
@@ -69,24 +69,26 @@ const TalentInfo = ({ jobDetailData, jobId }: any) => {
     }
   }
 
-  const fetchJobDetails = async () => {
-    try {
-      const apiResponse = await apiRequest("/job/details/public", {
-        method: "POST",
-        body: {
-          job_id: jobId,
-        },
-      });
-      if (apiResponse) {
-        setJobApiData(apiResponse);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  useEffect(() => {
-    fetchJobDetails();
-  }, [showModal]);
+  // console.log(jobDetailData,jobApiData)
+
+  // const fetchJobDetails = async () => {
+  //   try {
+  //     const apiResponse = await apiRequest("/job/details/public", {
+  //       method: "POST",
+  //       body: {
+  //         job_id: jobId,
+  //       },
+  //     });
+  //     if (apiResponse) {
+  //       setJobApiData(apiResponse);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchJobDetails();
+  // }, [showModal]);
   return (
     <div>
       {showModal ? (
@@ -108,7 +110,9 @@ const TalentInfo = ({ jobDetailData, jobId }: any) => {
                       : [jobDetailData?.invite?.worker?.profile_pic]
                   }
                   talent={jobDetailData?.invite?.worker}
-                  jobApiData={jobApiData}
+                  // jobApiData={jobDetailData}
+                  jobApiData={jobDetailData}
+                  serviceName={jobDetailData?.service_name}
                   onClose={() => setShowModal(false)}
                   isSelected={
                     selectedTalentsLocal.some(
