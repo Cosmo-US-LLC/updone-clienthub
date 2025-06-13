@@ -73,12 +73,13 @@ const Invites = ({
     inviteMoreTalentApi();
   };
 
+  console.log(jobApiData)
   const fetchTalentsData = async (add = false, page = 1) => {
     setLoadingMobile(true);
     let body = {
       city_id: jobData?.city_id || 1,
       // city_id: parseInt(Cookies.get("event_city")) || 1,
-      service_id: parseInt(Cookies.get("event_service_id")) || 1,
+      service_id: jobApiData?.service_id || parseInt(Cookies.get("event_service_id")) || 1,
       page_number: add ? page : currentPage,
       page_size: selectedCount || 12,
       order: "ASC",
@@ -147,8 +148,10 @@ const Invites = ({
   }, [currentPage, selectedCount]);
 
   useEffect(() => {
-    fetchTalentsData();
-  }, [currentPage, selectedCount]);
+    if (jobApiData) {
+      fetchTalentsData();
+    }
+  }, [jobApiData, currentPage, selectedCount]);
 
   const handleLoadMore = () => {
     const talentsToAdd = Math.min(

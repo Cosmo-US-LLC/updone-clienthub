@@ -320,7 +320,7 @@ function GalleryContent({
                   value="more-info"
                   className="faq-item shadow rounded-[4px]"
                 >
-                  <AccordionTrigger className="outline-none rounded-t-[4px] hover:no-underline cursor-pointer text-[#000] group data-[state=open]:m-0 data-[state=open]:bg-[#000] data-[state=open]:text-[#fff] !py-2 data-[state=open]:!py-3">
+                  <AccordionTrigger className="outline-none rounded-t-[4px] hover:no-underline cursor-pointer text-[#000] group data-[state=open]:m-0 data-[state=open]:bg-[#350abc] data-[state=open]:text-[#fff] !py-2 data-[state=open]:!py-3">
                     <h3 className="text-left text-sm px-4 w-[100%] max-w-[257px] font-[400]">
                       More Info
                     </h3>
