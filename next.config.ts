@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
         hostname: "updone.nyc3.cdn.digitaloceanspaces.com",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "www.shutterstock.com",
+        pathname: "**",
+      },
     ],
   },
 };

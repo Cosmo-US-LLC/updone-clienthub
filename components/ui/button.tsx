@@ -15,6 +15,8 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground ",
         ghost: "",
         link: "text-primary underline-offset-4 hover:underline",
+        light: "bg-[#EBE6FF] !px-6 !py-3 !text-[#350abc] hover:bg-[#FFF] !rounded-full font-[500] leading-[24px] hover:shadow-lg text-[16px] !h-[43px] transition-colors duration-200",
+        purple: "bg-[#7E4DE2] aspect-square flex items-center justify-center !p-0 !text-[#FFF] hover:bg-[#7447ce] hover:shadow-lg !rounded-full !h-[43px] transition-all duration-200",
       },
       size: {
         default: "h-10 px-4 py-2",
