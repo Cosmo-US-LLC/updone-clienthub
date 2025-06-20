@@ -113,7 +113,7 @@ function HeaderNav() {
       </div>
 
       <div className="flex items-center justify-end gap-[10px]">
-        <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job?client`}>
+        <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/add-job/location?client`}>
           <Button variant="light">Create Booking</Button>
         </Link>
         <Link href={`/settings`}>
@@ -156,7 +156,7 @@ function HeaderNav() {
         </Link>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="w-[137px] h-[43px] py-[3px] px-[5px] bg-[#7E4DE2] hover:bg-[#7447ce] hover:shadow-lg rounded-full text-white flex items-center justify-between">
+          <DropdownMenuTrigger className="min-w-[137px] w-fit h-[43px] py-[3px] px-[5px] bg-[#7E4DE2] hover:bg-[#7447ce] hover:shadow-lg rounded-full text-white flex items-center justify-between">
             <div className="relative w-[37px] h-[37px]">
               {/* <Image
                 src="https://www.shutterstock.com/image-illustration/iconic-character-played-by-johnny-600nw-2359846101.jpg"
