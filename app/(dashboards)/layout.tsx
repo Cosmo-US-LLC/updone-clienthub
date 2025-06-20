@@ -10,6 +10,7 @@ import Wrapper from "@/components/layout/Wrapper";
 import { Button } from "@/components/ui/button";
 import HeaderNav from "@/components/layout/HeaderNav";
 import SideNav from "@/components/layout/SideNav";
+import NavbarMobile from "@/components/layout/NavbarMobile";
 
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
@@ -30,20 +31,24 @@ const RootLayout = ({ children }: RootLayoutProps) => {
     //   </div>
     // </SidebarProvider>
     <Wrapper>
-      <nav className="h-[68px] flex">
+      <NavbarMobile />
+      <nav className="max-lg:hidden h-[68px] flex">
         <div className="grow">
           <HeaderNav />
         </div>
         <div className="w-[41px]"></div>
       </nav>
       <div className="grow flex">
-        <div className="w-[84px]">
+        <div className="max-lg:hidden w-[84px]">
           <SideNav />
         </div>
-        <div className="grow bg-white rounded-t-[18px] p-5 pb-0 h-[calc(100dvh-68px)]">
+        <div className="max-lg:hidden grow bg-white lg:rounded-t-[18px] lg:p-5 lg:pb-0 h-[calc(100dvh-68px)]">
           {children}
         </div>
-        <div className="w-[41px]"></div>
+        <main className="lg:hidden w-[100%] h-[100%] flex flex-col px-4 pt-0 relative overflow-y-auto">
+           {children}
+        </main>
+        <div className="max-lg:hidden w-[41px]"></div>
       </div>
     </Wrapper>
   );

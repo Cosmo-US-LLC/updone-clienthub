@@ -157,8 +157,11 @@ const Page = () => {
         )}
       </div>
       <div className="h-full lg:hidden flex flex-col max-lg:px-4 max-lg:py-4 gap-2">
-        <Link href={"/"} className="text-xs text-neutral-500 flex items-center gap-2">
-          <ChevronLeft className="h-4 w-4" /> 
+        <Link
+          href={"/"}
+          className="text-xs text-neutral-500 flex items-center gap-2"
+        >
+          <ChevronLeft className="h-4 w-4" />
           Back
         </Link>
         <h2 className="text-[18px] font-[500]">Payment Methods</h2>
